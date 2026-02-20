@@ -24,6 +24,39 @@ logger = logging.getLogger(__name__)
 # Type for progress callback: (completed: int, total: int, model_id: str, status: str) -> None
 ProgressCallback = Optional[Callable[[int, int, str, str], None]]
 
+# Fallback max_tokens when no context length info available
+_DEFAULT_MAX_TOKENS = 16384
+
+
+def _compute_max_tokens(config, model_ids: list[str], prompt_chars: int) -> int:
+    """Compute max_tokens from detected context window sizes.
+
+    Uses the minimum detected context length across all models, reserves
+    space for the prompt, and uses up to 50% of remaining context for output.
+    Falls back to _DEFAULT_MAX_TOKENS if no context info is available.
+    """
+    detected = []
+    for entry in config.model_health.entries:
+        if entry.model_id in model_ids and entry.context_length > 0:
+            detected.append(entry.context_length)
+
+    if not detected:
+        logger.info("No detected context lengths, using default max_tokens=%d", _DEFAULT_MAX_TOKENS)
+        return _DEFAULT_MAX_TOKENS
+
+    min_context = min(detected)
+    # Rough estimate: 1 token ≈ 3.5 chars
+    prompt_tokens = int(prompt_chars / 3.5)
+    available = max(min_context - prompt_tokens, min_context // 2)
+    # Use up to 50% of available context for output, capped at reasonable range
+    max_tokens = max(4096, min(available, min_context // 2))
+    logger.info(
+        "Context windows: %s, min=%d, prompt≈%d tokens → max_tokens=%d",
+        {m: c for m, c in zip(model_ids, detected)},
+        min_context, prompt_tokens, max_tokens,
+    )
+    return max_tokens
+
 
 def build_enhancement_prompt(mkdocs_path: Path, docs_dir: Path) -> str:
     """Build the analysis prompt from mkdocs.yml and documentation files.
@@ -161,8 +194,11 @@ async def run_llm_enhancement(
     prompt = build_enhancement_prompt(mkdocs_path, docs_dir)
     logger.info("Enhancement prompt: %d chars", len(prompt))
 
+    # Compute max_tokens from detected context window sizes
+    max_tokens = _compute_max_tokens(config, slaves, len(prompt))
+
     if progress_cb:
-        progress_cb(0, len(slaves), "", "Prompt erstellt")
+        progress_cb(0, len(slaves), "", f"Prompt erstellt ({max_tokens} max tokens)")
 
     # Query ensemble
     ensemble_result = await query_ensemble(
@@ -173,6 +209,7 @@ async def run_llm_enhancement(
         max_retries=2,
         retry_delay=3,
         mock_mode=mock_mode,
+        max_tokens=max_tokens,
     )
 
     if progress_cb:
@@ -185,7 +222,47 @@ async def run_llm_enhancement(
 
     if not ensemble_result.successful_drafts:
         logger.error("No successful drafts from ensemble")
+        if ensemble_result.failed_models:
+            logger.error("Failed models: %s", ensemble_result.failed_models)
         return []
+
+    # ── Debug: write all drafts + prompt to files ──────────────────
+    debug_dir = output_dir / "_enhance_debug"
+    debug_dir.mkdir(exist_ok=True)
+    try:
+        (debug_dir / "00_prompt.txt").write_text(prompt, encoding="utf-8")
+        logger.info("Debug: prompt written to %s", debug_dir / "00_prompt.txt")
+    except Exception as exc:
+        logger.warning("Could not write debug prompt: %s", exc)
+
+    for i, draft in enumerate(ensemble_result.successful_drafts):
+        has_markers = "<<<FILE" in draft.output and "<<<END>>>" in draft.output
+        safe_name = draft.model_id.replace("/", "_").replace(":", "_")
+        debug_file = debug_dir / f"01_draft_{i}_{safe_name}.txt"
+        try:
+            header = (
+                f"# Model: {draft.model_id}\n"
+                f"# Length: {len(draft.output)} chars\n"
+                f"# Has <<<FILE markers: {has_markers}\n"
+                f"# Duration: {draft.duration_seconds:.1f}s\n"
+                f"# Retries: {draft.retries}\n"
+                f"{'=' * 60}\n\n"
+            )
+            debug_file.write_text(header + draft.output, encoding="utf-8")
+            logger.info("Debug: draft from %s → %s (%d chars, markers=%s)",
+                        draft.model_id, debug_file.name, len(draft.output), has_markers)
+        except Exception as exc:
+            logger.warning("Could not write debug draft: %s", exc)
+
+    for i, model_id in enumerate(ensemble_result.failed_models):
+        logger.info("Debug: failed model %s", model_id)
+        try:
+            (debug_dir / f"01_FAILED_{model_id.replace('/', '_').replace(':', '_')}.txt").write_text(
+                f"Model {model_id} failed.\n", encoding="utf-8"
+            )
+        except Exception:
+            pass
+    # ── End debug ────────────────────────────────────────────────
 
     # Merge or select
     if master and len(ensemble_result.successful_drafts) > 1:
@@ -214,9 +291,24 @@ async def run_llm_enhancement(
     if progress_cb:
         progress_cb(len(slaves), len(slaves), "", "Änderungen werden geparst...")
 
+    # ── Debug: write merged result ───────────────────────────────
+    try:
+        (debug_dir / "02_merged_result.txt").write_text(merged, encoding="utf-8")
+        logger.info("Debug: merged result written (%d chars)", len(merged))
+    except Exception as exc:
+        logger.warning("Could not write debug merged: %s", exc)
+    # ── End debug ────────────────────────────────────────────────
+
     # Parse into FileChange list
     base_dir = str(output_dir)
     changes = parse_file_changes(merged, base_dir=base_dir)
+
+    if not changes:
+        logger.warning(
+            "No <<<FILE...<<<END>>> blocks found in merged output (%d chars). "
+            "Check %s for full output.",
+            len(merged), debug_dir / "02_merged_result.txt",
+        )
 
     logger.info("Parsed %d file changes from LLM output", len(changes))
     return changes
@@ -248,6 +340,8 @@ async def run_llm_enhancement_single(
     if progress_cb:
         progress_cb(0, 1, model_id, f"Modell {model_id} analysiert...")
 
+    max_tokens = _compute_max_tokens(config, [model_id], len(prompt))
+
     async with pool.acquire(f"enhance:{model_id}"):
         result = await run_opencode(
             prompt=prompt,
@@ -256,6 +350,7 @@ async def run_llm_enhancement_single(
             max_retries=2,
             retry_delay=3,
             mock_mode=mock_mode,
+            max_tokens=max_tokens,
         )
 
     if progress_cb:

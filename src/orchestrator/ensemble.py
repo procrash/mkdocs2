@@ -32,6 +32,7 @@ async def query_ensemble(
     retry_delay: int = 2,
     mock_mode: bool = False,
     failure_callback: Optional[FailureCallback] = None,
+    max_tokens: int = 4096,
 ) -> EnsembleResult:
     """Query multiple models with the same prompt in parallel.
 
@@ -39,6 +40,7 @@ async def query_ensemble(
         failure_callback: Called when a model fails all retries.
             Receives (model_id, error_message).
             Returns a replacement model_id to retry with, or None to skip.
+        max_tokens: Maximum tokens for each model response.
     """
     result = EnsembleResult()
 
@@ -51,6 +53,7 @@ async def query_ensemble(
                 max_retries=max_retries,
                 retry_delay=retry_delay,
                 mock_mode=mock_mode,
+                max_tokens=max_tokens,
             )
 
     tasks = [query_single(mid) for mid in model_ids]

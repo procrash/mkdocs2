@@ -10,10 +10,40 @@ from src.generator.llm_enhancer import (
     run_llm_enhancement,
     run_llm_enhancement_single,
     _select_best_draft,
+    _compute_max_tokens,
 )
 from src.orchestrator.opencode_runner import OpenCodeResult
 from src.orchestrator.semaphore import WorkerPool
 from src.ui.tui_screens.diff_review_screen import FileChange, parse_file_changes
+
+
+class _MockHealthEntry:
+    """Minimal mock for ModelHealthEntry."""
+    def __init__(self, model_id, context_length=0):
+        self.model_id = model_id
+        self.context_length = context_length
+
+
+class _MockModelHealth:
+    """Minimal mock for model_health config."""
+    def __init__(self, entries=None):
+        self.entries = entries or []
+
+
+def _make_mock_config(tmp_path, analysts=None, judge="", health_entries=None):
+    """Create a MockConfig with all required fields for llm_enhancer."""
+    class MockConfig:
+        class server:
+            url = "http://localhost:11434"
+            api_key = ""
+            timeout_read = 60
+        class project:
+            output_dir = tmp_path
+        class preferences:
+            selected_analysts = analysts or ["model-a", "model-b"]
+            selected_judge = judge
+        model_health = _MockModelHealth(health_entries or [])
+    return MockConfig
 
 
 class TestBuildEnhancementPrompt:
@@ -49,6 +79,35 @@ class TestBuildEnhancementPrompt:
         assert "50 Zeilen gesamt" in prompt
         assert "Line 29" in prompt
         assert "Line 40" not in prompt
+
+
+class TestComputeMaxTokens:
+    def test_uses_detected_context(self):
+        entries = [_MockHealthEntry("model-a", 32768)]
+        config = type("C", (), {"model_health": _MockModelHealth(entries)})
+        result = _compute_max_tokens(config, ["model-a"], 1000)
+        assert result >= 4096
+        assert result <= 32768
+
+    def test_uses_minimum_across_models(self):
+        entries = [
+            _MockHealthEntry("model-a", 32768),
+            _MockHealthEntry("model-b", 8192),
+        ]
+        config = type("C", (), {"model_health": _MockModelHealth(entries)})
+        result = _compute_max_tokens(config, ["model-a", "model-b"], 1000)
+        assert result <= 8192
+
+    def test_fallback_when_no_context_info(self):
+        config = type("C", (), {"model_health": _MockModelHealth([])})
+        result = _compute_max_tokens(config, ["model-a"], 1000)
+        assert result == 16384  # default
+
+    def test_minimum_4096(self):
+        entries = [_MockHealthEntry("model-a", 5000)]
+        config = type("C", (), {"model_health": _MockModelHealth(entries)})
+        result = _compute_max_tokens(config, ["model-a"], 4000)
+        assert result >= 4096
 
 
 class TestSelectBestDraft:
@@ -114,19 +173,8 @@ class TestParseFileChanges:
 class TestRunLlmEnhancement:
     def test_mock_mode_ensemble(self, tmp_path):
         """Test that ensemble works with mock mode (no real LLM)."""
-        # Create minimal config-like object
-        class MockConfig:
-            class server:
-                url = "http://localhost:11434"
-                api_key = ""
-                timeout_read = 60
-            class project:
-                output_dir = tmp_path
-            class preferences:
-                selected_analysts = ["model-a", "model-b"]
-                selected_judge = "model-judge"
+        config = _make_mock_config(tmp_path, ["model-a", "model-b"], "model-judge")
 
-        # Create mkdocs.yml and docs
         mkdocs_path = tmp_path / "mkdocs.yml"
         mkdocs_path.write_text("site_name: TestProject\n", encoding="utf-8")
         docs_dir = tmp_path / "docs"
@@ -135,30 +183,20 @@ class TestRunLlmEnhancement:
 
         async def _test():
             pool = WorkerPool(max_workers=3)
-            # Mock mode returns generic mock output without <<<FILE blocks,
-            # so we expect 0 parsed changes
             changes = await run_llm_enhancement(
-                config=MockConfig,
+                config=config,
                 slaves=["model-a", "model-b"],
                 master="model-judge",
                 pool=pool,
                 mock_mode=True,
             )
-            # Mock responses don't contain <<<FILE...<<<END>>> format,
-            # so we expect an empty list
             assert isinstance(changes, list)
 
         asyncio.run(_test())
 
     def test_single_model_mock(self, tmp_path):
         """Test single model enhancement with mock mode."""
-        class MockConfig:
-            class server:
-                url = "http://localhost:11434"
-                api_key = ""
-                timeout_read = 60
-            class project:
-                output_dir = tmp_path
+        config = _make_mock_config(tmp_path)
 
         mkdocs_path = tmp_path / "mkdocs.yml"
         mkdocs_path.write_text("site_name: TestProject\n", encoding="utf-8")
@@ -169,7 +207,7 @@ class TestRunLlmEnhancement:
         async def _test():
             pool = WorkerPool(max_workers=1)
             changes = await run_llm_enhancement_single(
-                config=MockConfig,
+                config=config,
                 model_id="test-model",
                 pool=pool,
                 mock_mode=True,
@@ -180,13 +218,7 @@ class TestRunLlmEnhancement:
 
     def test_progress_callback_called(self, tmp_path):
         """Test that progress callback is invoked."""
-        class MockConfig:
-            class server:
-                url = "http://localhost:11434"
-                api_key = ""
-                timeout_read = 60
-            class project:
-                output_dir = tmp_path
+        config = _make_mock_config(tmp_path)
 
         mkdocs_path = tmp_path / "mkdocs.yml"
         mkdocs_path.write_text("site_name: Test\n", encoding="utf-8")
@@ -200,7 +232,7 @@ class TestRunLlmEnhancement:
         async def _test():
             pool = WorkerPool(max_workers=3)
             await run_llm_enhancement(
-                config=MockConfig,
+                config=config,
                 slaves=["model-a"],
                 master="",
                 pool=pool,
@@ -213,13 +245,7 @@ class TestRunLlmEnhancement:
 
     def test_no_master_uses_best_draft(self, tmp_path):
         """Without master, selects best draft heuristically."""
-        class MockConfig:
-            class server:
-                url = "http://localhost:11434"
-                api_key = ""
-                timeout_read = 60
-            class project:
-                output_dir = tmp_path
+        config = _make_mock_config(tmp_path)
 
         mkdocs_path = tmp_path / "mkdocs.yml"
         mkdocs_path.write_text("site_name: Test\n", encoding="utf-8")
@@ -227,9 +253,33 @@ class TestRunLlmEnhancement:
 
         async def _test():
             pool = WorkerPool(max_workers=3)
-            # With 2 models and no master, should pick best heuristically
             changes = await run_llm_enhancement(
-                config=MockConfig,
+                config=config,
+                slaves=["model-a", "model-b"],
+                master="",
+                pool=pool,
+                mock_mode=True,
+            )
+            assert isinstance(changes, list)
+
+        asyncio.run(_test())
+
+    def test_uses_detected_context_for_max_tokens(self, tmp_path):
+        """When models have detected context lengths, uses them."""
+        entries = [
+            _MockHealthEntry("model-a", 32768),
+            _MockHealthEntry("model-b", 16384),
+        ]
+        config = _make_mock_config(tmp_path, health_entries=entries)
+
+        mkdocs_path = tmp_path / "mkdocs.yml"
+        mkdocs_path.write_text("site_name: Test\n", encoding="utf-8")
+        (tmp_path / "docs").mkdir()
+
+        async def _test():
+            pool = WorkerPool(max_workers=3)
+            changes = await run_llm_enhancement(
+                config=config,
                 slaves=["model-a", "model-b"],
                 master="",
                 pool=pool,

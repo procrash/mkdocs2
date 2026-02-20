@@ -47,6 +47,7 @@ async def run_opencode(
     retry_delay: int = 2,
     working_dir: str | None = None,
     mock_mode: bool = False,
+    max_tokens: int = 4096,
 ) -> OpenCodeResult:
     """Run an LLM query and return the result.
 
@@ -58,7 +59,7 @@ async def run_opencode(
     # Prefer direct HTTP API (faster, no subprocess overhead, handles long prompts)
     if _server_url:
         return await _run_via_http(
-            prompt, model_id, timeout, max_retries, retry_delay
+            prompt, model_id, timeout, max_retries, retry_delay, max_tokens
         )
 
     # Fallback: opencode CLI
@@ -145,6 +146,7 @@ async def _run_via_http(
     timeout: int,
     max_retries: int,
     retry_delay: int,
+    max_tokens: int = 4096,
 ) -> OpenCodeResult:
     """Run via direct OpenAI-compatible HTTP API."""
     import httpx
@@ -163,7 +165,7 @@ async def _run_via_http(
             {"role": "user", "content": prompt}
         ],
         "temperature": 0.3,
-        "max_tokens": 4096,
+        "max_tokens": max_tokens,
     }
 
     url = f"{_server_url}/v1/chat/completions"
