@@ -49,7 +49,10 @@ class SkeletonScreen(Screen):
     #btn-row {
         margin-top: 1;
         align: center middle;
-        height: 3;
+        height: 5;
+    }
+    #btn-row Button {
+        margin: 0 2;
     }
     """
 
@@ -90,8 +93,9 @@ class SkeletonScreen(Screen):
                             max_length=5,
                         )
 
-                with Center(id="btn-row"):
-                    yield Button("Skelett erstellen & Weiter", variant="primary", id="btn-next")
+                with Horizontal(id="btn-row"):
+                    yield Button("← Zurück", variant="default", id="btn-back")
+                    yield Button("Skelett erstellen & Weiter →", variant="primary", id="btn-next")
         yield Footer()
 
     def on_mount(self) -> None:
@@ -119,6 +123,9 @@ class SkeletonScreen(Screen):
             current.add_leaf(f"{parts[-1]}  [dim]({title})[/dim]")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "btn-back":
+            self.dismiss(None)
+            return
         if event.button.id == "btn-next":
             start_mkdocs = self.query_one("#start-mkdocs-check", Checkbox).value
             port_input = self.query_one("#port-input", Input)

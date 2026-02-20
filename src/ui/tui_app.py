@@ -113,7 +113,8 @@ class MkDocsTUI(App):
         super().__init__()
         self.config = config
         self.config_path = config_path
-        self.auto_mode = auto_mode or config.automation.enabled
+        self._cli_auto = auto_mode          # Only True when --auto flag was passed
+        self.auto_mode = auto_mode           # Will be set by WelcomeScreen choice
         self._log_handler: _TuiLogHandler | None = None
 
         # Runtime state
@@ -130,11 +131,14 @@ class MkDocsTUI(App):
         self.sub_title = self.config.project.name
 
         resume = self.config.resume
-        if resume.last_screen and not self.auto_mode:
-            self._resume_from(resume.last_screen)
-        elif self.auto_mode:
+        if self._cli_auto:
+            # --auto CLI flag: skip welcome, go straight to discovery
+            self.auto_mode = True
             self._start_discovery()
+        elif resume.last_screen:
+            self._resume_from(resume.last_screen)
         else:
+            # Always show welcome screen so user can choose manual/auto
             self._start_welcome()
 
     def _save_config(self) -> None:

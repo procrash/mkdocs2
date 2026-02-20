@@ -74,6 +74,7 @@ class DiscoveryScreen(Screen):
                 yield DataTable(id="model-table")
                 yield Label("", id="probe-status")
                 with Horizontal(id="btn-row"):
+                    yield Button("← Zurück", variant="default", id="btn-back")
                     yield Button(
                         "Kontextfenster diagnostizieren",
                         variant="warning",
@@ -203,6 +204,8 @@ class DiscoveryScreen(Screen):
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "btn-next":
             self._finish()
+        elif event.button.id == "btn-back":
+            self.dismiss(None)
         elif event.button.id == "btn-probe-ctx":
             event.button.disabled = True
             self.run_worker(self._run_context_probe(), exclusive=True)

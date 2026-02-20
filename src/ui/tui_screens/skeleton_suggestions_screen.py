@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 
 from textual.app import ComposeResult
-from textual.containers import Center, Vertical
+from textual.containers import Center, Horizontal, Vertical
 from textual.screen import Screen
 from textual.widgets import (
     Button,
@@ -65,7 +65,10 @@ class SkeletonSuggestionsScreen(Screen):
     #btn-row {
         margin-top: 1;
         align: center middle;
-        height: 3;
+        height: 5;
+    }
+    #btn-row Button {
+        margin: 0 2;
     }
     """
 
@@ -98,8 +101,9 @@ class SkeletonSuggestionsScreen(Screen):
                 )
                 yield LoadingIndicator(id="spinner")
                 yield Vertical(id="suggestions-list")
-                with Center(id="btn-row"):
-                    yield Button("Ausgewählte übernehmen & Weiter", variant="primary", id="btn-next", disabled=True)
+                with Horizontal(id="btn-row"):
+                    yield Button("← Zurück", variant="default", id="btn-back")
+                    yield Button("Ausgewählte übernehmen & Weiter →", variant="primary", id="btn-next", disabled=True)
         yield Footer()
 
     def on_mount(self) -> None:
@@ -170,6 +174,9 @@ class SkeletonSuggestionsScreen(Screen):
             container.mount(desc)
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "btn-back":
+            self.dismiss(None)
+            return
         if event.button.id == "btn-next":
             # Collect selections
             for i, s in enumerate(self._suggestions):

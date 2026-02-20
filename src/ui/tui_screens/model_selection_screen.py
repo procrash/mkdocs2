@@ -50,7 +50,10 @@ class ModelSelectionScreen(Screen):
     #btn-row {
         margin-top: 1;
         align: center middle;
-        height: 3;
+        height: 5;
+    }
+    #btn-row Button {
+        margin: 0 2;
     }
     .hint-text {
         color: $text-muted;
@@ -141,13 +144,16 @@ class ModelSelectionScreen(Screen):
                         classes="exclude-row",
                     )
 
-                with Center(id="btn-row"):
-                    yield Button("Weiter", variant="primary", id="btn-next")
+                with Horizontal(id="btn-row"):
+                    yield Button("← Zurück", variant="default", id="btn-back")
+                    yield Button("Weiter →", variant="primary", id="btn-next")
         yield Footer()
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "btn-next":
             self._apply_and_dismiss()
+        elif event.button.id == "btn-back":
+            self.dismiss(None)
 
     def _apply_and_dismiss(self) -> None:
         # Build set of non-excluded model IDs (for filtering)
