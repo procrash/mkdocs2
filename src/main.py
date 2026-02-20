@@ -289,9 +289,10 @@ def run(ctx: click.Context) -> None:
 @click.option("--skeleton", is_flag=True, help="Skeleton-Beschreibungen erweitern/erstellen")
 @click.option("--restructure", is_flag=True, help="Restrukturierung & Konsolidierung vorschlagen")
 @click.option("--llm", is_flag=True, help="KI-Analyse: alle Modelle bewerten mkdocs.yml und schlagen Verbesserungen vor")
+@click.option("--formats", is_flag=True, help="KI-Formatanalyse: Quellcode auf Dateiformate untersuchen und dokumentieren")
 @click.option("--all", "do_all", is_flag=True, help="Alles erweitern")
 @click.pass_context
-def enhance(ctx: click.Context, plugins: bool, extensions: bool, skeleton: bool, restructure: bool, llm: bool, do_all: bool) -> None:
+def enhance(ctx: click.Context, plugins: bool, extensions: bool, skeleton: bool, restructure: bool, llm: bool, formats: bool, do_all: bool) -> None:
     """Enhance mkdocs.yml, plugins, extensions and skeleton content.
 
     Can be run iteratively — only adds what is not yet present.
@@ -303,10 +304,10 @@ def enhance(ctx: click.Context, plugins: bool, extensions: bool, skeleton: bool,
     mkdocs_path = output_dir / "mkdocs.yml"
 
     if do_all:
-        plugins = extensions = skeleton = restructure = llm = True
+        plugins = extensions = skeleton = restructure = llm = formats = True
 
     # If nothing specified, default to interactive selection
-    if not plugins and not extensions and not skeleton and not restructure and not llm:
+    if not plugins and not extensions and not skeleton and not restructure and not llm and not formats:
         if auto:
             plugins = extensions = skeleton = True
         else:
@@ -316,18 +317,20 @@ def enhance(ctx: click.Context, plugins: bool, extensions: bool, skeleton: bool,
             click.echo("  3. Skeleton-Beschreibungen erweitern")
             click.echo("  4. Restrukturierung & Konsolidierung")
             click.echo("  5. KI-Analyse (alle Modelle bewerten Dokumentation)")
-            click.echo("  6. Alles")
+            click.echo("  6. Formatanalyse (Quellcode auf Dateiformate untersuchen)")
+            click.echo("  7. Alles")
             click.echo()
-            choice = click.prompt("Auswahl (Komma-getrennt, z.B. 1,3)", default="6")
+            choice = click.prompt("Auswahl (Komma-getrennt, z.B. 1,3)", default="7")
             choices = {c.strip() for c in choice.split(",")}
-            if "6" in choices:
-                plugins = extensions = skeleton = restructure = llm = True
+            if "7" in choices:
+                plugins = extensions = skeleton = restructure = llm = formats = True
             else:
                 plugins = "1" in choices
                 extensions = "2" in choices
                 skeleton = "3" in choices
                 restructure = "4" in choices
                 llm = "5" in choices
+                formats = "6" in choices
 
     from .generator.mkdocs_enhancer import (
         enhance_mkdocs_config,
@@ -429,6 +432,10 @@ def enhance(ctx: click.Context, plugins: bool, extensions: bool, skeleton: bool,
     if llm:
         _run_llm_enhance_cli(config, output_dir, auto)
 
+    # ── Format Analysis ──────────────────────────────────────────
+    if formats:
+        _run_format_analysis_cli(config, output_dir, auto)
+
     click.echo("\nFertig.")
 
 
@@ -518,6 +525,105 @@ def _run_llm_enhance_cli(config, output_dir: Path, auto: bool) -> None:
     click.echo(f"\n{len(changes)} Änderungsvorschläge:")
     for i, change in enumerate(changes, 1):
         action = "NEU" if change.is_new_file else "GEÄNDERT"
+        click.echo(f"  {i}. [{action}] {change.file_path}")
+        if change.description:
+            click.echo(f"     {change.description}")
+
+    if auto:
+        click.echo("\nAuto-Modus: Alle Änderungen werden angewendet...")
+        applied = 0
+        for change in changes:
+            if change.apply():
+                applied += 1
+                click.echo(f"  ✓ {change.file_path}")
+            else:
+                click.echo(f"  ✗ {change.file_path}")
+        click.echo(f"\n{applied}/{len(changes)} Änderungen angewendet.")
+    else:
+        if click.confirm("\nAlle Änderungen anwenden?", default=True):
+            applied = 0
+            for change in changes:
+                if change.apply():
+                    applied += 1
+                    click.echo(f"  ✓ {change.file_path}")
+                else:
+                    click.echo(f"  ✗ {change.file_path}")
+            click.echo(f"\n{applied}/{len(changes)} Änderungen angewendet.")
+        else:
+            click.echo("Keine Änderungen angewendet.")
+
+
+def _run_format_analysis_cli(config, output_dir: Path, auto: bool) -> None:
+    """Run file format analysis on source code via CLI."""
+    slaves = config.preferences.selected_analysts
+    master = config.preferences.selected_judge
+    if not slaves:
+        click.echo("Keine Modelle konfiguriert. Zuerst 'discover' ausführen.")
+        return
+
+    source_dir = config.project.source_dir
+    if not source_dir.exists():
+        click.echo(f"Quellcode-Verzeichnis nicht gefunden: {source_dir}")
+        return
+
+    # Suppress noisy httpx request logging
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
+
+    # Count source files
+    source_extensions = {".py", ".js", ".ts", ".java", ".go", ".rs", ".c", ".cpp", ".rb", ".php"}
+    src_count = sum(1 for f in source_dir.rglob("*") if f.is_file() and f.suffix.lower() in source_extensions)
+
+    click.echo(f"\n{'=' * 56}")
+    click.echo(f"  Dateiformat-Analyse des Quellcodes")
+    click.echo(f"{'=' * 56}")
+    click.echo()
+    click.echo(f"  Kontext der Analyse:")
+    click.echo(f"    - {src_count} Quellcode-Dateien aus {source_dir}")
+    click.echo(f"    - mkdocs.yml (aktuelle Konfiguration)")
+    click.echo()
+    click.echo(f"  Ablauf:")
+    click.echo(f"    1. Quellcode auf Dateioperationen, Parser, Serializer durchsuchen")
+    click.echo(f"    2. {len(slaves)} Modelle analysieren parallel")
+    if master:
+        click.echo(f"    3. Master ({master}) synthetisiert Ergebnisse")
+    click.echo(f"    4. Format-Dokumentation in docs/formats/ erzeugen")
+    click.echo()
+
+    from .generator.llm_enhancer import run_format_analysis
+    from .orchestrator.semaphore import WorkerPool
+
+    def print_progress(completed: int, total: int, model_id: str, status: str) -> None:
+        if "Prompt erstellt" in status or "Formatanalyse" in status:
+            click.echo(f"  [1/3] {status}")
+        elif "Modelle erfolgreich" in status:
+            click.echo(f"  [2/3] {status}")
+        elif "synthetisiert" in status:
+            click.echo(f"  [2/3] {status}")
+        else:
+            click.echo(f"  ... {status}")
+
+    pool = WorkerPool(max_workers=3)
+    click.echo("  Starte Formatanalyse...\n")
+    changes = asyncio.run(run_format_analysis(
+        config=config,
+        slaves=slaves,
+        master=master,
+        pool=pool,
+        source_dir=source_dir,
+        progress_cb=print_progress,
+    ))
+
+    if not changes:
+        click.echo("\n  Keine Formatdokumentation erzeugt.")
+        debug_dir = output_dir / "_enhance_debug"
+        if debug_dir.exists():
+            click.echo(f"  Prüfe Debug-Dateien: {debug_dir}/")
+        return
+
+    click.echo(f"\n{len(changes)} Format-Dokumentationen erzeugt:")
+    for i, change in enumerate(changes, 1):
+        action = "NEU" if change.is_new_file else "AKTUALISIERT"
         click.echo(f"  {i}. [{action}] {change.file_path}")
         if change.description:
             click.echo(f"     {change.description}")

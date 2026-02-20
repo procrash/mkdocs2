@@ -44,4 +44,5 @@ def ensure_loaded():
         judge_merge,
         index_page,
         enhance_analysis,
+        enhance_formats,
     )

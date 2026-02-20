@@ -62,17 +62,19 @@ class LlmEnhanceScreen(Screen):
         ("escape", "cancel", "Abbrechen"),
     ]
 
-    def __init__(self, config: AppConfig, slaves: list[str], master: str):
+    def __init__(self, config: AppConfig, slaves: list[str], master: str, analysis_mode: str = "enhance"):
         super().__init__()
         self.config = config
         self.slaves = slaves
         self.master = master
+        self.analysis_mode = analysis_mode  # "enhance" or "formats"
         self._cancelled = False
         self._task: asyncio.Task | None = None
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
-        yield Label("[bold]KI-gesteuerte Verbesserung[/bold]", id="enhance-title")
+        title = "Dateiformat-Analyse" if self.analysis_mode == "formats" else "KI-gesteuerte Verbesserung"
+        yield Label(f"[bold]{title}[/bold]", id="enhance-title")
         yield Label("Starte Analyse...", id="status-label")
         yield ProgressBar(id="progress", total=len(self.slaves))
         yield RichLog(id="enhance-log", highlight=True)
@@ -85,13 +87,20 @@ class LlmEnhanceScreen(Screen):
 
     async def _run_enhancement(self) -> None:
         """Run the ensemble enhancement as a Textual worker."""
-        from ...generator.llm_enhancer import run_llm_enhancement
+        from ...generator.llm_enhancer import run_format_analysis, run_llm_enhancement
         from ...orchestrator.semaphore import WorkerPool
 
         log = self.query_one("#enhance-log", RichLog)
-        log.write("[bold]Ablauf:[/bold]")
-        log.write("  1. mkdocs.yml + alle Markdown-Dateien werden als Kontext gesammelt")
-        log.write(f"  2. Prompt an {len(self.slaves)} Slave-Modelle parallel senden:")
+
+        if self.analysis_mode == "formats":
+            log.write("[bold]Ablauf: Dateiformat-Analyse[/bold]")
+            log.write("  1. Quellcode-Dateien werden auf Dateioperationen, Parser etc. durchsucht")
+            log.write(f"  2. Prompt an {len(self.slaves)} Slave-Modelle parallel senden:")
+        else:
+            log.write("[bold]Ablauf:[/bold]")
+            log.write("  1. mkdocs.yml + alle Markdown-Dateien werden als Kontext gesammelt")
+            log.write(f"  2. Prompt an {len(self.slaves)} Slave-Modelle parallel senden:")
+
         for s in self.slaves:
             log.write(f"     - {s}")
         if self.master:
@@ -109,14 +118,24 @@ class LlmEnhanceScreen(Screen):
             self.call_from_thread(self._update_progress, completed, total, model_id, status)
 
         try:
-            changes = await run_llm_enhancement(
-                config=self.config,
-                slaves=self.slaves,
-                master=self.master,
-                pool=pool,
-                progress_cb=progress_cb,
-                mock_mode=False,
-            )
+            if self.analysis_mode == "formats":
+                changes = await run_format_analysis(
+                    config=self.config,
+                    slaves=self.slaves,
+                    master=self.master,
+                    pool=pool,
+                    progress_cb=progress_cb,
+                    mock_mode=False,
+                )
+            else:
+                changes = await run_llm_enhancement(
+                    config=self.config,
+                    slaves=self.slaves,
+                    master=self.master,
+                    pool=pool,
+                    progress_cb=progress_cb,
+                    mock_mode=False,
+                )
 
             if self._cancelled:
                 return

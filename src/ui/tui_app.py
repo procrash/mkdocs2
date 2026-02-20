@@ -187,6 +187,8 @@ class MkDocsTUI(App):
             self._run_enhance()
         elif action == "enhance_llm":
             self._run_llm_enhance()
+        elif action == "enhance_formats":
+            self._run_format_analysis()
         elif action == "restructure":
             self._run_restructure()
         elif action == "serve":
@@ -261,6 +263,35 @@ class MkDocsTUI(App):
         self.push_screen(
             LlmEnhanceScreen(self.config, slaves, master),
             callback=on_enhance_result,
+        )
+
+    def _run_format_analysis(self) -> None:
+        """Run file format analysis on source code via ensemble."""
+        source_dir = self.config.project.source_dir
+        if not source_dir.exists():
+            self.notify(f"Quellcode-Verzeichnis nicht gefunden: {source_dir}", severity="error")
+            self._start_welcome()
+            return
+
+        slaves = self.config.preferences.selected_analysts
+        master = self.config.preferences.selected_judge
+        if not slaves:
+            self.notify("Keine Modelle ausgewählt — zuerst Discovery durchführen", severity="error")
+            self._start_welcome()
+            return
+
+        def on_format_result(file_changes) -> None:
+            if file_changes:
+                self.push_screen(
+                    DiffReviewScreen(file_changes),
+                    callback=self._on_diff_review_done,
+                )
+            else:
+                self._start_welcome()
+
+        self.push_screen(
+            LlmEnhanceScreen(self.config, slaves, master, analysis_mode="formats"),
+            callback=on_format_result,
         )
 
     def _on_diff_review_done(self, result) -> None:

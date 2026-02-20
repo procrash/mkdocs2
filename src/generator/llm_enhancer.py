@@ -140,6 +140,194 @@ Markdown-Inhalt
 Alle Texte auf Deutsch."""
 
 
+def build_format_analysis_prompt(
+    source_dir: Path,
+    mkdocs_path: Path,
+    project_name: str = "",
+    max_source_chars: int = 80000,
+) -> str:
+    """Build a prompt for file format analysis from source code.
+
+    Reads source code files (.py, .js, .ts, .java, .go, .rs, .c, .cpp, .rb, etc.)
+    and the mkdocs.yml, then uses the enhance/formats template.
+    """
+    # Collect source files
+    source_extensions = {
+        ".py", ".js", ".ts", ".jsx", ".tsx", ".java", ".go", ".rs",
+        ".c", ".cpp", ".h", ".hpp", ".rb", ".php", ".cs", ".swift",
+        ".kt", ".scala", ".sh", ".bash", ".toml", ".ini", ".cfg",
+    }
+    source_parts: list[str] = []
+    total_chars = 0
+
+    if source_dir.exists():
+        for src_file in sorted(source_dir.rglob("*")):
+            if not src_file.is_file():
+                continue
+            if src_file.suffix.lower() not in source_extensions:
+                continue
+            # Skip test files, virtualenvs, node_modules
+            rel = str(src_file.relative_to(source_dir))
+            if any(skip in rel for skip in [
+                "node_modules", ".venv", "__pycache__", ".git",
+                "dist/", "build/", ".egg-info",
+            ]):
+                continue
+            try:
+                content = src_file.read_text(encoding="utf-8", errors="replace")
+                # Truncate very large files
+                if len(content) > 5000:
+                    content = content[:5000] + f"\n... (gekürzt, {len(content)} Zeichen gesamt)"
+                entry = f"### {rel}\n```{src_file.suffix.lstrip('.')}\n{content}\n```"
+                if total_chars + len(entry) > max_source_chars:
+                    source_parts.append(f"\n... (weitere Dateien weggelassen, Limit erreicht)")
+                    break
+                source_parts.append(entry)
+                total_chars += len(entry)
+            except Exception:
+                continue
+
+    code_content = "\n\n".join(source_parts) if source_parts else "(kein Quellcode gefunden)"
+    logger.info("Format analysis context: %d source files, %d chars", len(source_parts), total_chars)
+
+    # Read mkdocs.yml for context
+    mkdocs_content = ""
+    if mkdocs_path.exists():
+        try:
+            mkdocs_content = mkdocs_path.read_text(encoding="utf-8")
+        except Exception:
+            pass
+
+    ensure_loaded()
+    ctx = PromptContext(
+        code_content=code_content,
+        file_listing=mkdocs_content,
+        section_name=project_name,
+    )
+    prompt = build_prompt("enhance", "formats", ctx)
+    if prompt:
+        return prompt
+
+    logger.warning("enhance/formats template not found")
+    return ""
+
+
+async def run_format_analysis(
+    config,
+    slaves: list[str],
+    master: str,
+    pool: WorkerPool,
+    source_dir: Path | None = None,
+    progress_cb: ProgressCallback = None,
+    mock_mode: bool = False,
+) -> list[FileChange]:
+    """Run format analysis on source code to generate format documentation.
+
+    Similar to run_llm_enhancement but uses a different prompt focused on
+    analyzing file formats in the source code.
+    """
+    configure_http_fallback(
+        server_url=config.server.url,
+        api_key=config.server.api_key,
+        timeout_read=config.server.timeout_read,
+    )
+
+    output_dir = config.project.output_dir
+    mkdocs_path = output_dir / "mkdocs.yml"
+
+    # Use project source dir or fall back to src/ in project root
+    if source_dir is None:
+        source_dir = config.project.source_dir
+
+    prompt = build_format_analysis_prompt(
+        source_dir=source_dir,
+        mkdocs_path=mkdocs_path,
+        project_name=config.project.name,
+    )
+    if not prompt:
+        logger.error("Could not build format analysis prompt")
+        return []
+
+    logger.info("Format analysis prompt: %d chars", len(prompt))
+    max_tokens = _compute_max_tokens(config, slaves, len(prompt))
+
+    if progress_cb:
+        progress_cb(0, len(slaves), "", f"Formatanalyse-Prompt erstellt ({max_tokens} max tokens)")
+
+    # Query ensemble
+    ensemble_result = await query_ensemble(
+        prompt=prompt,
+        model_ids=slaves,
+        pool=pool,
+        timeout=180,
+        max_retries=2,
+        retry_delay=3,
+        mock_mode=mock_mode,
+        max_tokens=max_tokens,
+    )
+
+    if progress_cb:
+        progress_cb(
+            len(ensemble_result.successful_drafts),
+            len(slaves),
+            "",
+            f"{len(ensemble_result.successful_drafts)}/{len(slaves)} Modelle erfolgreich",
+        )
+
+    if not ensemble_result.successful_drafts:
+        logger.error("No successful drafts from format analysis ensemble")
+        return []
+
+    # Debug output
+    debug_dir = output_dir / "_enhance_debug"
+    debug_dir.mkdir(exist_ok=True)
+    try:
+        (debug_dir / "00_format_prompt.txt").write_text(prompt, encoding="utf-8")
+    except Exception:
+        pass
+    for i, draft in enumerate(ensemble_result.successful_drafts):
+        safe_name = draft.model_id.replace("/", "_").replace(":", "_")
+        try:
+            (debug_dir / f"01_format_draft_{i}_{safe_name}.txt").write_text(
+                draft.output, encoding="utf-8"
+            )
+        except Exception:
+            pass
+
+    # Merge or select
+    if master and len(ensemble_result.successful_drafts) > 1:
+        if progress_cb:
+            progress_cb(
+                len(ensemble_result.successful_drafts), len(slaves),
+                master, f"Master-Modell {master} synthetisiert...",
+            )
+        merged = await judge_drafts(
+            drafts=ensemble_result.successful_drafts,
+            context_description="dateiformat-analyse",
+            stakeholder="developer",
+            judge_model_id=master,
+            pool=pool,
+            timeout=240,
+            mock_mode=mock_mode,
+        )
+    else:
+        if len(ensemble_result.successful_drafts) == 1:
+            merged = ensemble_result.successful_drafts[0].output
+        else:
+            merged = _select_best_draft(ensemble_result.successful_drafts)
+
+    # Debug merged
+    try:
+        (debug_dir / "02_format_merged.txt").write_text(merged, encoding="utf-8")
+    except Exception:
+        pass
+
+    base_dir = str(output_dir)
+    changes = parse_file_changes(merged, base_dir=base_dir)
+    logger.info("Format analysis: parsed %d file changes", len(changes))
+    return changes
+
+
 def _select_best_draft(drafts: list[OpenCodeResult]) -> str:
     """Select the best draft using heuristics (for when no master is available).
 

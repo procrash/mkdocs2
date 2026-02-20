@@ -17,6 +17,7 @@ ACTIONS = [
     ("init", "Skeleton erstellen", "Dokumentations-Skelett mit Inhaltsrichtlinien aufbauen"),
     ("enhance", "Enhance", "MkDocs-Plugins, Extensions und Skeleton-Inhalte erweitern"),
     ("enhance_llm", "KI-Verbesserung", "Alle Modelle analysieren mkdocs.yml und schlagen Verbesserungen vor"),
+    ("enhance_formats", "Formatanalyse", "Quellcode auf Dateiformate untersuchen und in docs/formats/ dokumentieren"),
     ("restructure", "Restrukturierung", "Dokumentationsstruktur analysieren und Verbesserungen vorschlagen"),
     ("serve", "Dokumentation anzeigen", "MkDocs-Server starten und Dokumentation im Browser öffnen"),
     ("report", "Bericht anzeigen", "Letzten Generierungsbericht anzeigen"),
