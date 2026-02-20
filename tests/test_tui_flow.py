@@ -183,12 +183,17 @@ class TestSkeletonBuilder:
         assert len(created) > 0
         docs_dir = output_dir / "docs"
         assert (docs_dir / "index.md").exists()
-        assert (docs_dir / "getting-started" / "index.md").exists()
         assert (docs_dir / "getting-started" / "installation.md").exists()
+        assert (docs_dir / "getting-started" / "quickstart.md").exists()
+        assert (docs_dir / "user-guide" / "overview.md").exists()
+        assert (docs_dir / "manual" / "overview.md").exists()
+        assert (docs_dir / "formats" / "overview.md").exists()
+        assert (docs_dir / "architecture" / "overview.md").exists()
+        assert (docs_dir / "api" / "overview.md").exists()
         assert (docs_dir / "generated" / "developer" / "index.md").exists()
-        assert (docs_dir / "generated" / "api" / "index.md").exists()
-        assert (docs_dir / "architecture" / "index.md").exists()
-        assert (docs_dir / "manual" / "index.md").exists()
+        assert (docs_dir / "development" / "contributing.md").exists()
+        assert (docs_dir / "operations" / "deployment.md").exists()
+        assert (docs_dir / "reference" / "faq.md").exists()
 
     def test_skeleton_contains_project_name(self, tmp_path: Path):
         output_dir = tmp_path / "output"

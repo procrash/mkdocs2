@@ -3,6 +3,9 @@
 Each skeleton page contains detailed content guidelines describing what
 should eventually appear there — useful both as LLM prompt context and
 as a human-readable roadmap visible in the early MkDocs preview.
+
+The skeleton reflects a comprehensive, general-purpose software documentation
+template applicable to any project.
 """
 from __future__ import annotations
 import logging
@@ -15,42 +18,27 @@ logger = logging.getLogger(__name__)
 # Default skeleton structure: (relative_path, title, body_template)
 # {project_name} is replaced at creation time.
 DEFAULT_SKELETON: list[tuple[str, str, str]] = [
-    # ── Root ─────────────────────────────────────────────────────────
-    ("index.md", "Projektübersicht", """
-Willkommen zur automatisch generierten Dokumentation für **{project_name}**.
+    # ━━ Root ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("index.md", "Projektdokumentation", """
+Willkommen zur Dokumentation für **{project_name}**.
 
-!!! info "Automatische Generierung"
-    Diese Dokumentation wird von mkdocsOnSteroids erstellt.
-    Seiten werden nach und nach mit Inhalten befüllt.
+## Dokumentationsstruktur
 
-## Dokumentationsabschnitte
-
-| Abschnitt | Beschreibung |
-|-----------|-------------|
-| [Erste Schritte](getting-started/index.md) | Installation, Konfiguration & Schnellstart |
-| [Entwickler](generated/developer/index.md) | Klassen, Module, Architektur, Diagramme |
-| [API-Referenz](generated/api/index.md) | Endpunkte, Schemas, Beispiele |
-| [Benutzerhandbuch](generated/user/index.md) | Features, Tutorials |
-| [Architektur](architecture/index.md) | System-Architektur & Design-Entscheidungen |
-| [Handbuch](manual/index.md) | FAQ, Changelog, Mitwirken |
+| Bereich | Inhalt |
+|---------|--------|
+| [Erste Schritte](getting-started/installation.md) | Installation, Schnellstart, Systemanforderungen |
+| [Benutzerhandbuch](user-guide/overview.md) | Konfiguration, Bedienung, erweiterte Funktionen |
+| [Bedienungsanleitung](manual/overview.md) | UI-Beschreibung, Workflows, Tastenkürzel, Import/Export |
+| [Dateiformate](formats/overview.md) | Ein-/Ausgabeformate, Konfigurationsdateien, DB-Schema |
+| [Architektur](architecture/overview.md) | Systemdesign, Komponenten, Datenfluss |
+| [API-Referenz](api/overview.md) | Endpunkte, Datenmodelle, Authentifizierung |
+| [Developer Guide](generated/developer/index.md) | Auto-generierte Klassen- und Modul-Dokumentation |
+| [Entwicklung](development/contributing.md) | Contributing, Code-Richtlinien, Tests, Release |
+| [Betrieb](operations/deployment.md) | Deployment, Monitoring, Backup, Sicherheit |
+| [Referenz](reference/faq.md) | FAQ, Troubleshooting, Glossar, Changelog, Lizenz |
 """),
 
-    # ── Getting Started ──────────────────────────────────────────────
-    ("getting-started/index.md", "Erste Schritte", """
-!!! tip "Inhaltsrichtlinie"
-    Dieser Abschnitt führt neue Benutzer und Entwickler durch die ersten Schritte.
-
-## Inhalte
-
-- [Installation](installation.md) — System aufsetzen
-- [Schnellstart](quickstart.md) — In 5 Minuten zum ersten Ergebnis
-
-## Zielgruppe
-
-Dieser Bereich richtet sich an Personen, die das Projekt **zum ersten Mal** verwenden.
-Er soll alle nötigen Informationen enthalten, um von Null auf ein funktionierendes Setup zu kommen.
-"""),
-
+    # ━━ Erste Schritte ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("getting-started/installation.md", "Installation", """
 !!! tip "Inhaltsrichtlinie"
     Komplette Schritt-für-Schritt Installationsanleitung.
@@ -65,18 +53,10 @@ Hier sollte stehen:
 
 ## Installation
 
-Hier sollte stehen:
-
 1. **Repository klonen** oder Paket herunterladen
-2. **Abhängigkeiten installieren** (z.B. `pip install`, `npm install`, `apt-get`)
+2. **Abhängigkeiten installieren** (z.B. `pip install`, `npm install`)
 3. **Konfigurationsdatei erstellen** und anpassen
 4. **Installation verifizieren** (Health-Check, Testlauf)
-
-## Nach der Installation
-
-- Erste Konfigurationsschritte
-- Verifikation: Wie prüft man, ob alles funktioniert?
-- Häufige Probleme bei der Installation und deren Lösungen
 
 ## Docker / Container
 
@@ -92,8 +72,6 @@ Falls zutreffend:
     Minimaler Guide: vom Start zum ersten Ergebnis in wenigen Minuten.
 
 ## Schnellstart in 5 Minuten
-
-Hier sollte stehen:
 
 1. **Minimalste Installation** (ein Befehl wenn möglich)
 2. **Erstes Beispiel ausführen** (Hello World / Demo)
@@ -111,233 +89,317 @@ Hier sollte stehen:
 Beschreibung des üblichen Arbeitsablaufs mit dem Projekt.
 """),
 
-    # ── Generated: Developer ─────────────────────────────────────────
-    ("generated/developer/index.md", "Entwickler-Dokumentation", """
+    ("getting-started/requirements.md", "Systemanforderungen", """
 !!! tip "Inhaltsrichtlinie"
-    Technische Dokumentation für Entwickler, die am Projekt arbeiten oder es erweitern.
+    Detaillierte Systemvoraussetzungen für alle unterstützten Plattformen.
 
-## Abschnitte
+## Hardware-Anforderungen
 
-- [Klassen](classes/index.md) — Klassenhierarchie und Verantwortlichkeiten
-- [Module](modules/index.md) — Modulstruktur und Abhängigkeiten
-- [Diagramme](diagrams/index.md) — Visualisierungen der Architektur
+| Komponente | Minimum | Empfohlen |
+|-----------|---------|-----------|
+| CPU | TODO | TODO |
+| RAM | TODO | TODO |
+| Festplatte | TODO | TODO |
 
-## Für Entwickler
+## Software-Anforderungen
 
-Dieser Bereich enthält:
+TODO: Betriebssysteme, Laufzeitumgebungen, Datenbanken
 
-- **Code-Dokumentation**: Auto-generierte Beschreibungen von Klassen, Funktionen, Modulen
-- **Architekturentscheidungen**: Warum wurde was wie implementiert?
-- **Abhängigkeiten**: Welche Bibliotheken/Frameworks werden genutzt und warum?
-- **Code-Konventionen**: Naming, Formatierung, Patterns
+## Netzwerk-Anforderungen
+
+TODO: Ports, Protokolle, Firewall-Regeln, externe Dienste
 """),
 
-    ("generated/developer/architecture.md", "Architektur", """
+    # ━━ Benutzerhandbuch ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("user-guide/overview.md", "Benutzerhandbuch — Überblick", """
 !!! tip "Inhaltsrichtlinie"
-    Technische Architekturübersicht mit Diagrammen.
+    Einstieg ins Benutzerhandbuch mit Übersicht der Funktionen.
+
+## Überblick
+
+Beschreibung der Hauptfunktionen und des typischen Einsatzzwecks.
+
+## Inhalte
+
+| Kapitel | Inhalt |
+|---------|--------|
+| [Konfiguration](configuration.md) | Alle Einstellungsmöglichkeiten |
+| [Grundlegende Bedienung](basic-usage.md) | Erste Schritte nach der Installation |
+| [Erweiterte Funktionen](advanced-features.md) | Fortgeschrittene Features |
+| [Beispiele & Rezepte](examples.md) | Praxisnahe Anleitungen |
+"""),
+
+    ("user-guide/configuration.md", "Konfiguration", """
+!!! tip "Inhaltsrichtlinie"
+    Alle Konfigurationsoptionen mit Erklärungen und Beispielen.
+
+## Konfigurationsdatei
+
+TODO: Pfad, Format (YAML/JSON/TOML), Beispiel der vollständigen Konfiguration
+
+## Optionen-Referenz
+
+| Option | Typ | Standard | Beschreibung |
+|--------|-----|---------|-------------|
+| TODO | TODO | TODO | TODO |
+
+## Umgebungsvariablen
+
+TODO: Welche Umgebungsvariablen werden unterstützt?
+"""),
+
+    ("user-guide/basic-usage.md", "Grundlegende Bedienung", """
+!!! tip "Inhaltsrichtlinie"
+    Schritt-für-Schritt Anleitung für die ersten Aufgaben nach der Installation.
+
+## Erste Schritte
+
+TODO: Was macht der Benutzer als erstes?
+
+## Grundfunktionen
+
+TODO: Die wichtigsten Funktionen mit Beispielen
+"""),
+
+    ("user-guide/advanced-features.md", "Erweiterte Funktionen", """
+!!! tip "Inhaltsrichtlinie"
+    Fortgeschrittene Features für erfahrene Benutzer.
+
+## Fortgeschrittene Konfiguration
+
+TODO: Erweiterte Einstellungen und Anpassungen
+
+## Automatisierung
+
+TODO: Scripting, Batch-Verarbeitung, Integration in CI/CD
+
+## Erweiterbarkeit
+
+TODO: Plugins, Hooks, API-Integration
+"""),
+
+    ("user-guide/examples.md", "Beispiele & Rezepte", """
+!!! tip "Inhaltsrichtlinie"
+    Praxisnahe Beispiele und Copy-Paste-Rezepte für häufige Aufgaben.
+
+## Beispiele
+
+TODO: Konkrete Anwendungsfälle mit vollständigem Code/Konfiguration
+
+## Rezepte
+
+TODO: Schritt-für-Schritt Lösungen für typische Szenarien
+"""),
+
+    # ━━ Bedienungsanleitung ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("manual/overview.md", "Bedienungsanleitung — Überblick", """
+!!! tip "Inhaltsrichtlinie"
+    Überblick für Endanwender über die Bedienung der Applikation.
+
+Richtet sich an **Endanwender** und beschreibt die praktische Nutzung.
+
+## Kapitel
+
+| Kapitel | Inhalt |
+|---------|--------|
+| [Benutzeroberfläche](ui-overview.md) | Aufbau, Navigation, Menüs und Dialoge |
+| [Workflows & Abläufe](workflows.md) | Schritt-für-Schritt-Anleitungen |
+| [Tastenkürzel](shortcuts.md) | Keyboard-Shortcuts |
+| [Import & Export](import-export.md) | Daten laden und exportieren |
+| [Drucken & Berichte](reports.md) | Berichte erzeugen |
+| [Barrierefreiheit](accessibility.md) | Bedienungshilfen |
+"""),
+
+    ("manual/ui-overview.md", "Benutzeroberfläche", """
+!!! tip "Inhaltsrichtlinie"
+    Aufbau des Hauptbildschirms, Navigation, Menüs, Dialoge, Statusleiste.
+
+## Bildschirmaufbau
+
+TODO: Screenshot oder ASCII-Diagramm der Hauptansicht
+
+## Hauptbereiche
+
+TODO: Menüleiste, Sidebar, Hauptbereich, Statusleiste beschreiben
+
+## Dialoge
+
+TODO: Einstellungen, Datei-Öffnen, Bestätigungsdialoge
+"""),
+
+    ("manual/workflows.md", "Workflows & Abläufe", """
+!!! tip "Inhaltsrichtlinie"
+    Schritt-für-Schritt-Anleitungen für typische Aufgaben der Endanwender.
+
+## Typische Arbeitsabläufe
+
+TODO: Neues Projekt erstellen, bearbeiten, speichern, suchen/filtern etc.
+
+Jeder Workflow als nummerierte Schrittfolge mit Erklärungen.
+"""),
+
+    ("manual/shortcuts.md", "Tastenkürzel & Shortcuts", """
+!!! tip "Inhaltsrichtlinie"
+    Vollständige Tastenkürzel-Referenz.
+
+## Allgemeine Tastenkürzel
+
+| Tastenkombination | Aktion |
+|-------------------|--------|
+| `Strg+N` | Neu |
+| `Strg+O` | Öffnen |
+| `Strg+S` | Speichern |
+| `Strg+Z` | Rückgängig |
+
+TODO: Alle Tastenkürzel der Anwendung auflisten
+"""),
+
+    ("manual/import-export.md", "Import & Export", """
+!!! tip "Inhaltsrichtlinie"
+    Daten importieren und exportieren: unterstützte Formate, Optionen, Beispiele.
+
+## Daten importieren
+
+TODO: Unterstützte Formate, Import-Vorgang, Optionen
+
+## Daten exportieren
+
+TODO: Unterstützte Formate, Export-Vorgang, Optionen
+"""),
+
+    ("manual/reports.md", "Drucken & Berichte", """
+!!! tip "Inhaltsrichtlinie"
+    Berichte erstellen, Druckvorschau, PDF-Export.
+
+## Berichte erstellen
+
+TODO: Verfügbare Berichtstypen, Generierung, Vorlagen
+
+## Drucken
+
+TODO: Druckvorschau, Seitenformat, PDF-Export
+"""),
+
+    ("manual/accessibility.md", "Barrierefreiheit", """
+!!! tip "Inhaltsrichtlinie"
+    Bedienungshilfen: Tastaturnavigation, Screenreader, visuelle Anpassungen.
+
+## Tastaturnavigation
+
+TODO: Tab-Reihenfolge, Fokus-Management
+
+## Screenreader-Unterstützung
+
+TODO: Unterstützte Screenreader, ARIA-Labels
+
+## Visuelle Anpassungen
+
+TODO: Dark Mode, Schriftgröße, Kontrast
+"""),
+
+    # ━━ Dateiformate ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("formats/overview.md", "Dateiformate — Überblick", """
+!!! tip "Inhaltsrichtlinie"
+    Übersicht aller Dateiformate die von der Anwendung verarbeitet oder erzeugt werden.
+
+## Format-Kategorien
+
+| Kategorie | Beschreibung |
+|-----------|-------------|
+| [Eingabeformate](input-formats.md) | Formate die importiert werden können |
+| [Ausgabeformate](output-formats.md) | Formate die exportiert werden |
+| [Konfigurationsdateien](config-files.md) | Interne Konfigurationsformate |
+| [Datenbank-Schema](database-schema.md) | Struktur der persistierten Daten |
+| [Migrationsformate](migration-formats.md) | Formate für Daten-Migration |
+
+## Allgemeine Konventionen
+
+- **Encoding**: UTF-8 (Standard)
+- **Zeilenenden**: Betriebssystem-abhängig
+"""),
+
+    ("formats/input-formats.md", "Eingabeformate", """
+!!! tip "Inhaltsrichtlinie"
+    Alle Dateiformate die importiert/gelesen werden können, mit Schema und Beispielen.
+
+## Unterstützte Formate
+
+| Format | Endung | Beschreibung |
+|--------|--------|-------------|
+| TODO | TODO | TODO |
+
+Für jedes Format: Schema, Validierung, Beispiel, Encoding-Hinweise.
+"""),
+
+    ("formats/output-formats.md", "Ausgabeformate", """
+!!! tip "Inhaltsrichtlinie"
+    Alle Dateiformate die exportiert/geschrieben werden, mit Schema und Beispielen.
+
+## Unterstützte Formate
+
+| Format | Endung | Beschreibung |
+|--------|--------|-------------|
+| TODO | TODO | TODO |
+
+Für jedes Format: Struktur, Export-Optionen, Beispiel.
+"""),
+
+    ("formats/config-files.md", "Konfigurationsdateien", """
+!!! tip "Inhaltsrichtlinie"
+    Alle internen Konfigurationsdateien mit vollständiger Feldreferenz.
+
+## Hauptkonfiguration
+
+TODO: Format, Pfad, alle Felder mit Typ/Default/Beschreibung
+
+## Umgebungsvariablen
+
+TODO: Mapping Umgebungsvariable → Konfigurationsoption
+
+## Prioritätsreihenfolge
+
+1. Umgebungsvariablen (höchste Priorität)
+2. Konfigurationsdatei
+3. Standardwerte
+"""),
+
+    ("formats/database-schema.md", "Datenbank-Schema", """
+!!! tip "Inhaltsrichtlinie"
+    Datenbank-Schema mit ER-Diagramm, Tabellendefinitionen, Indizes.
+
+## ER-Diagramm
+
+```mermaid
+erDiagram
+    TabelleA ||--o{ TabelleB : "hat viele"
+```
+
+TODO: ER-Diagramm an tatsächliches Schema anpassen
+
+## Tabellen
+
+TODO: Jede Tabelle mit Spalten, Typen, Constraints, Indizes
+"""),
+
+    ("formats/migration-formats.md", "Migrationsformate", """
+!!! tip "Inhaltsrichtlinie"
+    Formate für Datenbank-Migrationen und Daten-Migration zwischen Versionen.
+
+## Migrations-Dateien
+
+TODO: Namenskonvention, Struktur, Up/Down-Migrationen
+
+## Daten-Migrationen
+
+TODO: Konvertierung zwischen Format-Versionen
+"""),
+
+    # ━━ Architektur ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("architecture/overview.md", "Systemübersicht", """
+!!! tip "Inhaltsrichtlinie"
+    High-Level-Architektur des Gesamtsystems.
 
 ## Systemarchitektur
-
-Hier sollte stehen:
-
-- **High-Level-Diagramm** der Hauptkomponenten
-- **Datenfluss** zwischen den Komponenten
-- **Schnittstellen** zwischen Modulen
-
-```mermaid
-graph TD
-    A[Eingabe] --> B[Verarbeitung]
-    B --> C[Ausgabe]
-    B --> D[Persistenz]
-```
-
-## Komponentenübersicht
-
-| Komponente | Verantwortlichkeit | Abhängigkeiten |
-|-----------|-------------------|----------------|
-| *wird generiert* | | |
-
-## Design Patterns
-
-Welche Entwurfsmuster werden verwendet (z.B. Observer, Factory, Strategy)?
-
-## Fehlerbehandlung
-
-Strategie für Error-Handling, Logging, Recovery.
-"""),
-
-    ("generated/developer/classes/index.md", "Klassen", """
-!!! tip "Inhaltsrichtlinie"
-    Auto-generierte Dokumentation aller Klassen im Projekt.
-
-## Erwarteter Inhalt
-
-Für jede Klasse:
-
-- **Klassenname** und Modul-Zugehörigkeit
-- **Verantwortlichkeit** (Single Responsibility)
-- **Konstruktor-Parameter** und deren Typen
-- **Öffentliche Methoden** mit Signatur und Beschreibung
-- **Vererbungshierarchie** (extends/implements)
-- **Verwendungsbeispiel**
-"""),
-
-    ("generated/developer/modules/index.md", "Module", """
-!!! tip "Inhaltsrichtlinie"
-    Auto-generierte Dokumentation aller Module/Packages im Projekt.
-
-## Erwarteter Inhalt
-
-Für jedes Modul:
-
-- **Modulname** und Pfad
-- **Zweck** des Moduls (was macht es, warum existiert es?)
-- **Öffentliche Schnittstelle** (exportierte Funktionen, Klassen, Konstanten)
-- **Abhängigkeiten** (welche anderen Module werden importiert?)
-- **Konfiguration** (falls das Modul konfigurierbar ist)
-"""),
-
-    ("generated/developer/diagrams/index.md", "Diagramme", """
-!!! tip "Inhaltsrichtlinie"
-    Auto-generierte Mermaid-Diagramme zur Visualisierung der Codestruktur.
-
-## Erwarteter Inhalt
-
-- **Klassendiagramme**: Vererbung und Beziehungen
-- **Sequenzdiagramme**: Typische Abläufe/Workflows
-- **Komponentendiagramme**: Modulstruktur und Abhängigkeiten
-- **Zustandsdiagramme**: State Machines (falls vorhanden)
-
-```mermaid
-classDiagram
-    class Beispiel {
-        +methode()
-        -attribut: Typ
-    }
-```
-"""),
-
-    # ── Generated: API ───────────────────────────────────────────────
-    ("generated/api/index.md", "API-Referenz", """
-!!! tip "Inhaltsrichtlinie"
-    Vollständige API-Dokumentation für Integratoren und externe Entwickler.
-
-## Abschnitte
-
-- [Endpunkte](endpoints/index.md) — REST/GraphQL Endpunkte
-- [Schemas](schemas/index.md) — Datenmodelle und Typen
-- [Beispiele](examples/index.md) — Request/Response-Beispiele
-
-## Übersicht
-
-Hier sollte stehen:
-
-- **Base URL** und Versioning-Strategie
-- **Authentifizierung** (API-Key, OAuth, Bearer Token)
-- **Rate Limiting** und Quotas
-- **Fehler-Codes** und deren Bedeutung
-"""),
-
-    ("generated/api/endpoints/index.md", "API-Endpunkte", """
-!!! tip "Inhaltsrichtlinie"
-    Alle API-Endpunkte mit Methode, Pfad, Parametern und Antworten.
-
-## Erwarteter Inhalt
-
-Für jeden Endpunkt:
-
-- **HTTP-Methode** (GET, POST, PUT, DELETE)
-- **Pfad** mit Path- und Query-Parametern
-- **Request Body** (Schema, Pflichtfelder, Beispiel)
-- **Response** (Status-Codes, Body-Schema, Beispiel)
-- **Fehler-Antworten** (4xx, 5xx mit Beschreibung)
-"""),
-
-    ("generated/api/schemas/index.md", "Schemas", """
-!!! tip "Inhaltsrichtlinie"
-    Datenmodelle und Typdefinitionen die in der API verwendet werden.
-
-## Erwarteter Inhalt
-
-Für jedes Schema/Model:
-
-- **Name** und Beschreibung
-- **Felder** mit Typ, Pflicht/Optional, Default-Wert
-- **Validierungsregeln** (min/max, Pattern, Enum-Werte)
-- **Beziehungen** zu anderen Schemas
-- **JSON-Beispiel**
-"""),
-
-    ("generated/api/examples/index.md", "Beispiele", """
-!!! tip "Inhaltsrichtlinie"
-    Praxisnahe Request/Response-Beispiele für die API.
-
-## Erwarteter Inhalt
-
-- **cURL-Beispiele** für jeden wichtigen Endpunkt
-- **Python/JavaScript-Beispiele** mit gängigen HTTP-Bibliotheken
-- **Typische Workflows** (z.B. "Benutzer erstellen → Einloggen → Daten abfragen")
-- **Fehlerbehandlung** in Client-Code
-"""),
-
-    # ── Generated: User ──────────────────────────────────────────────
-    ("generated/user/index.md", "Benutzerhandbuch", """
-!!! tip "Inhaltsrichtlinie"
-    Dokumentation für Endbenutzer, die das Projekt verwenden (nicht entwickeln).
-
-## Abschnitte
-
-- [Features](features/index.md) — Was kann das Projekt?
-- [Tutorials](tutorials/index.md) — Schritt-für-Schritt Anleitungen
-
-## Zielgruppe
-
-Endbenutzer, Administratoren, Product Owner — alle, die das Projekt **benutzen**
-ohne den Quellcode zu verändern.
-"""),
-
-    ("generated/user/features/index.md", "Features", """
-!!! tip "Inhaltsrichtlinie"
-    Übersicht aller Features und Funktionen für Endbenutzer.
-
-## Erwarteter Inhalt
-
-Für jedes Feature:
-
-- **Feature-Name** und Kurzbeschreibung
-- **Anwendungsfall**: Wann und warum nutzt man es?
-- **Bedienung**: Screenshots, Schritte, Konfigurationsoptionen
-- **Einschränkungen**: Was geht nicht, was ist zu beachten?
-- **Tipps & Tricks**: Best Practices
-"""),
-
-    ("generated/user/tutorials/index.md", "Tutorials", """
-!!! tip "Inhaltsrichtlinie"
-    Schritt-für-Schritt Anleitungen für häufige Aufgaben.
-
-## Erwarteter Inhalt
-
-Jedes Tutorial sollte:
-
-- Ein **konkretes Ziel** haben (z.B. "Ersten Report erstellen")
-- **Voraussetzungen** nennen
-- **Nummerierte Schritte** mit Screenshots/Code-Beispielen enthalten
-- Mit einem **Ergebnis** enden (was sollte man am Ende sehen?)
-- **Troubleshooting** für häufige Fehler enthalten
-"""),
-
-    # ── Architecture ─────────────────────────────────────────────────
-    ("architecture/index.md", "Architektur-Überblick", """
-!!! tip "Inhaltsrichtlinie"
-    Gesamtarchitektur des Systems mit Diagrammen und Designentscheidungen.
-
-## Systemübersicht
-
-Hier sollte stehen:
-
-- **High-Level-Architekturdiagramm** (Mermaid)
-- **Hauptkomponenten** und ihre Verantwortlichkeiten
-- **Datenfluss** zwischen Komponenten
 
 ```mermaid
 graph LR
@@ -347,33 +409,38 @@ graph LR
     end
 ```
 
+TODO: Architekturdiagramm anpassen
+
 ## Technologie-Stack
 
-- Verwendete Frameworks, Bibliotheken, Datenbanken
-- Begründung der Technologieentscheidungen
+TODO: Frameworks, Bibliotheken, Datenbanken mit Begründung
 
-## Design-Entscheidungen
+## Architekturmuster
 
-- Architekturmuster (MVC, Microservices, Event-driven, etc.)
-- Trade-offs und Begründungen
-
-## Deployment
-
-- Deployment-Architektur (Server, Container, Cloud)
-- Skalierungsstrategie
-- Monitoring und Observability
+TODO: MVC, Microservices, Event-driven etc.
 """),
 
-    ("architecture/diagrams/index.md", "Architektur-Diagramme", """
+    ("architecture/components.md", "Komponenten", """
 !!! tip "Inhaltsrichtlinie"
-    Detaillierte Mermaid-Diagramme zur Systemarchitektur.
+    Detailbeschreibung jeder Hauptkomponente: Verantwortlichkeit, Schnittstellen, Abhängigkeiten.
 
-## Erwarteter Inhalt
+## Komponentenübersicht
 
-- **Komponentendiagramm**: Welche Teile gibt es und wie hängen sie zusammen?
-- **Sequenzdiagramm**: Ablauf typischer Requests/Workflows
-- **Deployment-Diagramm**: Wo läuft was (Server, Container, Services)?
-- **ER-Diagramm**: Datenbank-Schema (falls zutreffend)
+| Komponente | Verantwortlichkeit | Abhängigkeiten |
+|-----------|-------------------|----------------|
+| TODO | TODO | TODO |
+
+Für jede Komponente:
+- Was macht sie?
+- Welche Schnittstellen bietet sie?
+- Von welchen anderen Komponenten hängt sie ab?
+"""),
+
+    ("architecture/data-flow.md", "Datenfluss", """
+!!! tip "Inhaltsrichtlinie"
+    Wie fließen Daten durch das System? Sequenzdiagramme typischer Abläufe.
+
+## Datenfluss-Übersicht
 
 ```mermaid
 sequenceDiagram
@@ -385,70 +452,458 @@ sequenceDiagram
     Database-->>Server: Result
     Server-->>Client: Response
 ```
+
+TODO: Typische Workflows als Sequenzdiagramme
+
+## Datenformate an Schnittstellen
+
+TODO: Welche Formate werden zwischen Komponenten ausgetauscht?
 """),
 
-    # ── Manual ───────────────────────────────────────────────────────
-    ("manual/index.md", "Handbuch", """
-Manuell gepflegte Dokumentation, die nicht automatisch generiert wird.
-
-## Seiten
-
-- [FAQ](faq.md) — Häufig gestellte Fragen
-- [Changelog](changelog.md) — Versionshistorie
-- [Mitwirken](contributing.md) — Beitragsrichtlinien
-"""),
-
-    ("manual/faq.md", "FAQ", """
+    ("architecture/decisions.md", "Entscheidungslog (ADR)", """
 !!! tip "Inhaltsrichtlinie"
-    Häufig gestellte Fragen und Antworten.
-
-## Erwarteter Inhalt
-
-Typische Fragen zu:
-
-- **Installation**: "Es funktioniert nicht, was tun?"
-- **Konfiguration**: "Wie ändere ich X?"
-- **Betrieb**: "Warum ist Y langsam?"
-- **Fehlerbehebung**: "Fehlercode Z — was bedeutet das?"
-
-Jede Frage sollte eine **klare, kurze Antwort** und ggf. einen Link zur ausführlichen Dokumentation enthalten.
-"""),
-
-    ("manual/changelog.md", "Changelog", """
-!!! tip "Inhaltsrichtlinie"
-    Versionshistorie nach [Keep a Changelog](https://keepachangelog.com/) Format.
+    Architecture Decision Records: Wichtige Designentscheidungen mit Kontext und Begründung.
 
 ## Format
 
-```markdown
-## [1.0.0] - 2024-01-01
-### Added
-- Neue Funktion X
+Jede Entscheidung im ADR-Format:
 
-### Changed
-- Verhalten von Y geändert
+- **Status**: Akzeptiert / Abgelehnt / Ersetzt
+- **Kontext**: Welches Problem wird gelöst?
+- **Entscheidung**: Was wurde beschlossen?
+- **Begründung**: Warum diese Lösung?
+- **Konsequenzen**: Welche Auswirkungen hat das?
 
-### Fixed
-- Bug in Z behoben
+## ADR-001: TODO
 
-### Removed
-- Veraltete Funktion W entfernt
+- **Status**: Akzeptiert
+- **Kontext**: TODO
+- **Entscheidung**: TODO
+- **Begründung**: TODO
+"""),
+
+    # ━━ API-Referenz ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("api/overview.md", "API-Referenz — Übersicht", """
+!!! tip "Inhaltsrichtlinie"
+    Einstieg in die API-Dokumentation: Base URL, Versioning, Authentifizierung, Rate Limiting.
+
+## Übersicht
+
+| Seite | Inhalt |
+|-------|--------|
+| [Endpunkte](endpoints.md) | Alle REST-Endpunkte |
+| [Datenmodelle](models.md) | Schemas und Typen |
+| [Authentifizierung](authentication.md) | API-Keys, Token, Rollen |
+| [Fehlerbehandlung](errors.md) | Fehlercodes und Retry-Strategien |
+
+## Base URL
+
+```
+TODO: https://api.example.com/v1
+```
+
+## Versioning
+
+TODO: Wie wird die API versioniert?
+"""),
+
+    ("api/endpoints.md", "API-Endpunkte", """
+!!! tip "Inhaltsrichtlinie"
+    Alle Endpunkte mit Methode, Pfad, Parametern, Request/Response-Beispielen.
+
+## Endpunkt-Übersicht
+
+| Methode | Pfad | Beschreibung |
+|---------|------|-------------|
+| TODO | TODO | TODO |
+
+Für jeden Endpunkt: HTTP-Methode, Pfad, Parameter, Request/Response-Body, Fehler-Antworten.
+"""),
+
+    ("api/models.md", "Datenmodelle", """
+!!! tip "Inhaltsrichtlinie"
+    Alle API-Datenmodelle/Schemas mit Feldern, Typen, Validierung und Beispielen.
+
+## Modelle
+
+TODO: Für jedes Modell: Name, Felder-Tabelle, JSON-Beispiel, Validierungsregeln
+
+## Beziehungen
+
+```mermaid
+erDiagram
+    ModelA ||--o{ ModelB : "hat viele"
+```
+
+TODO: ER-Diagramm der API-Modelle
+"""),
+
+    ("api/authentication.md", "Authentifizierung", """
+!!! tip "Inhaltsrichtlinie"
+    Authentifizierungsmethoden, Token-Management, Rollen und Berechtigungen.
+
+## Authentifizierungsmethode
+
+TODO: API-Key, OAuth2, JWT, Basic Auth?
+
+## Verwendung
+
+```bash
+curl -H "Authorization: Bearer <token>" https://api.example.com/v1/resource
+```
+
+## Rollen und Berechtigungen
+
+| Rolle | Beschreibung | Zugriffsrechte |
+|-------|-------------|---------------|
+| TODO | TODO | TODO |
+"""),
+
+    ("api/errors.md", "Fehlerbehandlung", """
+!!! tip "Inhaltsrichtlinie"
+    HTTP-Statuscodes, Fehlercodes, Retry-Strategien, Client-Beispiele.
+
+## Fehlerformat
+
+```json
+{
+  "status": "error",
+  "code": "ERROR_CODE",
+  "message": "Beschreibung"
+}
+```
+
+## HTTP-Statuscodes
+
+| Code | Bedeutung |
+|------|----------|
+| 200 | Erfolg |
+| 400 | Ungültige Anfrage |
+| 401 | Nicht authentifiziert |
+| 403 | Zugriff verweigert |
+| 404 | Nicht gefunden |
+| 429 | Rate Limit |
+| 500 | Interner Fehler |
+
+## Retry-Strategie
+
+TODO: Welche Fehler mit Retry? Exponentielles Backoff?
+"""),
+
+    # ━━ Developer Guide (auto-generiert) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("generated/developer/index.md", "Developer Guide", """
+!!! tip "Inhaltsrichtlinie"
+    Auto-generierte technische Dokumentation: Klassen, Module, Diagramme.
+
+## Abschnitte
+
+- [Klassen](classes/index.md) — Klassenhierarchie und Verantwortlichkeiten
+- [Module](modules/index.md) — Modulstruktur und Abhängigkeiten
+- [Diagramme](diagrams/index.md) — Visualisierungen der Architektur
+
+Dieser Bereich wird automatisch aus dem Quellcode generiert.
+"""),
+
+    ("generated/developer/classes/index.md", "Klassen", """
+!!! tip "Inhaltsrichtlinie"
+    Auto-generierte Dokumentation aller Klassen: Konstruktor, Methoden, Vererbung.
+"""),
+
+    ("generated/developer/modules/index.md", "Module", """
+!!! tip "Inhaltsrichtlinie"
+    Auto-generierte Dokumentation aller Module: Zweck, Schnittstelle, Abhängigkeiten.
+"""),
+
+    ("generated/developer/diagrams/index.md", "Diagramme", """
+!!! tip "Inhaltsrichtlinie"
+    Auto-generierte Mermaid-Diagramme: Klassen, Sequenz, Komponenten, Zustandsdiagramme.
+"""),
+
+    # ━━ Entwicklung ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("development/contributing.md", "Contributing", """
+!!! tip "Inhaltsrichtlinie"
+    Beitragsrichtlinien: Issues, Pull Requests, Code-Konventionen, Review-Prozess.
+
+## Wie kann ich beitragen?
+
+- Bug-Reports als Issues erstellen
+- Feature-Requests vorschlagen
+- Code-Beiträge via Pull Request
+- Dokumentation verbessern
+
+## Workflow
+
+1. Issue erstellen oder finden
+2. Branch erstellen (`feature/...` oder `fix/...`)
+3. Änderungen implementieren
+4. Tests ausführen
+5. Pull Request erstellen
+
+## Commit-Konventionen
+
+```
+feat: Neue Funktion
+fix: Bug behoben
+docs: Dokumentation aktualisiert
+refactor: Code-Umstrukturierung
+test: Tests hinzugefügt
 ```
 """),
 
-    ("manual/contributing.md", "Mitwirken", """
+    ("development/setup.md", "Entwicklungsumgebung", """
 !!! tip "Inhaltsrichtlinie"
-    Richtlinien für Beiträge zum Projekt.
+    Einrichtung der lokalen Entwicklungsumgebung: Klonen, venv, Abhängigkeiten, IDE.
 
-## Erwarteter Inhalt
+## Repository klonen
 
-- **Wie kann ich beitragen?** (Issues, Pull Requests, Discussions)
-- **Entwicklungsumgebung einrichten** (Fork, Clone, Branch-Strategie)
-- **Code-Konventionen** (Style Guide, Linting, Formatierung)
-- **Tests schreiben** (Framework, Coverage-Anforderungen)
-- **Commit-Messages** (Format, Konventionen)
-- **Review-Prozess** (Wer reviewed? Wie lange dauert es?)
-- **Code of Conduct** (Verhaltensrichtlinien)
+```bash
+git clone <repo-url>
+cd <projekt>
+```
+
+## Python-Umgebung
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+```
+
+## IDE-Einrichtung
+
+TODO: Empfohlene IDE-Einstellungen (VS Code, PyCharm)
+
+## Verifizierung
+
+```bash
+pytest
+```
+"""),
+
+    ("development/code-style.md", "Code-Richtlinien", """
+!!! tip "Inhaltsrichtlinie"
+    Code-Stil: Formatierung, Namenskonventionen, Docstrings, Logging, Error-Handling.
+
+## Formatierung
+
+TODO: Formatter (Black/Prettier), Linter (flake8/ruff/eslint)
+
+## Namenskonventionen
+
+| Element | Konvention | Beispiel |
+|---------|-----------|----------|
+| Module | snake_case | `my_module.py` |
+| Klassen | PascalCase | `MyClass` |
+| Funktionen | snake_case | `calculate_total()` |
+| Konstanten | UPPER_SNAKE | `MAX_RETRIES` |
+
+## Fehlerbehandlung
+
+- Spezifische Exceptions verwenden
+- Keine leeren `except:`-Blöcke
+- Eigene Exception-Klassen für Domänenfehler
+"""),
+
+    ("development/testing.md", "Tests", """
+!!! tip "Inhaltsrichtlinie"
+    Test-Strategie: Unit/Integration/E2E, Framework, Fixtures, Coverage, CI.
+
+## Tests ausführen
+
+```bash
+pytest
+pytest --cov=src --cov-report=html
+```
+
+## Test-Struktur
+
+TODO: Verzeichnisstruktur, Namenskonventionen, Fixtures
+
+## Coverage-Ziele
+
+TODO: Mindest-Coverage, CI-Integration
+"""),
+
+    ("development/release.md", "Release-Prozess", """
+!!! tip "Inhaltsrichtlinie"
+    Versionierung (SemVer), Release-Checkliste, Artefakte, Hotfix-Prozess.
+
+## Versionierung
+
+Semantic Versioning: `MAJOR.MINOR.PATCH`
+
+## Release-Checkliste
+
+- [ ] Tests bestehen
+- [ ] Changelog aktualisiert
+- [ ] Version angepasst
+- [ ] Tag erstellt
+
+## Artefakte
+
+TODO: PyPI, Docker-Image, GitHub-Release?
+"""),
+
+    # ━━ Betrieb ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("operations/deployment.md", "Deployment", """
+!!! tip "Inhaltsrichtlinie"
+    Deployment-Strategien, Umgebungen, Docker, CI/CD, Rollback.
+
+## Umgebungen
+
+| Umgebung | Zweck |
+|----------|-------|
+| Development | Lokale Entwicklung |
+| Staging | Test vor Production |
+| Production | Live-System |
+
+## Docker Deployment
+
+```bash
+docker build -t projekt:latest .
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+## Rollback
+
+TODO: Schnelles Rollback auf vorherige Version
+"""),
+
+    ("operations/monitoring.md", "Monitoring & Logging", """
+!!! tip "Inhaltsrichtlinie"
+    Metriken, Logging-Konventionen, Alerting, Dashboards, Incident Response.
+
+## Wichtige Metriken
+
+| Metrik | Schwellwert |
+|--------|-------------|
+| CPU | < 80% |
+| RAM | < 85% |
+| Antwortzeit P95 | < 500ms |
+| Fehlerrate | < 1% |
+
+## Logging
+
+TODO: Log-Level, Format, Aggregation
+
+## Alerting
+
+TODO: Alert-Regeln, Eskalation, Benachrichtigungskanäle
+"""),
+
+    ("operations/backup.md", "Backup & Recovery", """
+!!! tip "Inhaltsrichtlinie"
+    Backup-Strategie, Zeitpläne, Recovery-Verfahren, RTO/RPO.
+
+## Was wird gesichert?
+
+| Komponente | Häufigkeit | Aufbewahrung |
+|-----------|-----------|-------------|
+| Datenbank | TODO | TODO |
+| Konfiguration | TODO | TODO |
+| Uploads/Medien | TODO | TODO |
+
+## Recovery
+
+TODO: Wiederherstellungsschritte, RTO/RPO-Ziele
+"""),
+
+    ("operations/security.md", "Sicherheit", """
+!!! tip "Inhaltsrichtlinie"
+    Sicherheitsrichtlinien: Authentifizierung, Secrets, Netzwerk, Input-Validierung, Audit.
+
+## Grundprinzipien
+
+- Least Privilege
+- Defense in Depth
+- Secure by Default
+
+## Secrets-Management
+
+- Niemals Secrets in den Quellcode
+- Umgebungsvariablen oder Secret-Manager verwenden
+- Regelmäßige Rotation
+
+## Sicherheitslücke melden
+
+TODO: Responsible-Disclosure-Prozess
+"""),
+
+    # ━━ Referenz ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("reference/faq.md", "Häufig gestellte Fragen (FAQ)", """
+!!! tip "Inhaltsrichtlinie"
+    Häufige Fragen zu Installation, Konfiguration, Verwendung, Fehlerbehebung.
+
+## Installation
+
+TODO: Häufige Fragen zur Installation
+
+## Verwendung
+
+TODO: Häufige Fragen zur Nutzung
+
+## Entwicklung
+
+TODO: Häufige Fragen für Entwickler
+"""),
+
+    ("reference/troubleshooting.md", "Fehlerbehebung", """
+!!! tip "Inhaltsrichtlinie"
+    Systematische Fehlersuche: Häufige Probleme, Debug-Modus, Log-Analyse.
+
+## Allgemeine Vorgehensweise
+
+1. Fehlermeldung lesen
+2. Log-Dateien prüfen
+3. Konfiguration überprüfen
+4. Abhängigkeiten prüfen
+
+## Häufige Probleme
+
+TODO: Installation, Konfiguration, Laufzeit, Docker — jeweils mit Ursache und Lösung
+"""),
+
+    ("reference/glossary.md", "Glossar", """
+!!! tip "Inhaltsrichtlinie"
+    Begriffserklärungen: Fachbegriffe, Abkürzungen, projektspezifische Terminologie.
+
+Alphabetisch sortierte Begriffsdefinitionen.
+
+TODO: Projektspezifische Fachbegriffe ergänzen
+"""),
+
+    ("reference/changelog.md", "Changelog", """
+!!! tip "Inhaltsrichtlinie"
+    Versionshistorie nach [Keep a Changelog](https://keepachangelog.com/) Format.
+
+## [Unreleased]
+
+### Hinzugefügt
+- TODO
+
+## Kategorien
+
+- **Hinzugefügt** — Neue Features
+- **Geändert** — Änderungen an bestehender Funktionalität
+- **Behoben** — Bugfixes
+- **Entfernt** — Entfernte Features
+- **Sicherheit** — Sicherheitsrelevante Änderungen
+"""),
+
+    ("reference/license.md", "Lizenz", """
+!!! tip "Inhaltsrichtlinie"
+    Projektlizenz, Drittanbieter-Lizenzen, Lizenz-Kompatibilität.
+
+## Projektlizenz
+
+TODO: Welche Lizenz? (MIT, Apache 2.0, GPL, etc.)
+
+## Abhängigkeiten
+
+| Bibliothek | Lizenz |
+|-----------|--------|
+| TODO | TODO |
 """),
 ]
 

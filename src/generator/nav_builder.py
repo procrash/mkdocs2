@@ -5,49 +5,58 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+# Ordered list of top-level sections.
+# Each entry: (directory_name, nav_label)
+# The order here determines the order in the generated nav.
+# "generated/developer" is listed but its content is auto-generated
+# so it's scanned dynamically like all other sections.
+_SECTION_ORDER: list[tuple[str, str]] = [
+    ("getting-started", "Erste Schritte"),
+    ("user-guide", "Benutzerhandbuch"),
+    ("manual", "Bedienungsanleitung"),
+    ("formats", "Dateiformate"),
+    ("architecture", "Architektur"),
+    ("api", "API-Referenz"),
+    ("generated/developer", "Developer Guide"),
+    ("development", "Entwicklung"),
+    ("operations", "Betrieb"),
+    ("reference", "Referenz"),
+]
+
 
 def build_nav(output_dir: Path) -> list:
     """Build the MkDocs nav structure from the docs directory.
 
-    Scans generated/, getting-started/, architecture/, and manual/ directories
-    and creates a nav list.
+    Scans all known section directories in a defined order and creates
+    a nav list suitable for mkdocs.yml.
     """
     docs_dir = output_dir / "docs"
     nav: list = []
+
+    if not docs_dir.exists():
+        return nav
 
     # Home
     if (docs_dir / "index.md").exists():
         nav.append({"Home": "index.md"})
 
-    # Getting Started (top-level)
-    gs_nav = _build_section_nav(docs_dir, "getting-started", "Erste Schritte")
-    if gs_nav:
-        nav.append({"Erste Schritte": gs_nav})
+    # All sections in defined order
+    for section_path, section_label in _SECTION_ORDER:
+        section_nav = _build_section_nav(docs_dir, section_path, section_label)
+        if section_nav:
+            nav.append({section_label: section_nav})
 
-    # User / Getting Started (generated)
-    user_nav = _build_section_nav(docs_dir, "generated/user", "Benutzerhandbuch")
-    if user_nav:
-        nav.append({"Benutzerhandbuch": user_nav})
-
-    # Developer Guide
-    dev_nav = _build_section_nav(docs_dir, "generated/developer", "Entwickler")
-    if dev_nav:
-        nav.append({"Entwickler": dev_nav})
-
-    # API Reference
-    api_nav = _build_section_nav(docs_dir, "generated/api", "API-Referenz")
-    if api_nav:
-        nav.append({"API-Referenz": api_nav})
-
-    # Architecture (top-level)
-    arch_nav = _build_section_nav(docs_dir, "architecture", "Architektur")
-    if arch_nav:
-        nav.append({"Architektur": arch_nav})
-
-    # Manual
-    manual_nav = _build_section_nav(docs_dir, "manual", "Handbuch")
-    if manual_nav:
-        nav.append({"Handbuch": manual_nav})
+    # Any additional top-level directories not in _SECTION_ORDER
+    known_dirs = {s[0].split("/")[0] for s in _SECTION_ORDER}
+    known_dirs.add("generated")  # handled via generated/developer etc.
+    for subdir in sorted(docs_dir.iterdir()):
+        if not subdir.is_dir():
+            continue
+        if subdir.name in known_dirs or subdir.name.startswith("_") or subdir.name.startswith("."):
+            continue
+        extra_nav = _build_section_nav(docs_dir, subdir.name, _title_from_filename(subdir.name))
+        if extra_nav:
+            nav.append({_title_from_filename(subdir.name): extra_nav})
 
     return nav
 
@@ -60,12 +69,12 @@ def _build_section_nav(docs_dir: Path, section_path: str, section_name: str) -> 
 
     items: list = []
 
-    # Index first
+    # Index first (as "Overview" or section name)
     index_file = section_dir / "index.md"
     if index_file.exists():
         items.append({"Overview": f"{section_path}/index.md"})
 
-    # Special files (non-directory)
+    # Top-level .md files in section (non-index)
     for md_file in sorted(section_dir.glob("*.md")):
         if md_file.name == "index.md":
             continue
