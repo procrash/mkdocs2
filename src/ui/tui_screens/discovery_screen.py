@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 
 from textual.app import ComposeResult
-from textual.containers import Center, Vertical
+from textual.containers import Center, Horizontal, Vertical
 from textual.screen import Screen
 from textual.widgets import Button, DataTable, Footer, Header, Label, LoadingIndicator, Static
 
@@ -26,6 +26,7 @@ class DiscoveryScreen(Screen):
         max-height: 85%;
         border: solid $primary;
         padding: 1 2;
+        overflow-y: auto;
     }
     #status-label {
         margin-bottom: 1;
@@ -37,7 +38,10 @@ class DiscoveryScreen(Screen):
     #btn-row {
         margin-top: 1;
         align: center middle;
-        height: 3;
+        height: 5;
+    }
+    #btn-row Button {
+        margin: 0 2;
     }
     #probe-status {
         margin-top: 1;
@@ -69,19 +73,19 @@ class DiscoveryScreen(Screen):
                 yield LoadingIndicator(id="spinner")
                 yield DataTable(id="model-table")
                 yield Label("", id="probe-status")
-                with Center(id="btn-row"):
+                with Horizontal(id="btn-row"):
                     yield Button(
                         "Kontextfenster diagnostizieren",
                         variant="warning",
                         id="btn-probe-ctx",
                         disabled=True,
                     )
-                    yield Button("Weiter", variant="primary", id="btn-next", disabled=True)
+                    yield Button("Weiter →", variant="primary", id="btn-next", disabled=True)
         yield Footer()
 
     def on_mount(self) -> None:
         table = self.query_one("#model-table", DataTable)
-        table.add_columns("Modell", "Rolle", "Größe", "Context", "Quelle", "Capabilities")
+        table.add_columns("Modell", "Größe", "Context", "Quelle", "Capabilities")
         table.display = False
         self.query_one("#probe-status", Label).display = False
         self.run_worker(self._probe(), exclusive=True)
@@ -146,7 +150,8 @@ class DiscoveryScreen(Screen):
 
             status.update(
                 f"[bold]LLM-Server-Erkennung[/bold]\n"
-                f"[green]{len(self._discovered)} Modelle gefunden[/green]{ctx_info}"
+                f"[green]{len(self._discovered)} Modelle gefunden[/green]{ctx_info}\n"
+                f"[dim]→ Weiter: Master/Slave-Rollenzuweisung[/dim]"
             )
 
             # Save server URL preference
@@ -178,7 +183,6 @@ class DiscoveryScreen(Screen):
         table.clear()
 
         for m in self._classified:
-            role = "Master" if self._assignment.judge and m.id == self._assignment.judge.id else "Slave"
             caps = ", ".join(c.value for c in m.capabilities)
             disabled_mark = " [red][X][/red]" if m.id in disabled_ids else ""
             ctx_display = f"{m.estimated_context:,}"
@@ -190,7 +194,7 @@ class DiscoveryScreen(Screen):
                 ctx_source = "[dim]Heuristik[/dim]"
 
             table.add_row(
-                f"{m.id}{disabled_mark}", role, m.size_class,
+                f"{m.id}{disabled_mark}", m.size_class,
                 ctx_display, ctx_source, caps,
             )
 
