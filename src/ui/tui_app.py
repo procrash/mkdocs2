@@ -519,10 +519,6 @@ class MkDocsTUI(App):
             self._selected_master = self.config.preferences.selected_judge
         starter()
 
-    def action_toggle_dark(self) -> None:
-        self.dark = not self.dark
-
-
 def run_tui(config: AppConfig, config_path: Path = Path("config.yaml"), auto: bool = False) -> None:
     """Launch the TUI application."""
     # Redirect ALL logging into our TUI handler BEFORE the app starts.
