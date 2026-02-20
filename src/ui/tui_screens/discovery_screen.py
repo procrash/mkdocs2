@@ -57,15 +57,21 @@ class DiscoveryScreen(Screen):
         height: auto;
         max-height: 25;
     }
-    #btn-row {
+    #probe-row {
         margin-top: 1;
         align: center middle;
-        height: auto;
-        min-height: 3;
+        height: 3;
     }
-    #btn-row Button {
+    #probe-row Button {
         margin: 0 1;
-        min-width: 14;
+    }
+    #nav-row {
+        margin-top: 1;
+        align: center middle;
+        height: 3;
+    }
+    #nav-row Button {
+        margin: 0 2;
     }
     #probe-status {
         margin-top: 1;
@@ -113,10 +119,11 @@ class DiscoveryScreen(Screen):
                 yield LoadingIndicator(id="spinner")
                 yield DataTable(id="model-table")
                 yield Label("", id="probe-status")
-                with Horizontal(id="btn-row"):
-                    yield Button("Zurück", id="btn-back")
+                with Horizontal(id="probe-row"):
                     yield Button("Alle proben", variant="warning", id="btn-probe-all", disabled=True)
                     yield Button("Neue proben", variant="warning", id="btn-probe-new", disabled=True)
+                with Horizontal(id="nav-row"):
+                    yield Button("Zurück", id="btn-back")
                     yield Button("Weiter", variant="primary", id="btn-next", disabled=True)
         yield Footer()
 
