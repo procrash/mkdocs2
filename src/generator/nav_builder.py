@@ -13,13 +13,16 @@ logger = logging.getLogger(__name__)
 _SECTION_ORDER: list[tuple[str, str]] = [
     ("getting-started", "Erste Schritte"),
     ("user-guide", "Benutzerhandbuch"),
+    ("tutorials", "Tutorials"),
     ("manual", "Bedienungsanleitung"),
     ("formats", "Dateiformate"),
     ("architecture", "Architektur"),
     ("api", "API-Referenz"),
+    ("integrations", "Integrationen"),
     ("generated/developer", "Developer Guide"),
     ("development", "Entwicklung"),
     ("operations", "Betrieb"),
+    ("compliance", "Compliance"),
     ("reference", "Referenz"),
 ]
 
