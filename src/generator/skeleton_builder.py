@@ -38,9 +38,9 @@ Willkommen zur Dokumentation für **{project_name}**.
 | [Entwicklung](development/contributing.md) | Contributing, Setup, Code-Stil, Tests, CI/CD, Debugging |
 | [Betrieb](operations/deployment.md) | Deployment, Monitoring, Backup, Sicherheit, Skalierung, Runbooks |
 | [Compliance](compliance/overview.md) | Datenschutz, DSGVO, Audit, SLA |
-| [Design-System](design/overview.md) | Farben, Typographie, Komponenten, Tokens, Accessibility |
-| [Testdokumentation](testing/overview.md) | Testplan, Testfälle, Automatisierung, Berichte |
-| [Projektmanagement](project/overview.md) | Roadmap, Stakeholder, Risiken, Meetings |
+| [Design-System](design/overview.md) | Farben, Typographie, Komponenten, Tokens, Animationen, Dark Mode |
+| [Testdokumentation](testing/overview.md) | Testplan, Testfälle, Automatisierung, Regression, Kompatibilität, Testdaten |
+| [Projektmanagement](project/overview.md) | Roadmap, Stakeholder, Risiken, Meetings, Onboarding, DoD |
 | [Referenz](reference/faq.md) | FAQ, Troubleshooting, CLI-Referenz, Fehlercodes, Glossar, Changelog |
 """),
 
@@ -312,6 +312,91 @@ graph TD
     A[Konzept A] --> B[Konzept B]
     B --> C[Konzept C]
 ```
+"""),
+
+
+    ("getting-started/hello-world.md", "Hello World — Erstes Beispiel", """
+!!! tip "Inhaltsrichtlinie"
+    Das kürzestmögliche lauffähige Beispiel. Copy-Paste-fähig, in unter 2 Minuten ausführbar.
+
+## Ziel
+
+Das absolute Minimum zum Laufen bringen — ohne Konfiguration, ohne Vorwissen.
+
+## Voraussetzung
+
+- [Installation](installation.md) abgeschlossen
+
+## Hello World
+
+```bash
+# TODO: Minimaler Befehl der ein Ergebnis erzeugt
+```
+
+## Erwartetes Ergebnis
+
+TODO: Was sieht der Benutzer? Screenshot oder Terminal-Ausgabe.
+
+## Was passiert hier?
+
+TODO: Kurze Erklärung der einzelnen Schritte (1-2 Sätze pro Schritt)
+
+## Nächste Schritte
+
+- [Schnellstart](quickstart.md) — ausführlicherer Einstieg
+- [Grundkonzepte](concepts.md) — die Ideen hinter dem Projekt verstehen
+"""),
+
+    ("getting-started/faq-beginners.md", "Einsteiger-FAQ", """
+!!! tip "Inhaltsrichtlinie"
+    Häufige Fragen von Einsteigern — was typischerweise beim ersten Kontakt unklar ist.
+    Unterschied zur [allgemeinen FAQ](../reference/faq.md): hier nur Einstiegsfragen.
+
+## Grundlegendes
+
+### Was genau macht dieses Projekt?
+
+TODO: Elevator Pitch in 2-3 Sätzen
+
+### Für wen ist es gedacht?
+
+TODO: Zielgruppen beschreiben
+
+### Ist es kostenlos / Open Source?
+
+TODO: Lizenzmodell kurz erklären. Verweis auf [Lizenz](../reference/license.md)
+
+### Wo bekomme ich Hilfe?
+
+TODO: Support-Kanäle, Community, Dokumentation
+
+## Technisches
+
+### Welche Programmiersprache wird verwendet?
+
+TODO
+
+### Brauche ich Programmierkenntnisse?
+
+TODO: Für Endanwender? Für Entwickler?
+
+### Funktioniert es auf meinem System?
+
+TODO: Verweis auf [Systemanforderungen](requirements.md) und [Plattformen](../reference/supported-platforms.md)
+
+### Wie aktualisiere ich?
+
+TODO: Verweis auf [Upgrade-Anleitung](upgrade.md)
+
+## Fehler & Probleme
+
+### Die Installation schlägt fehl
+
+TODO: Häufigste Ursachen und Schnell-Fixes
+
+### Es startet nicht
+
+TODO: Erste Diagnoseschritte
 """),
 
     # ━━ Benutzerhandbuch ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -678,6 +763,147 @@ TODO: Wie können Benutzer Übersetzungen beitragen oder anpassen?
 ## Rechts-nach-Links (RTL)
 
 TODO: Wird RTL unterstützt? (Arabisch, Hebräisch)
+"""),
+
+
+    ("user-guide/backup-restore.md", "Sicherung & Wiederherstellung", """
+!!! tip "Inhaltsrichtlinie"
+    Benutzerorientierte Anleitung für Backup und Restore — NICHT die technischen Operations-Details.
+    Technische Details in [Backup & Recovery (Betrieb)](../operations/backup.md).
+
+## Eigene Daten sichern
+
+TODO: Wie erstellt der Benutzer ein Backup seiner Daten? (Menü, CLI, API)
+
+## Automatische Sicherung
+
+TODO: Ist Autosave aktiv? Wo werden Backups gespeichert? Wie konfigurieren?
+
+## Backup wiederherstellen
+
+TODO: Schritt-für-Schritt Wiederherstellung aus Backup
+
+## Versionierung & Verlauf
+
+TODO: Können frühere Versionen einzelner Dateien/Datensätze wiederhergestellt werden?
+
+## Export als Backup
+
+TODO: Daten exportieren als zusätzliche Sicherung (CSV, JSON). Verweis auf [Import & Export](../manual/import-export.md)
+"""),
+
+    ("user-guide/automation-rules.md", "Automatisierungsregeln", """
+!!! tip "Inhaltsrichtlinie"
+    Regelbasierte Automatisierung innerhalb der Anwendung: Trigger, Bedingungen, Aktionen.
+
+## Konzept
+
+TODO: Was sind Automatisierungsregeln? Trigger → Bedingung → Aktion
+
+## Regel erstellen
+
+TODO: Schritt-für-Schritt Anleitung
+
+### Trigger-Typen
+
+| Trigger | Beschreibung | Beispiel |
+|---------|-------------|---------|
+| Zeitbasiert | Zu bestimmten Zeitpunkten | Jeden Montag 8:00 |
+| Event-basiert | Bei bestimmten Ereignissen | Neuer Datensatz erstellt |
+| Bedingungsbasiert | Wenn Wert sich ändert | Status wechselt auf "Fertig" |
+
+### Bedingungen
+
+TODO: Logische Verknüpfungen (UND, ODER, NICHT), Vergleichsoperatoren
+
+### Aktionen
+
+| Aktion | Beschreibung |
+|--------|-------------|
+| E-Mail senden | Benachrichtigung versenden |
+| Feld setzen | Wert automatisch setzen |
+| Webhook aufrufen | Externes System benachrichtigen |
+| Datensatz erstellen | Automatisch neuen Eintrag anlegen |
+
+TODO: An tatsächlich verfügbare Aktionen anpassen
+
+## Beispiel-Regeln
+
+TODO: 2-3 praxisnahe Beispiele
+
+## Regeln testen
+
+TODO: Testmodus, Simulation, Protokoll
+"""),
+
+    ("user-guide/templates.md", "Vorlagen & Templates", """
+!!! tip "Inhaltsrichtlinie"
+    Vorlagen verwenden und erstellen: Projekt-Vorlagen, Dokument-Vorlagen, Vorlagen teilen.
+
+## Vorlagen verwenden
+
+TODO: Wie wählt man eine Vorlage aus? Beim Erstellen eines neuen Projekts/Dokuments?
+
+## Verfügbare Vorlagen
+
+| Vorlage | Beschreibung | Anwendungsfall |
+|---------|-------------|---------------|
+| TODO | TODO | TODO |
+
+## Eigene Vorlage erstellen
+
+TODO: Aus bestehendem Projekt/Dokument eine Vorlage erstellen
+
+## Vorlagen verwalten
+
+TODO: Bearbeiten, Löschen, Duplizieren, Exportieren, Importieren
+
+## Vorlagen teilen
+
+TODO: Vorlagen mit Team/Organisation teilen
+
+## Variablen in Vorlagen
+
+TODO: Platzhalter, dynamische Felder.
+Technisches Format: [Template-Formate](../formats/template-formats.md)
+"""),
+
+    ("user-guide/tags-categories.md", "Tags & Kategorien", """
+!!! tip "Inhaltsrichtlinie"
+    Daten organisieren mit Tags und Kategorien: Erstellen, Zuweisen, Filtern, Hierarchien.
+
+## Tags
+
+### Tags erstellen
+
+TODO: Wie erstellt man einen neuen Tag? Name, Farbe, Beschreibung
+
+### Tags zuweisen
+
+TODO: Einem Datensatz Tags zuweisen — per Dropdown, Drag & Drop, Tastenkürzel
+
+### Nach Tags filtern
+
+TODO: Alle Datensätze mit bestimmtem Tag anzeigen. Verweis auf [Suche & Filter](../manual/search.md)
+
+## Kategorien
+
+### Kategorien vs. Tags
+
+| Eigenschaft | Tags | Kategorien |
+|-----------|------|-----------|
+| Mehrfach-Zuordnung | Ja | Nein (oder begrenzt) |
+| Hierarchie | Flach | Hierarchisch |
+| Pflicht | Optional | Oft Pflicht |
+
+### Kategorie-Hierarchie
+
+TODO: Können Kategorien verschachtelt werden? Wie tief?
+
+## Automatische Zuordnung
+
+TODO: Regeln für automatische Tag-/Kategorie-Zuordnung.
+Verweis auf [Automatisierungsregeln](automation-rules.md)
 """),
 
     # ━━ Tutorials ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1093,6 +1319,200 @@ TODO: Cluster-Metriken, Failover-Alerts
 
 - [Skalierung](../operations/scaling.md)
 - [Disaster Recovery](../operations/disaster-recovery.md)
+"""),
+
+
+    ("tutorials/beginner-ui-walkthrough.md", "Tutorial: UI-Rundgang", """
+!!! tip "Inhaltsrichtlinie"
+    Einsteiger-Tutorial: Geführter Rundgang durch die Benutzeroberfläche — jeder Bereich wird erklärt.
+
+## Ziel
+
+Alle wichtigen Bereiche der Benutzeroberfläche kennenlernen.
+
+## Voraussetzungen
+
+- [Installation](../getting-started/installation.md) abgeschlossen
+- Anwendung gestartet
+
+## Schritte
+
+### Schritt 1: Startseite / Dashboard
+
+TODO: Was sieht man nach dem Login? Verweis auf [Dashboard](../manual/dashboard.md)
+
+### Schritt 2: Navigation & Sidebar
+
+TODO: Hauptmenü, Sidebar, Breadcrumbs
+
+### Schritt 3: Daten anzeigen und bearbeiten
+
+TODO: Tabellen, Formulare, Inline-Editing
+
+### Schritt 4: Suche und Filter
+
+TODO: Daten finden. Verweis auf [Suche & Filter](../manual/search.md)
+
+### Schritt 5: Einstellungen
+
+TODO: Persönliche Einstellungen. Verweis auf [Einstellungen](../manual/settings.md)
+
+### Schritt 6: Hilfe finden
+
+TODO: Wo findet man Hilfe innerhalb der Anwendung?
+
+## Zusammenfassung
+
+TODO: Die wichtigsten UI-Bereiche in Kurzform
+"""),
+
+    ("tutorials/advanced-webhooks.md", "Tutorial: Webhooks einrichten", """
+!!! tip "Inhaltsrichtlinie"
+    Fortgeschrittenen-Tutorial: Webhooks konfigurieren, testen und in externe Dienste integrieren.
+
+## Ziel
+
+Einen Webhook einrichten der bei bestimmten Events externe Dienste benachrichtigt.
+
+## Voraussetzungen
+
+- Grundkonfiguration verstanden
+- Zugang zu einem externen Dienst (Slack, Teams, oder eigener Server)
+
+## Schritte
+
+### Schritt 1: Webhook-URL bereitstellen
+
+TODO: Externe URL die POST-Requests empfängt (z.B. Slack Incoming Webhook)
+
+### Schritt 2: Webhook in der Anwendung registrieren
+
+TODO: UI oder API. Verweis auf [Webhooks](../api/webhooks.md)
+
+### Schritt 3: Events auswählen
+
+TODO: Welche Events sollen den Webhook auslösen?
+
+### Schritt 4: Testen
+
+TODO: Test-Event senden, Payload prüfen
+
+### Schritt 5: Signatur-Verifikation
+
+TODO: HMAC-Signatur im Empfänger verifizieren
+
+## Fehlerbehebung
+
+TODO: Webhook kommt nicht an, falsche Payload, Timeout
+
+## Verweis
+
+- [Webhook-Integrationen](../integrations/webhooks.md)
+- [API-Webhooks](../api/webhooks.md)
+"""),
+
+    ("tutorials/advanced-backup-restore.md", "Tutorial: Backup & Restore", """
+!!! tip "Inhaltsrichtlinie"
+    Fortgeschrittenen-Tutorial: Vollständiges Backup erstellen, verifizieren und wiederherstellen.
+
+## Ziel
+
+Ein komplettes Backup erstellen und die Wiederherstellung erfolgreich durchführen.
+
+## Voraussetzungen
+
+- Admin-Zugang
+- Ausreichend Speicherplatz
+
+## Schritte
+
+### Schritt 1: Backup erstellen
+
+```bash
+# TODO: Backup-Befehl
+```
+
+### Schritt 2: Backup verifizieren
+
+TODO: Integrität prüfen, Inhalt listen
+
+### Schritt 3: Backup sicher aufbewahren
+
+TODO: Externe Speicherung (S3, NAS, etc.)
+
+### Schritt 4: Wiederherstellung testen
+
+TODO: In Test-Umgebung wiederherstellen, Daten prüfen
+
+### Schritt 5: Automatisches Backup einrichten
+
+TODO: Cron-Job oder integrierter Scheduler
+
+## Verweis
+
+- [Backup & Recovery (Betrieb)](../operations/backup.md)
+- [Backup-Formate](../formats/backup-formats.md)
+"""),
+
+    ("tutorials/expert-security-hardening.md", "Tutorial: Sicherheitshärtung", """
+!!! tip "Inhaltsrichtlinie"
+    Experten-Tutorial: System für Produktion härten — alle Sicherheitsmaßnahmen Schritt für Schritt.
+
+## Ziel
+
+Ein produktionsreifes, gehärtetes System aufbauen.
+
+## Voraussetzungen
+
+- Fortgeschrittene System-Administration
+- Zugang zu Firewall, DNS, Zertifikaten
+
+## Schritte
+
+### Schritt 1: HTTPS erzwingen
+
+TODO: TLS-Zertifikat einrichten (Let\\s Encrypt), HTTP → HTTPS Redirect
+
+### Schritt 2: Firewall konfigurieren
+
+TODO: Nur notwendige Ports öffnen
+
+### Schritt 3: Authentifizierung härten
+
+TODO: MFA aktivieren, Session-Timeout, Brute-Force-Schutz
+
+### Schritt 4: Secrets schützen
+
+TODO: Secrets aus Environment, kein Klartext in Config
+
+### Schritt 5: Updates automatisieren
+
+TODO: Unattended Upgrades, Dependency-Monitoring
+
+### Schritt 6: Audit-Logging aktivieren
+
+TODO: Alle Admin-Aktionen protokollieren
+
+### Schritt 7: Backup verifizieren
+
+TODO: Backup-Integrität regelmäßig testen
+
+## Checkliste
+
+- [ ] HTTPS erzwungen
+- [ ] Debug-Modus aus
+- [ ] Default-Credentials geändert
+- [ ] Firewall konfiguriert
+- [ ] MFA aktiviert
+- [ ] Audit-Logging aktiv
+- [ ] Backups getestet
+- [ ] Security-Scan durchgeführt
+
+## Verweis
+
+- [Sicherheit (Betrieb)](../operations/security.md)
+- [Sicherheitsarchitektur](../architecture/security-architecture.md)
+- [Sicherheitsrichtlinien](../compliance/security-policies.md)
 """),
 
     # ━━ Bedienungsanleitung ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1679,6 +2099,163 @@ TODO: Verweis auf [Offline-Modus](offline-mode.md)
 TODO: Konfiguration auf Mobilgeräten
 """),
 
+
+    ("manual/file-management.md", "Dateiverwaltung", """
+!!! tip "Inhaltsrichtlinie"
+    Dateien in der Anwendung verwalten: Hochladen, Organisieren, Vorschau, Herunterladen, Löschen.
+
+## Dateien hochladen
+
+TODO: Drag & Drop, Datei-Dialog, maximale Größe, erlaubte Formate
+
+## Datei-Browser
+
+TODO: Ordnerstruktur, Ansichten (Liste, Kacheln), Sortierung
+
+## Vorschau
+
+| Format | Vorschau verfügbar |
+|--------|-------------------|
+| Bilder (PNG, JPG, SVG) | TODO |
+| PDF | TODO |
+| Textdateien | TODO |
+| Office-Dokumente | TODO |
+
+## Dateien organisieren
+
+TODO: Ordner erstellen, Verschieben, Umbenennen, Tags zuweisen
+
+## Speicherplatz
+
+TODO: Quota-Anzeige, Speicherplatz freigeben
+
+## Papierkorb
+
+TODO: Gelöschte Dateien wiederherstellen, automatisches Leeren
+"""),
+
+    ("manual/templates-usage.md", "Vorlagen verwenden", """
+!!! tip "Inhaltsrichtlinie"
+    Endanwender-Anleitung: Vorlagen auswählen und anwenden — NICHT Vorlagen erstellen (das ist in [Vorlagen & Templates](../user-guide/templates.md)).
+
+## Vorlage auswählen
+
+TODO: Beim Erstellen eines neuen Dokuments/Projekts → Vorlagen-Auswahl
+
+## Vorlagen-Galerie
+
+TODO: Übersicht der verfügbaren Vorlagen mit Vorschau
+
+## Vorlage anpassen
+
+TODO: Felder ausfüllen, optionale Abschnitte ein-/ausblenden
+
+## Favoriten
+
+TODO: Häufig genutzte Vorlagen als Favoriten markieren
+
+## Verweis
+
+- [Vorlagen & Templates (Benutzerhandbuch)](../user-guide/templates.md)
+- [Template-Formate (technisch)](../formats/template-formats.md)
+"""),
+
+    ("manual/history-versioning.md", "Verlauf & Versionierung", """
+!!! tip "Inhaltsrichtlinie"
+    Änderungsverlauf einsehen, Versionen vergleichen, frühere Version wiederherstellen.
+
+## Verlauf anzeigen
+
+TODO: Wo findet man den Änderungsverlauf? (Timeline, Tab, Menü)
+
+## Versionen vergleichen
+
+TODO: Diff-Ansicht, Änderungen farblich markiert (grün=hinzugefügt, rot=entfernt)
+
+## Version wiederherstellen
+
+TODO: Frühere Version als aktuelle setzen, Kopie erstellen
+
+## Wer hat was geändert?
+
+TODO: Benutzer, Zeitstempel, Beschreibung der Änderung
+
+## Automatische Versionierung
+
+TODO: Wird bei jedem Speichern eine Version erstellt? Nur bei explizitem Checkpoint?
+
+## Aufbewahrung
+
+TODO: Wie viele Versionen werden aufbewahrt? Verweis auf [Datenaufbewahrung](../compliance/data-retention.md)
+"""),
+
+    ("manual/bulk-operations.md", "Massenoperationen", """
+!!! tip "Inhaltsrichtlinie"
+    Mehrere Datensätze gleichzeitig bearbeiten: Auswahl, Aktionen, Fortschritt, Rückgängig.
+
+## Datensätze auswählen
+
+TODO: Einzeln per Checkbox, alle auswählen, Bereichsauswahl (Shift+Klick)
+
+## Verfügbare Massenaktionen
+
+| Aktion | Beschreibung |
+|--------|-------------|
+| Löschen | Ausgewählte Datensätze löschen |
+| Tag zuweisen | Allen einen Tag hinzufügen |
+| Kategorie ändern | Kategorie für alle setzen |
+| Exportieren | Auswahl exportieren |
+| Feld ändern | Ein Feld für alle auf gleichen Wert setzen |
+
+TODO: An tatsächliche Aktionen anpassen
+
+## Fortschritt & Abbruch
+
+TODO: Fortschrittsbalken, Abbruch-Möglichkeit bei großen Mengen
+
+## Rückgängig
+
+TODO: Können Massenaktionen rückgängig gemacht werden?
+
+## Limits
+
+TODO: Maximale Anzahl Datensätze pro Massenaktion
+"""),
+
+    ("manual/admin-panel.md", "Administrations-Bereich", """
+!!! tip "Inhaltsrichtlinie"
+    Admin-Panel für Systemadministratoren: Benutzer, Einstellungen, System-Info, Wartung.
+
+## Zugang
+
+TODO: Nur für Administratoren. URL, Menüpunkt, Berechtigungen.
+
+## Benutzer verwalten
+
+TODO: Erstellen, Bearbeiten, Deaktivieren, Passwort zurücksetzen, Rollen zuweisen.
+Verweis auf [Berechtigungen & Rollen](../user-guide/permissions.md)
+
+## Systemeinstellungen
+
+TODO: Globale Einstellungen die alle Benutzer betreffen
+
+## System-Informationen
+
+TODO: Version, Lizenz, Speicherverbrauch, aktive Sitzungen, Uptime
+
+## Wartungsmodus
+
+TODO: System in Wartungsmodus versetzen — Benutzer sehen Wartungsseite
+
+## Audit-Log einsehen
+
+TODO: Verweis auf [Audit & Nachverfolgung](../compliance/audit.md)
+
+## Diagnose
+
+TODO: Health-Check, Log-Viewer, System-Diagnose aus dem Admin-Panel
+"""),
+
     # ━━ Dateiformate ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("formats/overview.md", "Dateiformate — Überblick", """
 !!! tip "Inhaltsrichtlinie"
@@ -2085,6 +2662,137 @@ TODO: Schema-Validierung für Austauschformate, Fehlerbehandlung bei ungültigen
 ## Versionierung
 
 TODO: Wie werden verschiedene Versionen des Austauschformats unterschieden?
+"""),
+
+
+    ("formats/image-formats.md", "Bild- und Medienformate", """
+!!! tip "Inhaltsrichtlinie"
+    Unterstützte Bildformate, Medienformate, Komprimierung, Thumbnails, Konvertierung.
+
+## Unterstützte Bildformate
+
+| Format | Endung | MIME-Type | Lesen | Schreiben | Thumbnail |
+|--------|--------|-----------|-------|----------|----------|
+| JPEG | .jpg, .jpeg | image/jpeg | TODO | TODO | TODO |
+| PNG | .png | image/png | TODO | TODO | TODO |
+| WebP | .webp | image/webp | TODO | TODO | TODO |
+| SVG | .svg | image/svg+xml | TODO | TODO | TODO |
+| GIF | .gif | image/gif | TODO | TODO | TODO |
+| TIFF | .tif, .tiff | image/tiff | TODO | TODO | TODO |
+
+## Größenlimits
+
+| Eigenschaft | Limit |
+|------------|-------|
+| Max. Dateigröße | TODO MB |
+| Max. Auflösung | TODO x TODO px |
+| Max. Dateien pro Upload | TODO |
+
+## Thumbnail-Generierung
+
+TODO: Automatisch? Größen? Qualität? Cache?
+
+## Automatische Konvertierung
+
+TODO: Werden Bilder automatisch konvertiert? (z.B. TIFF → WebP)
+
+## Video- und Audio-Formate
+
+TODO: Falls unterstützt — MP4, WebM, MP3, WAV etc.
+"""),
+
+    ("formats/report-formats.md", "Berichtsformate", """
+!!! tip "Inhaltsrichtlinie"
+    Formate für generierte Berichte: PDF-Layout, Excel-Export, HTML-Berichte, Druckoptimierung.
+
+## PDF-Berichte
+
+### Layout
+
+TODO: Seitenformat (A4/Letter), Ränder, Kopf-/Fußzeile
+
+### Inhalte
+
+- Titel, Datum, Ersteller
+- Tabellen, Diagramme
+- Seitenumbrüche
+- Logo / Branding
+
+### Metadaten
+
+```json
+{
+  "title": "Bericht",
+  "author": "System",
+  "created": "ISO-8601",
+  "pages": 5
+}
+```
+
+## Excel-Export
+
+TODO: .xlsx-Format, Formatierung, Formeln, mehrere Tabellenblätter
+
+## HTML-Berichte
+
+TODO: Interaktive Berichte, Druckansicht, Responsive
+
+## Berichts-Vorlagen
+
+TODO: Verweis auf [Template-Formate](template-formats.md)
+"""),
+
+    ("formats/i18n-formats.md", "Internationalisierungs-Formate", """
+!!! tip "Inhaltsrichtlinie"
+    Formate für Übersetzungen und Lokalisierung: Sprachdateien, Formate, Tools.
+
+## Sprachdatei-Format
+
+TODO: Welches Format? JSON, YAML, PO/MO, XLIFF, ARB?
+
+### JSON-Format
+
+```json
+{
+  "greeting": "Hallo",
+  "farewell": "Auf Wiedersehen",
+  "items_count": "{count} Einträge"
+}
+```
+
+### PO-Format (gettext)
+
+```
+msgid "greeting"
+msgstr "Hallo"
+
+msgid "items_count"
+msgstr "{count} Einträge"
+```
+
+## Datei-Struktur
+
+```
+locales/
+  de/
+    messages.json
+    errors.json
+  en/
+    messages.json
+    errors.json
+```
+
+## Pluralisierung
+
+TODO: Wie werden Pluralformen behandelt?
+
+## Kontext
+
+TODO: Disambiguierung gleicher Strings in verschiedenen Kontexten
+
+## Verweis
+
+- [Mehrsprachigkeit (Benutzerhandbuch)](../user-guide/internationalization.md)
 """),
 
     # ━━ Architektur ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -2608,6 +3316,193 @@ TODO: Was wird gemockt? External APIs, Datenbank, Dateisystem, Uhrzeit
 ## CI-Integration
 
 TODO: Verweis auf [CI/CD](../development/ci-cd.md)
+"""),
+
+
+    ("architecture/logging-architecture.md", "Logging-Architektur", """
+!!! tip "Inhaltsrichtlinie"
+    Logging-Architektur: Logger-Hierarchie, Sink-Konfiguration, Korrelation, Performance.
+
+## Logger-Hierarchie
+
+```
+root
+├── app
+│   ├── app.api
+│   ├── app.service
+│   └── app.repository
+├── security
+│   ├── security.auth
+│   └── security.audit
+└── integration
+    ├── integration.db
+    └── integration.http
+```
+
+TODO: An tatsächliche Logger-Struktur anpassen
+
+## Sinks / Ausgabeziele
+
+| Sink | Konfiguration | Verwendung |
+|------|-------------|-----------|
+| Console | stdout/stderr | Entwicklung |
+| Datei | Rotation, Komprimierung | Produktion |
+| Aggregator | ELK, Loki, CloudWatch | Zentralisiert |
+| Audit-DB | Datenbank-Tabelle | Compliance |
+
+## Korrelations-IDs
+
+TODO: Request-ID, Trace-ID, Span-ID für verteiltes Tracing
+
+## Structured Logging
+
+TODO: JSON-Logging, Kontext-Felder, MDC (Mapped Diagnostic Context)
+
+## Performance
+
+TODO: Async-Logging, Buffering, Sampling bei hohem Volumen
+
+## Verweis
+
+- [Logging-Strategie (Betrieb)](../operations/logging-strategy.md)
+- [Log-Formate](../formats/log-formats.md)
+"""),
+
+    ("architecture/plugin-architecture.md", "Plugin-Architektur", """
+!!! tip "Inhaltsrichtlinie"
+    Technische Architektur des Plugin-Systems: Lade-Mechanismus, Isolation, API, Lifecycle.
+
+## Architektur-Übersicht
+
+```mermaid
+graph TD
+    A[Plugin Manager] --> B[Plugin Registry]
+    A --> C[Plugin Loader]
+    C --> D[Plugin Sandbox]
+    D --> E[Plugin Instance]
+    E --> F[Hook: on_load]
+    E --> G[Hook: on_event]
+    E --> H[Hook: on_unload]
+```
+
+## Plugin-Lade-Mechanismus
+
+TODO: Wie werden Plugins entdeckt und geladen? (Entry Points, Verzeichnis-Scan, Registry)
+
+## Plugin-Isolation
+
+TODO: Laufen Plugins isoliert? (Separate Prozesse, Sandboxing, Berechtigungen)
+
+## Plugin-API
+
+TODO: Welche APIs stehen Plugins zur Verfügung?
+
+| API | Beschreibung |
+|-----|-------------|
+| `app.config` | Konfiguration lesen |
+| `app.db` | Datenbank-Zugriff (eingeschränkt) |
+| `app.events` | Events abonnieren/senden |
+| `app.ui` | UI-Erweiterungen registrieren |
+
+## Lifecycle
+
+1. **Discovery**: Plugin-Verzeichnis scannen
+2. **Validation**: Manifest prüfen, Abhängigkeiten auflösen
+3. **Loading**: Code laden, Initialisierung
+4. **Running**: Hooks werden aufgerufen
+5. **Unloading**: Aufräumen, Ressourcen freigeben
+
+## Verweis
+
+- [Plugins & Erweiterungen (Benutzerhandbuch)](../user-guide/plugins.md)
+- [Plugin-Formate](../formats/plugin-formats.md)
+"""),
+
+    ("architecture/queue-architecture.md", "Queue- & Async-Architektur", """
+!!! tip "Inhaltsrichtlinie"
+    Asynchrone Verarbeitung: Worker, Queues, Job-Scheduling, Retry, Dead-Letter.
+
+## Architektur
+
+```mermaid
+graph LR
+    A[API] -->|enqueue| B[Message Queue]
+    B --> C[Worker 1]
+    B --> D[Worker 2]
+    C --> E[Result Store]
+    D --> E
+    B -->|failed| F[Dead Letter Queue]
+```
+
+## Queues
+
+| Queue | Priorität | Beschreibung | Worker |
+|-------|----------|-------------|--------|
+| default | Normal | Allgemeine Aufgaben | 2 |
+| high | Hoch | Zeitkritische Aufgaben | 1 |
+| bulk | Niedrig | Massenverarbeitung | 1 |
+
+TODO: An tatsächliche Queues anpassen
+
+## Job-Typen
+
+| Job | Queue | Timeout | Retry |
+|-----|-------|---------|-------|
+| TODO | default | 60s | 3x |
+
+## Retry-Strategie
+
+TODO: Exponentielles Backoff, Max-Retries, Dead Letter nach N Fehlern
+
+## Scheduling
+
+TODO: Wiederkehrende Jobs (Cron-artig), einmalige verzögerte Jobs
+
+## Monitoring
+
+TODO: Queue-Länge, Durchsatz, Fehlerrate, Worker-Status
+
+## Verweis
+
+- [Event-System](event-system.md)
+- [Message Queue Integration](../integrations/messaging.md)
+"""),
+
+    ("architecture/database-architecture.md", "Datenbank-Architektur", """
+!!! tip "Inhaltsrichtlinie"
+    Datenbank-Designentscheidungen: Normalisierung, Indizierung, Partitionierung, Replikation.
+
+## Design-Prinzipien
+
+- **Normalisierung**: Mindestens 3. Normalform für Stammdaten
+- **Denormalisierung**: Gezielt für Performance-kritische Abfragen
+- **Soft Delete**: Datensätze werden markiert, nicht gelöscht
+- **Audit-Felder**: `created_at`, `updated_at`, `created_by` auf allen Tabellen
+
+## Indizierungs-Strategie
+
+TODO: Primärschlüssel, Fremdschlüssel, häufige Abfragen, Composite Indexes
+
+## Partitionierung
+
+TODO: Zeitbasiert, Range-basiert? Für welche Tabellen?
+
+## Replikation
+
+TODO: Primary-Replica Setup, Read-Routing
+
+## Connection Pooling
+
+TODO: Pool-Größe, Timeout, Health Checks
+
+## Migrationen
+
+TODO: Verweis auf [Migrationsformate](../formats/migration-formats.md)
+
+## Verweis
+
+- [Datenbank-Schema](../formats/database-schema.md)
+- [Externe Datenbanken](../integrations/database.md)
 """),
 
     # ━━ API-Referenz ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -3167,6 +4062,250 @@ TODO: Welche Endpunkte/Felder sind deprecated? Bis wann verfügbar?
 - [Changelog (Gesamt)](../reference/changelog.md)
 """),
 
+
+    ("api/file-upload.md", "Datei-Upload API", """
+!!! tip "Inhaltsrichtlinie"
+    Datei-Upload via API: Multipart, Chunked Upload, Presigned URLs, Limits.
+
+## Einfacher Upload
+
+```bash
+curl -X POST https://api.example.com/v1/files \\
+  -H "Authorization: Bearer <token>" \\
+  -F "file=@dokument.pdf" \\
+  -F "description=Mein Dokument"
+```
+
+## Response
+
+```json
+{
+  "id": "file-uuid",
+  "filename": "dokument.pdf",
+  "size": 1048576,
+  "mime_type": "application/pdf",
+  "url": "/files/file-uuid",
+  "created_at": "2024-01-15T10:30:00Z"
+}
+```
+
+## Chunked Upload (große Dateien)
+
+TODO: Mehrteiliger Upload für Dateien > X MB
+
+## Presigned URLs
+
+TODO: Direkt-Upload zu S3/Storage ohne Umweg über API-Server
+
+## Limits
+
+| Limit | Wert |
+|-------|------|
+| Max. Dateigröße | TODO MB |
+| Max. Dateien pro Request | TODO |
+| Erlaubte MIME-Types | TODO |
+
+## Verweis
+
+- [Bild- und Medienformate](../formats/image-formats.md)
+"""),
+
+    ("api/search-api.md", "Such-API", """
+!!! tip "Inhaltsrichtlinie"
+    Such-Endpunkt: Volltextsuche, Filter, Facetten, Highlighting, Autocomplete.
+
+## Endpunkt
+
+```
+GET /api/v1/search?q=suchbegriff
+```
+
+## Parameter
+
+| Parameter | Typ | Beschreibung |
+|-----------|-----|-------------|
+| `q` | string | Suchbegriff (Volltextsuche) |
+| `type` | string | Ressourcentyp filtern |
+| `fields` | string | In welchen Feldern suchen |
+| `page` | int | Seite (Pagination) |
+| `per_page` | int | Ergebnisse pro Seite |
+| `sort` | string | Sortierung (`relevance`, `date`, `name`) |
+
+## Response
+
+```json
+{
+  "results": [
+    {
+      "id": "123",
+      "type": "document",
+      "title": "Treffer",
+      "snippet": "...relevanter <mark>Suchbegriff</mark> im Kontext...",
+      "score": 0.95
+    }
+  ],
+  "total": 42,
+  "facets": {
+    "type": {"document": 30, "user": 12}
+  }
+}
+```
+
+## Autocomplete
+
+```
+GET /api/v1/search/suggest?q=such
+```
+
+TODO: Vorschläge, Tippfehler-Korrektur
+
+## Erweiterte Suche
+
+TODO: Boolesche Operatoren, Phrasensuche, Wildcards, Fuzzy
+"""),
+
+    ("api/admin-api.md", "Admin-API", """
+!!! tip "Inhaltsrichtlinie"
+    API-Endpunkte für Administration: Benutzerverwaltung, Systemstatus, Konfiguration.
+    Nur mit Admin-Berechtigung zugänglich.
+
+## Authentifizierung
+
+Erfordert Admin-Rolle. Verweis auf [Authentifizierung](authentication.md).
+
+## Benutzerverwaltung
+
+### Benutzer auflisten
+
+```
+GET /api/v1/admin/users?page=1&per_page=20
+```
+
+### Benutzer erstellen
+
+```
+POST /api/v1/admin/users
+{"email": "neu@example.com", "role": "editor"}
+```
+
+### Benutzer deaktivieren
+
+```
+PATCH /api/v1/admin/users/:id
+{"active": false}
+```
+
+## Systemstatus
+
+```
+GET /api/v1/admin/status
+```
+
+```json
+{
+  "version": "2.1.0",
+  "uptime": 86400,
+  "database": "ok",
+  "cache": "ok",
+  "storage": {"used": "5.2GB", "total": "50GB"}
+}
+```
+
+## Konfiguration
+
+```
+GET /api/v1/admin/config
+PUT /api/v1/admin/config
+```
+
+TODO: Welche Konfigurationen sind via API änderbar?
+
+## Audit-Log
+
+```
+GET /api/v1/admin/audit?from=2024-01-01&to=2024-01-31
+```
+"""),
+
+    ("api/health-api.md", "Health & Status API", """
+!!! tip "Inhaltsrichtlinie"
+    Health-Check-Endpunkte für Monitoring, Load Balancer, Kubernetes Probes.
+
+## Endpunkte
+
+### Liveness Probe
+
+```
+GET /health/live
+```
+
+Prüft: Prozess läuft.
+
+```json
+{"status": "ok"}
+```
+
+### Readiness Probe
+
+```
+GET /health/ready
+```
+
+Prüft: Alle Abhängigkeiten verfügbar.
+
+```json
+{
+  "status": "ok",
+  "checks": {
+    "database": {"status": "ok", "latency_ms": 2},
+    "cache": {"status": "ok", "latency_ms": 1},
+    "storage": {"status": "ok"}
+  }
+}
+```
+
+### Detaillierter Status
+
+```
+GET /health/detail
+```
+
+Erfordert Admin-Berechtigung.
+
+```json
+{
+  "status": "ok",
+  "version": "2.1.0",
+  "uptime_seconds": 86400,
+  "checks": { "..." : "..." },
+  "metrics": {
+    "requests_total": 150000,
+    "active_connections": 42
+  }
+}
+```
+
+## HTTP-Statuscodes
+
+| Status | Bedeutung |
+|--------|----------|
+| 200 | Alles in Ordnung |
+| 503 | Nicht bereit (Dependency down) |
+
+## Kubernetes-Integration
+
+```yaml
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 8000
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: 8000
+```
+"""),
+
     # ━━ Integrationen ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("integrations/overview.md", "Integrationen — Überblick", """
 !!! tip "Inhaltsrichtlinie"
@@ -3468,6 +4607,163 @@ TODO: Verweis auf [Migrationsformate](../formats/migration-formats.md)
 ## Replikation
 
 TODO: Read-Replicas konfigurieren, Routing (Schreiben → Primary, Lesen → Replica)
+"""),
+
+
+    ("integrations/email.md", "E-Mail-Integration", """
+!!! tip "Inhaltsrichtlinie"
+    E-Mail-Versand: SMTP-Konfiguration, Templates, Transaktions-E-Mails, Newsletter.
+
+## SMTP-Konfiguration
+
+```bash
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=noreply@example.com
+SMTP_PASSWORD=secret
+SMTP_USE_TLS=true
+SMTP_FROM=noreply@example.com
+```
+
+## E-Mail-Dienste
+
+| Dienst | Konfiguration | Beschreibung |
+|--------|-------------|-------------|
+| SMTP direkt | Host/Port/Credentials | Eigener Mailserver |
+| SendGrid | API-Key | Cloud-Dienst |
+| AWS SES | Access Key | Amazon E-Mail-Service |
+| Mailgun | API-Key | Cloud-Dienst |
+
+## Transaktions-E-Mails
+
+| E-Mail | Trigger | Template |
+|--------|---------|---------|
+| Willkommen | Registrierung | `welcome.html` |
+| Passwort-Reset | Anforderung | `password-reset.html` |
+| Benachrichtigung | Konfigurierbar | `notification.html` |
+
+TODO: An tatsächliche E-Mails anpassen
+
+## E-Mail-Templates
+
+TODO: Template-Engine, Variablen, Vorschau, Testen
+
+## Rate Limiting
+
+TODO: Max. E-Mails pro Stunde/Tag, Queue
+"""),
+
+    ("integrations/search-engine.md", "Suchmaschinen-Integration", """
+!!! tip "Inhaltsrichtlinie"
+    Integration mit dedizierten Suchmaschinen: Elasticsearch, Meilisearch, Typesense, Solr.
+
+## Unterstützte Engines
+
+| Engine | Version | Status |
+|--------|---------|--------|
+| Elasticsearch | 8.x | TODO |
+| Meilisearch | 1.x | TODO |
+| Typesense | 0.25+ | TODO |
+
+## Konfiguration
+
+```bash
+SEARCH_ENGINE=elasticsearch
+SEARCH_URL=http://localhost:9200
+SEARCH_INDEX=app_documents
+```
+
+## Indizierung
+
+TODO: Welche Daten werden indiziert? Automatisch oder manuell? Echtzeit oder Batch?
+
+## Mapping / Schema
+
+TODO: Feld-Mapping, Analyser, Synonyme, Stoppwörter
+
+## Neuindizierung
+
+```bash
+# TODO: Befehl für vollständige Neuindizierung
+```
+
+## Verweis
+
+- [Such-API](../api/search-api.md)
+- [Suche & Filter (Manual)](../manual/search.md)
+"""),
+
+    ("integrations/cdn.md", "CDN-Integration", """
+!!! tip "Inhaltsrichtlinie"
+    Content Delivery Network: Konfiguration, Cache-Regeln, Invalidierung, Kosten.
+
+## Unterstützte CDNs
+
+| CDN | Status | Konfiguration |
+|-----|--------|-------------|
+| CloudFront | TODO | AWS-Integration |
+| Cloudflare | TODO | DNS-basiert |
+| Bunny CDN | TODO | Pull-Zone |
+
+## Konfiguration
+
+```bash
+CDN_ENABLED=true
+CDN_URL=https://cdn.example.com
+CDN_CACHE_TTL=86400
+```
+
+## Cache-Regeln
+
+| Pfad | Cache-Dauer | Beschreibung |
+|------|-----------|-------------|
+| `/static/*` | 1 Jahr | CSS, JS, Bilder (mit Hash) |
+| `/media/*` | 1 Tag | Benutzer-Uploads |
+| `/api/*` | Kein Cache | API-Antworten |
+
+## Cache-Invalidierung
+
+TODO: Wie wird der CDN-Cache geleert? (API, CLI, automatisch bei Deploy)
+
+## Kosten
+
+TODO: Kostenfaktoren, Monitoring, Optimierung
+"""),
+
+    ("integrations/backup-services.md", "Backup-Dienste", """
+!!! tip "Inhaltsrichtlinie"
+    Integration mit Backup-Diensten: automatische Backups zu S3, GCS, Restic, Borg.
+
+## Unterstützte Dienste
+
+| Dienst | Typ | Konfiguration |
+|--------|-----|-------------|
+| AWS S3 | Cloud | Bucket + Credentials |
+| Google Cloud Storage | Cloud | Bucket + Service Account |
+| Restic | Self-hosted | Repository-Pfad |
+| Borg | Self-hosted | Repository-Pfad |
+
+## Konfiguration
+
+```bash
+BACKUP_PROVIDER=s3
+BACKUP_BUCKET=my-backups
+BACKUP_SCHEDULE=0 2 * * *  # Täglich um 2:00
+BACKUP_RETENTION_DAYS=30
+```
+
+## Automatische Backups
+
+TODO: Scheduler, Benachrichtigung bei Erfolg/Fehler
+
+## Wiederherstellung
+
+TODO: Backup auswählen, Restore-Befehl, Verifizierung
+
+## Verweis
+
+- [Backup & Recovery (Betrieb)](../operations/backup.md)
+- [Backup-Formate](../formats/backup-formats.md)
 """),
 
     # ━━ Developer Guide (auto-generiert) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -4112,6 +5408,244 @@ export default function () {
 TODO: Performance-Tests in Pipeline, Regression-Erkennung
 """),
 
+
+    ("development/error-handling-guide.md", "Fehlerbehandlung (Entwickler-Guide)", """
+!!! tip "Inhaltsrichtlinie"
+    Best Practices für Fehlerbehandlung im Code: Custom Exceptions, Logging, User-Feedback.
+    Architektur-Perspektive in [Fehlerbehandlungsstrategie](../architecture/error-handling.md).
+
+## Custom Exceptions
+
+```python
+class AppError(Exception):
+    def __init__(self, message: str, code: str, status: int = 500):
+        self.message = message
+        self.code = code
+        self.status = status
+
+class NotFoundError(AppError):
+    def __init__(self, resource: str, id: str):
+        super().__init__(f"{resource} {id} nicht gefunden", "NOT_FOUND", 404)
+
+class ValidationError(AppError):
+    def __init__(self, errors: dict):
+        super().__init__("Validierungsfehler", "VALIDATION_ERROR", 422)
+        self.errors = errors
+```
+
+TODO: An tatsächliche Exception-Klassen anpassen
+
+## Regeln
+
+1. **Spezifische Exceptions** statt generische (`ValueError`, `Exception`)
+2. **Keine leeren `except:`** — immer Fehlertyp angeben
+3. **Kontext loggen** — was wurde versucht? Mit welchen Parametern?
+4. **Benutzerfreundlich** — technische Details nur ins Log, nicht in die UI
+
+## Anti-Patterns
+
+- `except: pass` — Fehler verschlucken
+- `raise Exception("...")` — unspezifische Exceptions
+- Stack-Traces an Benutzer zeigen
+"""),
+
+    ("development/logging-guide.md", "Logging (Entwickler-Guide)", """
+!!! tip "Inhaltsrichtlinie"
+    Logging-Best-Practices für Entwickler: Wann was loggen, Kontext, Performance.
+    Architektur in [Logging-Architektur](../architecture/logging-architecture.md).
+
+## Logger erstellen
+
+```python
+import logging
+logger = logging.getLogger(__name__)
+```
+
+## Wann was loggen
+
+| Level | Wann | Beispiel |
+|-------|------|---------|
+| DEBUG | Detaillierte Diagnose | `logger.debug("Query: %s, params: %s", sql, params)` |
+| INFO | Wichtige Geschäftsereignisse | `logger.info("Benutzer %s angemeldet", user_id)` |
+| WARNING | Unerwartetes aber behandeltes | `logger.warning("Retry %d/%d für %s", attempt, max, url)` |
+| ERROR | Fehler mit Stacktrace | `logger.error("Import fehlgeschlagen", exc_info=True)` |
+
+## Kontext mitgeben
+
+```python
+logger.info("Datei verarbeitet", extra={
+    "file_id": file.id,
+    "size_bytes": file.size,
+    "duration_ms": elapsed,
+})
+```
+
+## Regeln
+
+1. **Keine PII loggen** (Passwörter, E-Mails, Tokens)
+2. **Structured Logging** — Key-Value statt Fließtext
+3. **Lazy Formatting** — `logger.debug("x=%s", x)` statt `logger.debug(f"x={x}")`
+4. **Korrelation** — Request-ID im Kontext mitführen
+"""),
+
+    ("development/database-guide.md", "Datenbank (Entwickler-Guide)", """
+!!! tip "Inhaltsrichtlinie"
+    Datenbank-Best-Practices für Entwickler: Queries, Migrationen, Transaktionen, Performance.
+    Architektur in [Datenbank-Architektur](../architecture/database-architecture.md).
+
+## ORM-Nutzung
+
+TODO: Welches ORM? (SQLAlchemy, Django ORM, Prisma, TypeORM)
+
+## Queries
+
+### Do's
+
+- Parameterisierte Queries (nie String-Concatenation!)
+- Nur benötigte Felder selektieren
+- Eager Loading bei Beziehungen
+- Indizes für häufige WHERE/JOIN-Spalten
+
+### Don'ts
+
+- N+1 Queries (Schleife mit DB-Abfrage)
+- `SELECT *` in Produktion
+- Queries in Templates / Views
+- Transaktionen über HTTP-Requests hinweg
+
+## Migrationen schreiben
+
+```bash
+# Neue Migration erstellen
+# TODO: Migrations-Befehl
+
+# Migration ausführen
+# TODO: Migrate-Befehl
+```
+
+### Regeln für Migrationen
+
+1. Immer Up + Down bereitstellen
+2. Keine Datenverluste
+3. Kleine, atomare Schritte
+4. In Staging testen vor Produktion
+
+## Transaktionen
+
+TODO: Wann explizite Transaktionen? Isolation Level?
+"""),
+
+    ("development/migration-writing.md", "Migrationen schreiben", """
+!!! tip "Inhaltsrichtlinie"
+    Anleitung zum Schreiben von Datenbank-Migrationen: Konventionen, Beispiele, Testing.
+
+## Namenskonvention
+
+```
+YYYYMMDD_HHMMSS_beschreibung.py
+```
+
+Beispiel: `20240115_103000_add_user_email_index.py`
+
+## Beispiel-Migration
+
+```python
+# TODO: An tatsächliches Migrations-Framework anpassen
+
+def upgrade():
+    op.add_column('users', sa.Column('phone', sa.String(50)))
+    op.create_index('idx_users_email', 'users', ['email'])
+
+def downgrade():
+    op.drop_index('idx_users_email')
+    op.drop_column('users', 'phone')
+```
+
+## Checkliste
+
+- [ ] Up-Migration geschrieben und getestet
+- [ ] Down-Migration geschrieben und getestet
+- [ ] Keine Datenverluste
+- [ ] Performance bei großen Tabellen bedacht
+- [ ] In Staging getestet
+- [ ] Review durch zweiten Entwickler
+
+## Häufige Patterns
+
+### Spalte hinzufügen (ohne Downtime)
+
+1. Spalte als nullable hinzufügen
+2. Code deployen der neue Spalte befüllt
+3. Backfill für bestehende Daten
+4. Spalte als NOT NULL setzen (optional)
+
+### Tabelle umbenennen
+
+TODO: Schritt-für-Schritt mit Abwärtskompatibilität
+
+## Verweis
+
+- [Migrationsformate](../formats/migration-formats.md)
+"""),
+
+    ("development/accessibility-guide.md", "Accessibility (Entwickler-Guide)", """
+!!! tip "Inhaltsrichtlinie"
+    Accessibility-Best-Practices für Entwickler: Semantisches HTML, ARIA, Tests, Checkliste.
+    Design-Richtlinien in [Accessibility-Richtlinien](../design/accessibility-guidelines.md).
+
+## Semantisches HTML
+
+```html
+<!-- Gut -->
+<nav aria-label="Hauptnavigation">
+  <ul>
+    <li><a href="/">Start</a></li>
+  </ul>
+</nav>
+
+<main>
+  <h1>Seitentitel</h1>
+  <section aria-labelledby="section-title">
+    <h2 id="section-title">Abschnitt</h2>
+  </section>
+</main>
+
+<!-- Schlecht -->
+<div class="nav">
+  <div class="item" onclick="navigate()">Start</div>
+</div>
+```
+
+## ARIA-Regeln
+
+1. **Kein ARIA ist besser als schlechtes ARIA** — semantisches HTML bevorzugen
+2. **Keine `role` auf native Elemente** — `<button>` statt `<div role="button">`
+3. **Dynamische Inhalte** — `aria-live` für Updates ohne Seitenneuladen
+4. **Labels** — Jedes Formularfeld braucht ein `<label>` oder `aria-label`
+
+## Fokus-Management
+
+TODO: Focus-Trap in Modals, Skip-Links, `tabindex`
+
+## Testen
+
+```bash
+# axe-core CLI
+npx @axe-core/cli http://localhost:8000
+
+# Lighthouse
+npx lighthouse http://localhost:8000 --only-categories=accessibility
+```
+
+## Checkliste für jeden PR
+
+- [ ] Bilder haben Alt-Texte
+- [ ] Formularfelder haben Labels
+- [ ] Interaktive Elemente per Tastatur erreichbar
+- [ ] Farbkontrast ≥ 4.5:1
+- [ ] `lang`-Attribut gesetzt
+"""),
+
     # ━━ Betrieb ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("operations/deployment.md", "Deployment", """
 !!! tip "Inhaltsrichtlinie"
@@ -4605,6 +6139,175 @@ TODO: VPN-Zugang für Administration, WireGuard/OpenVPN
 - [Sicherheitsarchitektur](../architecture/security-architecture.md)
 """),
 
+
+    ("operations/monitoring-alerts.md", "Alert-Konfiguration", """
+!!! tip "Inhaltsrichtlinie"
+    Alert-Regeln: Schwellwerte, Eskalation, Benachrichtigungskanäle, Stummschaltung.
+
+## Alert-Regeln
+
+| Alert | Bedingung | Schwere | Kanal |
+|-------|----------|---------|-------|
+| CPU hoch | > 85% für 5 Min | Warning | Slack |
+| CPU kritisch | > 95% für 2 Min | Critical | PagerDuty |
+| RAM hoch | > 90% für 5 Min | Warning | Slack |
+| Disk voll | > 90% | Critical | PagerDuty |
+| Fehlerrate | > 5% für 2 Min | Critical | PagerDuty |
+| Antwortzeit P95 | > 2s für 5 Min | Warning | Slack |
+| Service down | Health-Check fehl 3x | Critical | PagerDuty |
+
+TODO: An tatsächliche Schwellwerte anpassen
+
+## Eskalation
+
+| Zeit nach Alert | Aktion |
+|----------------|--------|
+| 0 Min | Benachrichtigung an On-Call |
+| 15 Min | Eskalation an Team-Lead |
+| 30 Min | Eskalation an Engineering Manager |
+
+## Stummschaltung (Silence)
+
+TODO: Wartungsfenster, bekannte Probleme temporär stummschalten
+
+## Alert-Fatigue vermeiden
+
+- Nur actionable Alerts
+- Schwellwerte regelmäßig anpassen
+- Flapping-Detection aktivieren
+- Alerts gruppieren
+
+## Verweis
+
+- [Monitoring & Logging](monitoring.md)
+- [On-Call](on-call.md)
+"""),
+
+    ("operations/cost-optimization.md", "Kostenoptimierung", """
+!!! tip "Inhaltsrichtlinie"
+    Infrastruktur-Kosten optimieren: Cloud-Kosten, Ressourcen-Rightsizing, Reserved Instances.
+
+## Aktuelle Kosten
+
+| Ressource | Monatliche Kosten | Anteil |
+|----------|------------------|--------|
+| Compute | TODO | TODO% |
+| Datenbank | TODO | TODO% |
+| Storage | TODO | TODO% |
+| Netzwerk | TODO | TODO% |
+| **Gesamt** | **TODO** | **100%** |
+
+## Optimierungsmöglichkeiten
+
+### Compute
+
+TODO: Rightsizing, Spot/Preemptible Instances, Auto-Scaling, Scheduling
+
+### Datenbank
+
+TODO: Richtige Instanzgröße, Reserved Instances, Read Replicas nur wenn nötig
+
+### Storage
+
+TODO: Lifecycle-Policies, Compression, Archivierung (S3 Glacier)
+
+### Netzwerk
+
+TODO: CDN, Komprimierung, Caching
+
+## Monitoring
+
+TODO: Cost-Alerts, Budget-Limits, Tagging für Kostenzuordnung
+
+## Verweis
+
+- [Kapazitätsplanung](capacity-planning.md)
+"""),
+
+    ("operations/on-call.md", "On-Call & Bereitschaft", """
+!!! tip "Inhaltsrichtlinie"
+    Bereitschaftsdienst: Rotation, Verantwortlichkeiten, Werkzeuge, Übergabe, Vergütung.
+
+## On-Call-Rotation
+
+| Woche | Primär | Sekundär |
+|-------|--------|---------|
+| TODO | TODO | TODO |
+
+## Verantwortlichkeiten
+
+### Primärer On-Call
+
+- Alerts innerhalb von TODO Minuten bestätigen
+- Erste Diagnose durchführen
+- Eskalieren wenn nötig
+- Incident-Dokumentation beginnen
+
+### Sekundärer On-Call
+
+- Unterstützung bei Eskalation
+- Übernahme bei Nichterreichbarkeit des Primären
+
+## Werkzeuge
+
+| Werkzeug | Zweck |
+|---------|-------|
+| PagerDuty / Opsgenie | Alert-Routing, Eskalation |
+| Slack #incidents | Kommunikation |
+| Runbooks | Schritt-für-Schritt Anleitungen |
+| Monitoring-Dashboard | Status-Übersicht |
+
+## Übergabe
+
+TODO: Checkliste für On-Call-Übergabe, offene Incidents, bekannte Probleme
+
+## Runbooks
+
+Verweis auf [Runbooks](runbooks.md) — für jeden Alert ein Runbook.
+
+## Vergütung
+
+TODO: Bereitschaftszulage, Regeln
+"""),
+
+    ("operations/change-management.md", "Change Management", """
+!!! tip "Inhaltsrichtlinie"
+    Änderungsmanagement: Klassifizierung, Genehmigung, Durchführung, Dokumentation.
+
+## Change-Kategorien
+
+| Kategorie | Beschreibung | Genehmigung | Beispiel |
+|----------|-------------|-------------|---------|
+| Standard | Routiniert, geringes Risiko | Automatisch | Dependency-Update |
+| Normal | Geplant, moderates Risiko | Team-Lead | Neues Feature |
+| Notfall | Ungeplant, dringend | Post-hoc | Hotfix für Sicherheitslücke |
+
+## Change-Prozess
+
+1. **Antrag**: Change beschreiben (Was, Warum, Wann, Risiko)
+2. **Bewertung**: Risiko und Auswirkung einschätzen
+3. **Genehmigung**: Je nach Kategorie
+4. **Planung**: Zeitfenster, Rollback-Plan, Kommunikation
+5. **Durchführung**: Change implementieren
+6. **Verifizierung**: Funktioniert alles? Monitoring prüfen
+7. **Dokumentation**: Change-Log aktualisieren
+
+## Rollback-Plan
+
+TODO: Jeder Change braucht einen dokumentierten Rollback-Plan
+
+## Change-Log
+
+| Datum | Change | Kategorie | Durchgeführt von | Ergebnis |
+|-------|--------|----------|-----------------|---------|
+| TODO | TODO | TODO | TODO | Erfolgreich/Rollback |
+
+## Verweis
+
+- [Deployment](deployment.md)
+- [Runbooks](runbooks.md)
+"""),
+
     # ━━ Compliance ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("compliance/overview.md", "Compliance — Überblick", """
 !!! tip "Inhaltsrichtlinie"
@@ -4876,6 +6579,240 @@ TODO: Wie wird ein Anbieterwechsel durchgeführt? Datenexport möglich?
 ## Regelmäßige Überprüfung
 
 TODO: Wie oft werden Drittanbieter überprüft?
+"""),
+
+
+    ("compliance/accessibility-compliance.md", "Barrierefreiheit-Compliance", """
+!!! tip "Inhaltsrichtlinie"
+    Gesetzliche Anforderungen zur Barrierefreiheit: WCAG, BITV, EAA, Prüfverfahren, Berichte.
+
+## Relevante Gesetze & Standards
+
+| Standard | Region | Anforderung |
+|---------|--------|-------------|
+| WCAG 2.1 AA | International | W3C Web Content Accessibility Guidelines |
+| BITV 2.0 | Deutschland | Barrierefreie-Informationstechnik-Verordnung |
+| EAA | EU | European Accessibility Act (ab 2025) |
+| ADA | USA | Americans with Disabilities Act |
+| EN 301 549 | EU | Europäische Norm für ICT-Barrierefreiheit |
+
+## Aktueller Status
+
+TODO: Welches Level wird eingehalten? Wann wurde zuletzt geprüft?
+
+## Prüfverfahren
+
+TODO: Automatisiert (axe, Lighthouse) + manuell (Screen-Reader, Tastatur)
+
+## BITV-Test-Ergebnis
+
+TODO: Ergebnis der letzten Prüfung, offene Punkte
+
+## Erklärung zur Barrierefreiheit
+
+TODO: Öffentliche Erklärung gem. BITV/EAA
+
+## Verweis
+
+- [Accessibility-Richtlinien (Design)](../design/accessibility-guidelines.md)
+- [Accessibility (Entwickler-Guide)](../development/accessibility-guide.md)
+- [Barrierefreiheit (Manual)](../manual/accessibility.md)
+"""),
+
+    ("compliance/licensing-compliance.md", "Lizenz-Compliance", """
+!!! tip "Inhaltsrichtlinie"
+    Open-Source-Lizenzen: Kompatibilität, Pflichten, SBOM, License-Scanning.
+
+## Software Bill of Materials (SBOM)
+
+TODO: Vollständige Liste aller Abhängigkeiten mit Lizenzen
+
+## Lizenz-Kategorien
+
+| Kategorie | Lizenzen | Erlaubt | Pflichten |
+|----------|---------|---------|----------|
+| Permissive | MIT, BSD, Apache 2.0 | Ja | Copyright-Hinweis |
+| Weak Copyleft | LGPL, MPL | Bedingt | Änderungen offenlegen |
+| Strong Copyleft | GPL, AGPL | Prüfung nötig | Gesamtcode offenlegen |
+
+## Automatisches Scanning
+
+```bash
+# TODO: License-Scanning-Tool und Befehl
+# pip-licenses, license-checker, FOSSA, Snyk
+```
+
+## Inkompatibilitäten
+
+TODO: Bekannte Lizenz-Inkompatibilitäten und wie sie gelöst wurden
+
+## Verweis
+
+- [Lizenz](../reference/license.md)
+- [Abhängigkeiten](../development/dependencies.md)
+"""),
+
+    ("compliance/export-control.md", "Exportkontrolle & Kryptographie", """
+!!! tip "Inhaltsrichtlinie"
+    Exportkontrollvorschriften für Software mit Kryptographie: Regelwerke, Klassifizierung, Meldepflichten.
+
+## Relevanz
+
+TODO: Verwendet die Software Verschlüsselung? Wird sie international vertrieben?
+
+## Verwendete Kryptographie
+
+| Algorithmus | Zweck | Schlüssellänge | Export-Klassifizierung |
+|-----------|-------|---------------|----------------------|
+| AES-256 | Daten-Verschlüsselung | 256 bit | TODO |
+| TLS 1.3 | Transport-Verschlüsselung | - | TODO |
+| bcrypt | Passwort-Hashing | - | Ausgenommen |
+
+## Regelwerke
+
+| Regelwerk | Region | Beschreibung |
+|----------|--------|-------------|
+| EAR | USA | Export Administration Regulations |
+| EU Dual-Use | EU | Verordnung (EU) 2021/821 |
+| Wassenaar | International | Arrangement on Export Controls |
+
+## Meldepflichten
+
+TODO: Müssen Kryptographie-Exporte gemeldet werden?
+
+## Verweis
+
+- [Sicherheitsarchitektur](../architecture/security-architecture.md)
+"""),
+
+
+    ("project/onboarding.md", "Team-Onboarding", """
+!!! tip "Inhaltsrichtlinie"
+    Onboarding-Plan für neue Teammitglieder: Checkliste, Zeitplan, Mentor, Ressourcen.
+
+## Erste Woche
+
+### Tag 1
+
+- [ ] Zugänge einrichten (Git, CI/CD, Slack, Jira, Cloud)
+- [ ] [Entwicklungsumgebung](../development/setup.md) aufsetzen
+- [ ] Repository klonen und bauen
+- [ ] Tests lokal ausführen
+
+### Tag 2-3
+
+- [ ] [Architektur-Überblick](../architecture/overview.md) lesen
+- [ ] [Grundkonzepte](../getting-started/concepts.md) verstehen
+- [ ] Code-Basis erkunden, Module-Struktur verstehen
+- [ ] Pair-Programming mit Mentor
+
+### Tag 4-5
+
+- [ ] [Code-Richtlinien](../development/code-style.md) lesen
+- [ ] [Git-Workflow](../development/git-workflow.md) verstehen
+- [ ] Ersten kleinen Bug fixen (Good-First-Issue)
+- [ ] Ersten Pull Request erstellen
+
+## Zweite Woche
+
+- [ ] [Tests](../development/testing.md) verstehen und eigene schreiben
+- [ ] [CI/CD-Pipeline](../development/ci-cd.md) verstehen
+- [ ] Feature-Arbeit beginnen
+- [ ] Am Sprint-Planning teilnehmen
+
+## Mentor
+
+TODO: Wer ist Mentor? Wie oft treffen?
+
+## Hilfreiche Links
+
+TODO: Interne Wikis, Slack-Kanäle, Ansprechpartner
+"""),
+
+    ("project/definition-of-done.md", "Definition of Done", """
+!!! tip "Inhaltsrichtlinie"
+    Definition of Done (DoD): Wann gilt eine Aufgabe/Story als fertig?
+
+## Story / Feature
+
+- [ ] Code implementiert und Code-Review abgeschlossen
+- [ ] Unit-Tests geschrieben und bestanden
+- [ ] Integrationstests bestanden (falls zutreffend)
+- [ ] Keine Regressions in bestehenden Tests
+- [ ] Coverage nicht reduziert
+- [ ] Dokumentation aktualisiert (falls nutzerrelevant)
+- [ ] Accessibility geprüft
+- [ ] Security-Checkliste geprüft
+- [ ] In Staging deployed und getestet
+- [ ] Product Owner hat abgenommen
+
+## Bug-Fix
+
+- [ ] Root Cause identifiziert
+- [ ] Fix implementiert und reviewed
+- [ ] Regressionstest geschrieben
+- [ ] In Staging verifiziert
+
+## Spike / Research
+
+- [ ] Ergebnisse dokumentiert
+- [ ] Empfehlung formuliert
+- [ ] ADR erstellt (falls Architektur-relevant)
+- [ ] Im Team vorgestellt
+
+## Release
+
+- [ ] Alle Stories erfüllen DoD
+- [ ] Changelog aktualisiert
+- [ ] Release Notes geschrieben
+- [ ] Abnahmetests bestanden
+- [ ] Tag erstellt und deployed
+"""),
+
+    ("project/communication-plan.md", "Kommunikationsplan", """
+!!! tip "Inhaltsrichtlinie"
+    Wer kommuniziert wann was an wen: Kanäle, Frequenz, Vorlagen, Eskalation.
+
+## Regelmäßige Kommunikation
+
+| Was | Wer | An wen | Frequenz | Kanal |
+|-----|-----|--------|---------|-------|
+| Daily Standup | Team | Team | Täglich | Slack/Meeting |
+| Sprint Review | Team | Stakeholder | 2-wöchentlich | Meeting |
+| Status-Report | Tech Lead | Management | Monatlich | E-Mail |
+| Release Notes | Team | Alle | Bei Release | Dokumentation |
+| Incident Report | On-Call | Team + Management | Bei Incident | Slack + E-Mail |
+
+## Kanäle
+
+| Kanal | Zweck | Response-Zeit |
+|-------|-------|-------------|
+| Slack #general | Allgemeines | Best-effort |
+| Slack #incidents | Vorfälle | < 15 Min |
+| E-Mail | Formelles, Externes | < 1 Tag |
+| Jira-Kommentare | Task-bezogen | < 1 Tag |
+| Meeting | Diskussionen | Geplant |
+
+## Vorlagen
+
+### Status-Report
+
+```
+## Status-Report KW XX
+
+### Highlights
+- TODO
+
+### Risiken / Blocker
+- TODO
+
+### Nächste Schritte
+- TODO
+```
+
+## Eskalation
+
+TODO: Wann und wie wird eskaliert? Verweis auf [On-Call](../operations/on-call.md)
 """),
 
     # ━━ Referenz ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -5624,6 +7561,185 @@ TODO: Responsive Images (`srcset`, `picture`), Lazy Loading
 TODO: Wie auf verschiedenen Geräten testen? (DevTools, reale Geräte)
 """),
 
+
+    ("design/animations.md", "Animationen & Übergänge", """
+!!! tip "Inhaltsrichtlinie"
+    Animations-Richtlinien: Dauer, Easing, Zweck, Performance, Reduced Motion.
+
+## Grundprinzipien
+
+- **Funktional**: Animationen verdeutlichen Übergänge, keine reine Dekoration
+- **Schnell**: Maximal 300ms für UI-Feedback
+- **Konsistent**: Gleiche Aktionen → gleiche Animationen
+
+## Standard-Timings
+
+| Aktion | Dauer | Easing |
+|--------|-------|--------|
+| Hover-Feedback | 150ms | ease-out |
+| Modal öffnen | 200ms | ease-out |
+| Modal schließen | 150ms | ease-in |
+| Seitenwechsel | 250ms | ease-in-out |
+| Toast erscheinen | 200ms | ease-out |
+| Toast verschwinden | 300ms | ease-in |
+
+## Easing-Funktionen
+
+```css
+--ease-in: cubic-bezier(0.4, 0, 1, 0.7);
+--ease-out: cubic-bezier(0, 0.3, 0.6, 1);
+--ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+```
+
+## Reduced Motion
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+## Performance
+
+TODO: CSS-Transitions bevorzugen, `transform` und `opacity` animieren, `will-change` sparsam
+"""),
+
+    ("design/iconography.md", "Icons & Symbole", """
+!!! tip "Inhaltsrichtlinie"
+    Icon-System: Bibliothek, Größen, Farben, Konventionen, eigene Icons.
+
+## Icon-Bibliothek
+
+TODO: Material Icons, Heroicons, Lucide, Phosphor, etc.
+
+## Größen
+
+| Größe | Pixel | Verwendung |
+|-------|-------|-----------|
+| xs | 12px | Inline-Hinweise |
+| sm | 16px | Buttons, Inputs |
+| md | 20px | Navigation, Listen |
+| lg | 24px | Überschriften |
+| xl | 32px | Feature-Icons |
+| 2xl | 48px | Illustrationen |
+
+## Farben
+
+- **Primär**: Interaktive Icons (Buttons, Links)
+- **Sekundär**: Dekorative Icons (Labels, Badges)
+- **Muted**: Weniger wichtige Icons
+- **Danger**: Destruktive Aktionen
+- **Keine Farbe allein**: Icons nie als einziges Unterscheidungsmerkmal
+
+## Konventionen
+
+| Aktion | Icon | Beschreibung |
+|--------|------|-------------|
+| Erstellen | + (Plus) | Neuen Eintrag erstellen |
+| Bearbeiten | Stift | Eintrag bearbeiten |
+| Löschen | Mülleimer | Eintrag löschen |
+| Suchen | Lupe | Suche öffnen |
+| Einstellungen | Zahnrad | Einstellungen öffnen |
+| Schließen | X | Dialog/Panel schließen |
+
+## Accessibility
+
+- Dekorative Icons: `aria-hidden="true"`
+- Funktionale Icons: `aria-label="Beschreibung"`
+"""),
+
+    ("design/dark-mode.md", "Dark Mode", """
+!!! tip "Inhaltsrichtlinie"
+    Dark-Mode-Design: Farbpalette, Kontraste, Bilder, Umschaltung, System-Präferenz.
+
+## Farbpalette Dark Mode
+
+| Token | Light | Dark |
+|-------|-------|------|
+| Background | #ffffff | #1a1a2e |
+| Surface | #f9fafb | #16213e |
+| Text Primary | #1f2937 | #e2e8f0 |
+| Text Secondary | #6b7280 | #94a3b8 |
+| Border | #e5e7eb | #334155 |
+| Primary | #3b82f6 | #60a5fa |
+
+TODO: An tatsächliche Farben anpassen
+
+## Kontraste
+
+- Text auf Background: mindestens 4.5:1 (auch im Dark Mode!)
+- Alle Farben mit Contrast-Checker verifizieren
+
+## Bilder im Dark Mode
+
+TODO: Dunklere Bilder, reduzierte Helligkeit, Schatten statt Ränder
+
+## Umschaltung
+
+| Modus | Beschreibung |
+|-------|-------------|
+| System | Folgt der Betriebssystem-Einstellung |
+| Hell | Immer Light Mode |
+| Dunkel | Immer Dark Mode |
+
+```css
+@media (prefers-color-scheme: dark) {
+  :root { /* Dark-Mode-Tokens */ }
+}
+```
+
+## Verweis
+
+- [Design Tokens](tokens.md)
+"""),
+
+    ("design/forms.md", "Formular-Design", """
+!!! tip "Inhaltsrichtlinie"
+    Formular-Patterns: Layout, Validierung, Fehlermeldungen, Barrierefreiheit, Multi-Step.
+
+## Layout
+
+- **Einspaltiges Layout** bevorzugen (bessere Lesbarkeit)
+- **Labels über dem Feld** (nicht daneben)
+- **Logische Gruppierung** zusammengehöriger Felder
+- **Pflichtfelder** markieren (Stern * oder "Pflicht"-Label)
+
+## Validierung
+
+### Wann validieren?
+
+| Zeitpunkt | Verwendung |
+|-----------|-----------|
+| On Submit | Standard — alle Fehler auf einmal |
+| On Blur | Für komplexe Felder (E-Mail, Passwort) |
+| On Input | Nur für Echtzeit-Feedback (Passwort-Stärke) |
+
+### Fehlermeldungen
+
+```
+✗ Bitte geben Sie eine gültige E-Mail-Adresse ein.
+✗ Das Passwort muss mindestens 8 Zeichen lang sein.
+```
+
+**Regeln:**
+- Unter dem betroffenen Feld anzeigen
+- Rot markieren (+ Icon, nicht nur Farbe)
+- Sagen was falsch ist UND was erwartet wird
+- `aria-describedby` für Screen-Reader
+
+## Multi-Step-Formulare
+
+TODO: Wizard-Pattern, Fortschrittsanzeige, Vor/Zurück, Zwischenspeichern
+
+## Verweis
+
+- [UI-Komponenten](components.md)
+- [Accessibility-Richtlinien](accessibility-guidelines.md)
+"""),
+
     # ━━ Testdokumentation ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("testing/overview.md", "Testdokumentation — Überblick", """
 !!! tip "Inhaltsrichtlinie"
@@ -5892,6 +8008,176 @@ TODO: Bekannte CVEs in Abhängigkeiten
 
 - [Release-Prozess](../development/release.md)
 - [Testplan](test-plan.md)
+"""),
+
+
+    ("testing/regression-tests.md", "Regressionstests", """
+!!! tip "Inhaltsrichtlinie"
+    Regressionstests: Strategie, Testauswahl, Automatisierung, Triage von Regressionen.
+
+## Strategie
+
+TODO: Wann werden Regressionstests ausgeführt? (Nightly, vor Release, nach Merge)
+
+## Test-Suite
+
+| Suite | Anzahl Tests | Dauer | Scope |
+|-------|-------------|-------|-------|
+| Smoke | TODO | < 5 Min | Kritische Pfade |
+| Regression (klein) | TODO | < 30 Min | Letzte 3 Releases |
+| Regression (voll) | TODO | < 2 Std | Alle Features |
+
+## Triage bei Regression
+
+1. Test fehlgeschlagen — Bug oder Testfehler?
+2. Seit welchem Commit? (`git bisect`)
+3. Kritikalität bewerten
+4. Fix oder Revert
+
+## Testauswahl
+
+TODO: Risiko-basierte Auswahl, Changed-Code-basiert, Impact Analysis
+
+## Verweis
+
+- [CI/CD-Pipeline](../development/ci-cd.md)
+- [Testplan](test-plan.md)
+"""),
+
+    ("testing/compatibility-tests.md", "Kompatibilitätstests", """
+!!! tip "Inhaltsrichtlinie"
+    Browser-, Plattform-, Versions-Kompatibilität: Testmatrix, Tools, Automatisierung.
+
+## Browser-Testmatrix
+
+| Browser | Version | Desktop | Mobile | Status |
+|---------|---------|---------|--------|--------|
+| Chrome | Letzte 2 | TODO | TODO | TODO |
+| Firefox | Letzte 2 | TODO | TODO | TODO |
+| Safari | Letzte 2 | TODO | TODO | TODO |
+| Edge | Letzte 2 | TODO | TODO | TODO |
+
+## Plattform-Testmatrix
+
+| OS | Version | Status |
+|-----|---------|--------|
+| Ubuntu | 22.04 | TODO |
+| macOS | 14 | TODO |
+| Windows | 11 | TODO |
+
+## Automatisierung
+
+TODO: Selenium Grid, BrowserStack, Sauce Labs, Playwright
+
+## Testfälle
+
+TODO: Welche Funktionen werden browser-/plattform-übergreifend getestet?
+
+## Verweis
+
+- [Plattform-Unterstützung](../reference/supported-platforms.md)
+"""),
+
+    ("testing/accessibility-tests.md", "Accessibility-Tests", """
+!!! tip "Inhaltsrichtlinie"
+    Accessibility-Tests: Automatisierte Tools, manuelle Prüfung, Screen-Reader-Tests.
+
+## Automatisierte Tests
+
+### axe-core (CI)
+
+```bash
+npx @axe-core/cli http://localhost:8000
+```
+
+### Lighthouse (CI)
+
+```bash
+npx lighthouse http://localhost:8000 --only-categories=accessibility --output=json
+```
+
+### pa11y (CI)
+
+```bash
+npx pa11y http://localhost:8000
+```
+
+## Manuelle Tests
+
+### Tastatur-Test
+
+- [ ] Alle interaktiven Elemente erreichbar mit Tab
+- [ ] Fokus-Reihenfolge logisch
+- [ ] Focus-Indicator sichtbar
+- [ ] Dialoge per Escape schließbar
+
+### Screen-Reader-Test
+
+| Screen-Reader | Browser | Status |
+|-------------|---------|--------|
+| NVDA | Firefox | TODO |
+| VoiceOver | Safari | TODO |
+| JAWS | Chrome | TODO |
+
+### Zoom-Test
+
+- [ ] 200% Zoom — Layout bricht nicht
+- [ ] 400% Zoom — Inhalte weiterhin nutzbar
+
+## Ergebnisse
+
+TODO: Verweis auf letzte Testergebnisse
+
+## Verweis
+
+- [Accessibility-Richtlinien (Design)](../design/accessibility-guidelines.md)
+- [Barrierefreiheit-Compliance](../compliance/accessibility-compliance.md)
+"""),
+
+    ("testing/test-data.md", "Testdaten-Management", """
+!!! tip "Inhaltsrichtlinie"
+    Testdaten erstellen, verwalten, anonymisieren: Factories, Fixtures, Faker, Snapshots.
+
+## Testdaten-Strategien
+
+| Strategie | Beschreibung | Einsatz |
+|----------|-------------|---------|
+| Fixtures | Statische Testdaten | Einfache, vorhersagbare Tests |
+| Factories | Dynamisch generierte Daten | Flexible, variantenreiche Tests |
+| Faker | Realistische Zufallsdaten | Massentests, Edge Cases |
+| Snapshots | Kopie von Produktionsdaten | Integrations-/E2E-Tests |
+
+## Factory-Pattern
+
+```python
+# TODO: An tatsächliches Framework anpassen
+class UserFactory:
+    @staticmethod
+    def create(**kwargs):
+        defaults = {
+            "name": faker.name(),
+            "email": faker.email(),
+            "role": "viewer",
+        }
+        defaults.update(kwargs)
+        return User.create(**defaults)
+```
+
+## Anonymisierung von Produktionsdaten
+
+TODO: PII entfernen, E-Mails/Namen ersetzen, IDs beibehalten, Relationen intakt halten
+
+## Seed-Daten
+
+```bash
+# TODO: Befehl zum Laden von Seed-Daten
+```
+
+## Regeln
+
+1. **Keine echten Daten** in Tests oder Repositories
+2. **Deterministische Tests** — gleiche Eingabe → gleiches Ergebnis
+3. **Aufräumen** — Testdaten nach dem Test löschen
 """),
 
     # ━━ Projektmanagement ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
