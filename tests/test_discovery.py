@@ -59,6 +59,33 @@ class TestModelClassifier:
         assert results[1].estimated_context == 65536
         assert results[2].estimated_context == 4096  # default heuristic for unknown
 
+    def test_classify_instruct_model(self):
+        """Models with instruct/chat in name should get INSTRUCT capability."""
+        result = classify_model("llama3.1-8b-instruct")
+        assert ModelCapability.INSTRUCT in result.capabilities
+
+    def test_classify_chat_model(self):
+        result = classify_model("vicuna-13b-chat")
+        assert ModelCapability.INSTRUCT in result.capabilities
+
+    def test_classify_large_model_gets_instruct(self):
+        """Large models should auto-get INSTRUCT capability."""
+        result = classify_model("llama3-70b")
+        assert ModelCapability.INSTRUCT in result.capabilities
+
+    def test_classify_with_detected_capabilities(self):
+        """Detected capabilities should be merged into classification."""
+        result = classify_model("some-model-7b", detected_caps={"tool_use", "instruct"})
+        assert ModelCapability.TOOL_USE in result.capabilities
+        assert ModelCapability.INSTRUCT in result.capabilities
+
+    def test_classify_models_with_detected_capabilities(self):
+        """classify_models should pass detected capabilities through."""
+        caps_map = {"model-a": {"tool_use", "instruct"}}
+        results = classify_models(["model-a", "model-b"], detected_capabilities=caps_map)
+        assert ModelCapability.TOOL_USE in results[0].capabilities
+        assert ModelCapability.INSTRUCT in results[0].capabilities
+
 
 class TestRoleAssigner:
     def test_single_model(self):

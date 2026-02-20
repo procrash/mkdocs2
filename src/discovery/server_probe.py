@@ -150,6 +150,32 @@ async def _probe_ollama_context(
     return 0
 
 
+async def probe_ollama_template(
+    base_url: str, model_id: str, api_key: str = "", timeout: int = 5,
+) -> dict[str, bool]:
+    """Check Ollama /api/show for chat template (indicates instruct model)."""
+    show_url = f"{base_url}/api/show"
+    headers = {"Content-Type": "application/json"}
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+    result = {"has_template": False, "has_tools_tag": False}
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            resp = await client.post(show_url, json={"name": model_id}, headers=headers)
+            if resp.status_code != 200:
+                return result
+            data = resp.json()
+            template = data.get("template", "")
+            if template:
+                result["has_template"] = True
+                # Check if template contains tool-related tags
+                if any(kw in template.lower() for kw in ("<tool", "function", "{tools}", "<tools>")):
+                    result["has_tools_tag"] = True
+    except Exception:
+        pass
+    return result
+
+
 async def probe_context_length(
     base_url: str,
     model_id: str,
@@ -288,6 +314,134 @@ async def probe_all_context_lengths(
         if ctx > 0:
             results[model.id] = ctx
             model.context_length = ctx
+    return results
+
+
+async def probe_tool_support(
+    base_url: str,
+    model_id: str,
+    api_key: str = "",
+    timeout: int = 15,
+) -> dict[str, bool]:
+    """Probe whether a model supports tool/function calling and is instruct-tuned.
+
+    Returns {"tool_use": bool, "instruct": bool}.
+    """
+    url = base_url.rstrip("/")
+    if not url.endswith("/v1"):
+        url += "/v1"
+    completions_url = f"{url}/chat/completions"
+
+    headers = {"Content-Type": "application/json"}
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+
+    result = {"tool_use": False, "instruct": False}
+
+    # 1. Check instruct: does it follow a simple instruction?
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            resp = await client.post(completions_url, json={
+                "model": model_id,
+                "messages": [{"role": "user", "content": "Reply with exactly the word HELLO and nothing else."}],
+                "max_tokens": 10,
+                "temperature": 0,
+            }, headers=headers)
+            if resp.status_code == 200:
+                data = resp.json()
+                content = (data.get("choices", [{}])[0]
+                           .get("message", {}).get("content", ""))
+                # If the model follows instructions, it's instruct-tuned
+                if "hello" in content.lower():
+                    result["instruct"] = True
+                elif content.strip():
+                    # Got a coherent response at all → likely instruct
+                    result["instruct"] = True
+    except Exception:
+        pass
+
+    # 2. Check tool use: send a request with tools parameter
+    test_tool = {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get weather for a city",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {"type": "string", "description": "City name"},
+                },
+                "required": ["city"],
+            },
+        },
+    }
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            resp = await client.post(completions_url, json={
+                "model": model_id,
+                "messages": [{"role": "user", "content": "What is the weather in Berlin?"}],
+                "tools": [test_tool],
+                "max_tokens": 100,
+                "temperature": 0,
+            }, headers=headers)
+            if resp.status_code == 200:
+                data = resp.json()
+                msg = data.get("choices", [{}])[0].get("message", {})
+                # Check if model returned tool calls
+                tool_calls = msg.get("tool_calls", [])
+                if tool_calls:
+                    result["tool_use"] = True
+                else:
+                    # Some models put function_call at message level
+                    if msg.get("function_call"):
+                        result["tool_use"] = True
+                    # Even if no tool call, server accepted the request → basic support
+                    elif resp.status_code == 200:
+                        result["tool_use"] = True
+            elif resp.status_code in (400, 422):
+                # Server explicitly rejected tools → no support
+                result["tool_use"] = False
+    except Exception:
+        pass
+
+    # 3. Fallback: check Ollama template for instruct/tool hints
+    if not result["instruct"] or not result["tool_use"]:
+        base_no_v1 = base_url.rstrip("/")
+        if base_no_v1.endswith("/v1"):
+            base_no_v1 = base_no_v1[:-3]
+        tpl = await probe_ollama_template(base_no_v1, model_id, api_key, timeout)
+        if tpl["has_template"] and not result["instruct"]:
+            result["instruct"] = True
+        if tpl["has_tools_tag"] and not result["tool_use"]:
+            result["tool_use"] = True
+
+    logger.info("Model %s: instruct=%s, tool_use=%s", model_id, result["instruct"], result["tool_use"])
+    return result
+
+
+async def probe_all_capabilities(
+    base_url: str,
+    models: list[DiscoveredModel],
+    api_key: str = "",
+    timeout: int = 15,
+    progress_callback=None,
+) -> dict[str, set[str]]:
+    """Probe instruct/tool capabilities for all models.
+
+    Returns a dict mapping model_id → set of capability strings.
+    """
+    results: dict[str, set[str]] = {}
+    for model in models:
+        if progress_callback:
+            progress_callback(model.id, 0, f"Prüfe Capabilities: {model.id}...")
+        probed = await probe_tool_support(base_url, model.id, api_key, timeout)
+        caps: set[str] = set()
+        if probed["tool_use"]:
+            caps.add("tool_use")
+        if probed["instruct"]:
+            caps.add("instruct")
+        if caps:
+            results[model.id] = caps
     return results
 
 

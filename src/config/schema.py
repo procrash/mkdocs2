@@ -90,6 +90,8 @@ class ModelHealthEntry(BaseModel):
     enabled: bool = True
     replacement_model_id: str = ""
     failure_count: int = 0
+    context_length: int = 0            # 0 = unknown, >0 = diagnosed/detected
+    detected_capabilities: list[str] = Field(default_factory=list)  # e.g. ["tool_use", "instruct"]
 
 
 class ModelHealthConfig(BaseModel):

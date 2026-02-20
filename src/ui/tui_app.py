@@ -165,7 +165,114 @@ class MkDocsTUI(App):
             self.config.automation.enabled = result["automation_enabled"]
             self._save_config()
         self.auto_mode = result.get("automation_enabled", False)
-        self._start_discovery()
+
+        action = result.get("action", "run")
+        self._dispatch_action(action)
+
+    def _dispatch_action(self, action: str) -> None:
+        """Route an action from the welcome screen to the corresponding flow."""
+        if action == "run":
+            self._start_discovery()
+        elif action == "discover":
+            self._start_discovery()
+        elif action == "generate":
+            # Skip to generation (reuse existing model config if available)
+            self._restore_model_config()
+            self._start_generation()
+        elif action == "init":
+            self._run_init_skeleton()
+        elif action == "enhance":
+            self._run_enhance()
+        elif action == "restructure":
+            self._run_restructure()
+        elif action == "serve":
+            self._run_serve()
+        elif action == "report":
+            self._run_report()
+        else:
+            self._start_discovery()
+
+    def _restore_model_config(self) -> None:
+        """Restore model selections from preferences (for actions that skip discovery)."""
+        if self.config.preferences.selected_analysts:
+            self._selected_slaves = list(self.config.preferences.selected_analysts)
+        if self.config.preferences.selected_judge:
+            self._selected_master = self.config.preferences.selected_judge
+
+    def _run_init_skeleton(self) -> None:
+        """Create skeleton and show result."""
+        from ..generator.skeleton_builder import create_skeleton, create_suggestion_files
+        from ..generator.mkdocs_builder import write_mkdocs_config
+
+        output_dir = self.config.project.output_dir
+        created = create_skeleton(output_dir, self.config.project.name)
+        if self.config.preferences.skeleton_suggestions:
+            create_suggestion_files(output_dir, self.config.preferences.skeleton_suggestions)
+        write_mkdocs_config(self.config, output_dir)
+        self.config.resume.skeleton_created = True
+        self._save_config()
+        self.notify(f"Skeleton: {len(created)} Dateien erstellt", title="Init", severity="information")
+        self._start_welcome()
+
+    def _run_enhance(self) -> None:
+        """Enhance mkdocs.yml with plugins and extensions."""
+        from ..generator.mkdocs_enhancer import enhance_mkdocs_config
+        mkdocs_path = self.config.project.output_dir / "mkdocs.yml"
+        if not mkdocs_path.exists():
+            self.notify("mkdocs.yml nicht gefunden — zuerst Skeleton erstellen", severity="error")
+            self._start_welcome()
+            return
+        result = enhance_mkdocs_config(mkdocs_path, plugins=True, extensions=True)
+        added = len(result["plugins"]) + len(result["extensions"])
+        if added:
+            self.notify(f"+{len(result['plugins'])} Plugins, +{len(result['extensions'])} Extensions", title="Enhance")
+        else:
+            self.notify("Alles bereits aktiv — nichts hinzugefügt", title="Enhance")
+        self._start_welcome()
+
+    def _run_restructure(self) -> None:
+        """Show restructuring suggestions via notification."""
+        docs_dir = self.config.project.output_dir / "docs"
+        if not docs_dir.exists():
+            self.notify("Kein docs/-Verzeichnis gefunden", severity="error")
+            self._start_welcome()
+            return
+        md_files = list(docs_dir.rglob("*.md"))
+        empty = sum(1 for f in md_files if f.stat().st_size < 100)
+        large = sum(1 for f in md_files if f.stat().st_size > 50000)
+        self.notify(
+            f"{len(md_files)} Dateien, {empty} fast leer, {large} sehr groß",
+            title="Restrukturierung",
+        )
+        self._start_welcome()
+
+    def _run_serve(self) -> None:
+        """Start MkDocs dev server."""
+        from ..generator.mkdocs_server import MkDocsServer
+        output_dir = self.config.project.output_dir
+        port = self.config.preferences.preferred_port or 8000
+        mkdocs_yml = output_dir / "mkdocs.yml"
+        if not mkdocs_yml.exists():
+            self.notify("mkdocs.yml nicht gefunden", severity="error")
+            self._start_welcome()
+            return
+        try:
+            self._mkdocs_server = MkDocsServer(output_dir, port=port)
+            self._mkdocs_url = self._mkdocs_server.start()
+            self.notify(f"Server läuft: {self._mkdocs_url}", title="MkDocs Serve")
+        except Exception as exc:
+            self.notify(f"Server-Start fehlgeschlagen: {exc}", severity="error")
+        self._start_welcome()
+
+    def _run_report(self) -> None:
+        """Show generation report."""
+        report_path = self.config.project.output_dir / "generation_report.md"
+        if report_path.exists():
+            content = report_path.read_text(encoding="utf-8")[:500]
+            self.notify(content, title="Generierungsbericht", timeout=10)
+        else:
+            self.notify("Kein Bericht gefunden — zuerst 'Generierung' ausführen", severity="warning")
+        self._start_welcome()
 
     def _start_discovery(self) -> None:
         self._update_resume("discovery")

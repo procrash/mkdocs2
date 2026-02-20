@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 class ModelCapability(str, Enum):
     TOOL_USE = "tool_use"
+    INSTRUCT = "instruct"
     LONG_CONTEXT = "long_context"
     CODE_FOCUSED = "code_focused"
     VISION = "vision"
@@ -51,14 +52,25 @@ _VISION_PATTERNS = re.compile(
     r"(llava|vision|vl$|vl-|bakllava|cogvlm|fuyu|moondream)",
     re.IGNORECASE,
 )
+_INSTRUCT_PATTERNS = re.compile(
+    r"(instruct|chat|it$|-it-|assistant|rlhf|dpo|sft|hermes|openhermes|nous|neural-chat|zephyr|openchat|vicuna|alpaca)",
+    re.IGNORECASE,
+)
 
 
-def classify_model(model_id: str, detected_context: int = 0) -> ClassifiedModel:
+def classify_model(
+    model_id: str,
+    detected_context: int = 0,
+    detected_caps: set[str] | None = None,
+) -> ClassifiedModel:
     """Classify a single model by its ID using heuristics.
 
     If *detected_context* > 0 (obtained from the server API), it overrides the
     heuristic estimate.  A detected context length ≥ 32768 also triggers the
     LONG_CONTEXT capability flag.
+
+    *detected_caps* can contain capability values (e.g. {"tool_use", "instruct"})
+    obtained from active probing, which will be merged in.
     """
     caps: list[ModelCapability] = []
     ctx = 4096
@@ -70,6 +82,8 @@ def classify_model(model_id: str, detected_context: int = 0) -> ClassifiedModel:
         caps.append(ModelCapability.VISION)
     if _TOOL_PATTERNS.search(model_id):
         caps.append(ModelCapability.TOOL_USE)
+    if _INSTRUCT_PATTERNS.search(model_id):
+        caps.append(ModelCapability.INSTRUCT)
     if _LONG_CTX_PATTERNS.search(model_id):
         caps.append(ModelCapability.LONG_CONTEXT)
         ctx = 65536
@@ -80,6 +94,9 @@ def classify_model(model_id: str, detected_context: int = 0) -> ClassifiedModel:
             ctx = 32768
         if ModelCapability.CODE_FOCUSED not in caps:
             caps.append(ModelCapability.CODE_FOCUSED)
+        # Large models are almost always instruct-tuned
+        if ModelCapability.INSTRUCT not in caps:
+            caps.append(ModelCapability.INSTRUCT)
     elif _MEDIUM_PATTERNS.search(model_id):
         size = "medium"
         ctx = max(ctx, 16384)
@@ -89,6 +106,16 @@ def classify_model(model_id: str, detected_context: int = 0) -> ClassifiedModel:
         ctx = detected_context
         if detected_context >= 32768 and ModelCapability.LONG_CONTEXT not in caps:
             caps.append(ModelCapability.LONG_CONTEXT)
+
+    # Merge detected capabilities from active probing
+    if detected_caps:
+        for cap_str in detected_caps:
+            try:
+                cap = ModelCapability(cap_str)
+                if cap not in caps:
+                    caps.append(cap)
+            except ValueError:
+                pass
 
     if not caps:
         caps.append(ModelCapability.BASIC)
@@ -101,10 +128,19 @@ def classify_model(model_id: str, detected_context: int = 0) -> ClassifiedModel:
     )
 
 
-def classify_models(model_ids: list[str], detected_contexts: dict[str, int] | None = None) -> list[ClassifiedModel]:
+def classify_models(
+    model_ids: list[str],
+    detected_contexts: dict[str, int] | None = None,
+    detected_capabilities: dict[str, set[str]] | None = None,
+) -> list[ClassifiedModel]:
     """Classify a list of model IDs.
 
     *detected_contexts* maps model_id → context_length as discovered from the server.
+    *detected_capabilities* maps model_id → set of capability strings from active probing.
     """
     ctx_map = detected_contexts or {}
-    return [classify_model(mid, ctx_map.get(mid, 0)) for mid in model_ids]
+    caps_map = detected_capabilities or {}
+    return [
+        classify_model(mid, ctx_map.get(mid, 0), caps_map.get(mid))
+        for mid in model_ids
+    ]

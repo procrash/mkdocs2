@@ -109,14 +109,48 @@ def discover(ctx: click.Context, server_url: str | None, auto_assign: bool) -> N
         if auto_assign:
             model_ids = [m.id for m in discovered]
             detected_ctx = {m.id: m.context_length for m in discovered if m.context_length > 0}
-            classified = classify_models(model_ids, detected_ctx)
+
+            # Probe capabilities (instruct, tool_use)
+            from .discovery.server_probe import probe_all_capabilities
+            click.echo("\nProbing capabilities (instruct, tool_use)...")
+            detected_caps = await probe_all_capabilities(
+                config.server.url, discovered, config.server.api_key, timeout=15,
+            )
+
+            classified = classify_models(model_ids, detected_ctx, detected_caps)
             assignment = assign_roles(classified)
+
+            click.echo(f"\nClassification:")
+            for m in classified:
+                caps = ", ".join(c.value for c in m.capabilities)
+                click.echo(f"  {m.id}: {m.size_class}, ctx={m.estimated_context:,}, [{caps}]")
 
             click.echo("\nRole assignments:")
             if assignment.judge:
                 click.echo(f"  Master: {assignment.judge.id}")
             for a in assignment.analysts:
                 click.echo(f"  Slave: {a.id}")
+
+            # Persist discovered data
+            from .config.schema import ModelHealthEntry
+            for m in classified:
+                caps_list = list(detected_caps.get(m.id, set()))
+                entry_found = False
+                for e in config.model_health.entries:
+                    if e.model_id == m.id:
+                        e.context_length = detected_ctx.get(m.id, 0)
+                        if caps_list:
+                            e.detected_capabilities = caps_list
+                        entry_found = True
+                        break
+                if not entry_found:
+                    config.model_health.entries.append(ModelHealthEntry(
+                        model_id=m.id,
+                        context_length=detected_ctx.get(m.id, 0),
+                        detected_capabilities=caps_list,
+                    ))
+            save_config(config, ctx.obj["config_path"])
+            click.echo(f"\nModel data saved to {ctx.obj['config_path']}")
 
     asyncio.run(_discover())
 

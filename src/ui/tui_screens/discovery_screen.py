@@ -1,16 +1,19 @@
 """Discovery screen - probe LLM server and display available models."""
 from __future__ import annotations
 import asyncio
+import logging
+
+logger = logging.getLogger(__name__)
 
 from textual.app import ComposeResult
 from textual.containers import Center, Horizontal, Vertical
 from textual.screen import Screen
 from textual.widgets import Button, DataTable, Footer, Header, Label, LoadingIndicator, Static
 
-from ...config.schema import AppConfig
+from ...config.schema import AppConfig, ModelHealthEntry
 from ...discovery.model_classifier import ClassifiedModel, classify_models
 from ...discovery.role_assigner import RoleAssignment, assign_roles
-from ...discovery.server_probe import DiscoveredModel, probe_server, probe_all_context_lengths
+from ...discovery.server_probe import DiscoveredModel, probe_server, probe_all_context_lengths, probe_all_capabilities
 
 
 class DiscoveryScreen(Screen):
@@ -60,6 +63,7 @@ class DiscoveryScreen(Screen):
         self._assignment: RoleAssignment = RoleAssignment()
         self._discovered: list[DiscoveredModel] = []
         self._detected_contexts: dict[str, int] = {}
+        self._detected_capabilities: dict[str, set[str]] = {}
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -127,13 +131,38 @@ class DiscoveryScreen(Screen):
                 self.query_one("#btn-next", Button).disabled = False
                 return
 
-            # Build detected context map from server probe results
+            # Build detected context map: merge server probe + previously saved values
             model_ids = [m.id for m in self._discovered]
             self._detected_contexts = {
                 m.id: m.context_length for m in self._discovered if m.context_length > 0
             }
+            # Load previously diagnosed values from config (fill gaps)
+            for entry in self.config.model_health.entries:
+                if entry.context_length > 0 and entry.model_id not in self._detected_contexts:
+                    self._detected_contexts[entry.model_id] = entry.context_length
+                if entry.detected_capabilities:
+                    self._detected_capabilities[entry.model_id] = set(entry.detected_capabilities)
 
-            self._classified = classify_models(model_ids, self._detected_contexts)
+            # Quick capability probe for all models
+            status.update(
+                f"[bold]LLM-Server-Erkennung[/bold]\n"
+                f"Server: {self.config.server.url}\n"
+                f"[yellow]{len(self._discovered)} Modelle gefunden — prüfe Capabilities...[/yellow]"
+            )
+            try:
+                probed_caps = await probe_all_capabilities(
+                    self.config.server.url,
+                    self._discovered,
+                    self.config.server.api_key,
+                    timeout=15,
+                )
+                self._detected_capabilities.update(probed_caps)
+            except Exception as exc:
+                logger.warning("Capability probe failed: %s", exc)
+
+            self._classified = classify_models(
+                model_ids, self._detected_contexts, self._detected_capabilities,
+            )
             self._assignment = assign_roles(self._classified)
 
             self._refresh_table()
@@ -149,9 +178,15 @@ class DiscoveryScreen(Screen):
             else:
                 ctx_info = "  (alle Werte geschätzt — Diagnose empfohlen)"
 
+            n_instruct = sum(1 for m in self._classified
+                             if any(c.value == "instruct" for c in m.capabilities))
+            n_tool = sum(1 for m in self._classified
+                         if any(c.value == "tool_use" for c in m.capabilities))
+
             status.update(
                 f"[bold]LLM-Server-Erkennung[/bold]\n"
                 f"[green]{len(self._discovered)} Modelle gefunden[/green]{ctx_info}\n"
+                f"[dim]Instruct: {n_instruct}, Tool-Use: {n_tool}[/dim]\n"
                 f"[dim]→ Weiter: Master/Slave-Rollenzuweisung[/dim]"
             )
 
@@ -234,12 +269,17 @@ class DiscoveryScreen(Screen):
         # Merge probed values into detected contexts
         self._detected_contexts.update(probed)
 
-        # Re-classify with real context lengths
+        # Re-classify with real context lengths + capabilities
         model_ids = [m.id for m in self._discovered]
-        self._classified = classify_models(model_ids, self._detected_contexts)
+        self._classified = classify_models(
+            model_ids, self._detected_contexts, self._detected_capabilities,
+        )
         self._assignment = assign_roles(self._classified)
 
         self._refresh_table()
+
+        # Persist diagnosed values
+        self._save_model_data()
 
         n_probed = sum(1 for v in probed.values() if v > 0)
         probe_label.update(
@@ -253,7 +293,37 @@ class DiscoveryScreen(Screen):
             f"(Kontextfenster aktiv diagnostiziert)"
         )
 
+    def _save_model_data(self) -> None:
+        """Persist detected context lengths and capabilities into model_health.entries."""
+        existing = {e.model_id: e for e in self.config.model_health.entries}
+
+        # Collect all model IDs we have data for
+        all_ids = set(self._detected_contexts.keys()) | set(self._detected_capabilities.keys())
+        for model_id in all_ids:
+            ctx = self._detected_contexts.get(model_id, 0)
+            caps = list(self._detected_capabilities.get(model_id, set()))
+
+            if model_id in existing:
+                entry = existing[model_id]
+                if ctx > 0:
+                    entry.context_length = ctx
+                if caps:
+                    entry.detected_capabilities = caps
+            else:
+                self.config.model_health.entries.append(
+                    ModelHealthEntry(
+                        model_id=model_id,
+                        context_length=ctx,
+                        detected_capabilities=caps,
+                    )
+                )
+        try:
+            self.app._save_config()
+        except Exception:
+            pass
+
     def _finish(self) -> None:
+        self._save_model_data()
         self.dismiss({
             "classified": self._classified,
             "assignment": self._assignment,
