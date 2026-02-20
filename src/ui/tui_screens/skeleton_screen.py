@@ -28,11 +28,14 @@ class SkeletonScreen(Screen):
         align: center middle;
     }
     #skeleton-box {
-        width: 90;
+        width: 1fr;
+        max-width: 120;
         height: auto;
-        max-height: 85%;
+        max-height: 95%;
         border: solid $primary;
         padding: 1 2;
+        margin: 0 2;
+        overflow-y: auto;
     }
     #tree-container {
         height: 20;
@@ -43,15 +46,23 @@ class SkeletonScreen(Screen):
         margin-top: 1;
         padding: 1;
     }
-    .port-row {
+    #port-row {
         height: 3;
+        width: 30;
     }
-    #btn-row {
+    #port-label {
+        width: 8;
+        padding-top: 1;
+    }
+    #port-input {
+        width: 10;
+    }
+    #nav-row {
         margin-top: 1;
         align: center middle;
-        height: 5;
+        height: 3;
     }
-    #btn-row Button {
+    #nav-row Button {
         margin: 0 2;
     }
     """
@@ -85,12 +96,12 @@ class SkeletonScreen(Screen):
                         id="start-mkdocs-check",
                     )
                     yield Checkbox(
-                        "MkDocs-Konfiguration erweitern (Plugins + Extensions)",
+                        "MkDocs erweitern (Plugins + Extensions)",
                         value=self.config.preferences.enhance_mkdocs,
                         id="enhance-check",
                     )
-                    with Horizontal(classes="port-row"):
-                        yield Label("Port: ")
+                    with Horizontal(id="port-row"):
+                        yield Label("Port:", id="port-label")
                         yield Input(
                             value=str(preferred_port),
                             placeholder="8000",
@@ -98,9 +109,9 @@ class SkeletonScreen(Screen):
                             max_length=5,
                         )
 
-                with Horizontal(id="btn-row"):
-                    yield Button("← Zurück", variant="default", id="btn-back")
-                    yield Button("Skelett erstellen & Weiter →", variant="primary", id="btn-next")
+                with Horizontal(id="nav-row"):
+                    yield Button("Zurück", id="btn-back")
+                    yield Button("Erstellen & Weiter", variant="primary", id="btn-next")
         yield Footer()
 
     def on_mount(self) -> None:
@@ -112,7 +123,6 @@ class SkeletonScreen(Screen):
         """Populate tree with planned skeleton structure."""
         from ...generator.skeleton_builder import DEFAULT_SKELETON
 
-        # Build nested tree from flat paths
         nodes: dict[str, object] = {}
         root = tree_widget.root
 
@@ -124,7 +134,6 @@ class SkeletonScreen(Screen):
                 if key not in nodes:
                     nodes[key] = current.add(f"[bold]{part}/[/bold]", expand=True)
                 current = nodes[key]
-            # Add file leaf
             current.add_leaf(f"{parts[-1]}  [dim]({title})[/dim]")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -141,7 +150,6 @@ class SkeletonScreen(Screen):
 
             enhance = self.query_one("#enhance-check", Checkbox).value
 
-            # Persist preferences
             self.config.preferences.start_mkdocs_early = start_mkdocs
             self.config.preferences.preferred_port = port
             self.config.preferences.enhance_mkdocs = enhance
