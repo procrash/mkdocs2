@@ -119,6 +119,7 @@ class UserPreferencesConfig(BaseModel):
     language: str = "de"
     last_server_url: str = ""
     last_source_dir: str = ""
+    enhance_mkdocs: bool = True
     skeleton_suggestions: list[SkeletonSuggestionEntry] = Field(default_factory=list)
 
 

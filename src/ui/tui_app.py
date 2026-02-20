@@ -260,6 +260,13 @@ class MkDocsTUI(App):
         from ..generator.mkdocs_builder import write_mkdocs_config
         write_mkdocs_config(self.config, self.config.project.output_dir)
 
+        # Enhance mkdocs.yml with plugins + extensions if requested
+        enhance = result.get("enhance_mkdocs", False)
+        if enhance:
+            from ..generator.mkdocs_enhancer import enhance_mkdocs_config
+            mkdocs_path = self.config.project.output_dir / "mkdocs.yml"
+            enhance_mkdocs_config(mkdocs_path, plugins=True, extensions=True)
+
         if start_mkdocs:
             from ..generator.mkdocs_server import MkDocsServer
             self._mkdocs_server = MkDocsServer(self.config.project.output_dir, port=port)

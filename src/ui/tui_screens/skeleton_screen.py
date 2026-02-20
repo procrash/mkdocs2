@@ -84,6 +84,11 @@ class SkeletonScreen(Screen):
                         value=self.config.preferences.start_mkdocs_early,
                         id="start-mkdocs-check",
                     )
+                    yield Checkbox(
+                        "MkDocs-Konfiguration erweitern (Plugins + Extensions)",
+                        value=self.config.preferences.enhance_mkdocs,
+                        id="enhance-check",
+                    )
                     with Horizontal(classes="port-row"):
                         yield Label("Port: ")
                         yield Input(
@@ -134,13 +139,17 @@ class SkeletonScreen(Screen):
             except ValueError:
                 port = self.config.preferences.preferred_port
 
+            enhance = self.query_one("#enhance-check", Checkbox).value
+
             # Persist preferences
             self.config.preferences.start_mkdocs_early = start_mkdocs
             self.config.preferences.preferred_port = port
+            self.config.preferences.enhance_mkdocs = enhance
 
             self.dismiss({
                 "start_mkdocs": start_mkdocs,
                 "port": port,
+                "enhance_mkdocs": enhance,
             })
 
     def action_go_back(self) -> None:

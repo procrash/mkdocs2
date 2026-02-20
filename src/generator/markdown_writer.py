@@ -60,6 +60,11 @@ def write_markdown(
     # Clean up the content
     cleaned = _clean_markdown(content)
 
+    # Protect skeleton index files: append generated content instead of overwriting
+    if file_path.exists() and file_path.name == "index.md":
+        logger.info("Skipping index file (skeleton protected): %s", file_path)
+        return file_path
+
     file_path.write_text(cleaned, encoding="utf-8")
     logger.info("Written: %s", file_path)
     return file_path
