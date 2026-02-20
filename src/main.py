@@ -288,9 +288,10 @@ def run(ctx: click.Context) -> None:
 @click.option("--extensions", is_flag=True, help="Markdown-Extensions hinzufügen")
 @click.option("--skeleton", is_flag=True, help="Skeleton-Beschreibungen erweitern/erstellen")
 @click.option("--restructure", is_flag=True, help="Restrukturierung & Konsolidierung vorschlagen")
+@click.option("--llm", is_flag=True, help="KI-Analyse: alle Modelle bewerten mkdocs.yml und schlagen Verbesserungen vor")
 @click.option("--all", "do_all", is_flag=True, help="Alles erweitern")
 @click.pass_context
-def enhance(ctx: click.Context, plugins: bool, extensions: bool, skeleton: bool, restructure: bool, do_all: bool) -> None:
+def enhance(ctx: click.Context, plugins: bool, extensions: bool, skeleton: bool, restructure: bool, llm: bool, do_all: bool) -> None:
     """Enhance mkdocs.yml, plugins, extensions and skeleton content.
 
     Can be run iteratively — only adds what is not yet present.
@@ -302,10 +303,10 @@ def enhance(ctx: click.Context, plugins: bool, extensions: bool, skeleton: bool,
     mkdocs_path = output_dir / "mkdocs.yml"
 
     if do_all:
-        plugins = extensions = skeleton = restructure = True
+        plugins = extensions = skeleton = restructure = llm = True
 
     # If nothing specified, default to interactive selection
-    if not plugins and not extensions and not skeleton and not restructure:
+    if not plugins and not extensions and not skeleton and not restructure and not llm:
         if auto:
             plugins = extensions = skeleton = True
         else:
@@ -314,17 +315,19 @@ def enhance(ctx: click.Context, plugins: bool, extensions: bool, skeleton: bool,
             click.echo("  2. Markdown-Extensions hinzufügen")
             click.echo("  3. Skeleton-Beschreibungen erweitern")
             click.echo("  4. Restrukturierung & Konsolidierung")
-            click.echo("  5. Alles")
+            click.echo("  5. KI-Analyse (alle Modelle bewerten Dokumentation)")
+            click.echo("  6. Alles")
             click.echo()
-            choice = click.prompt("Auswahl (Komma-getrennt, z.B. 1,3)", default="5")
+            choice = click.prompt("Auswahl (Komma-getrennt, z.B. 1,3)", default="6")
             choices = {c.strip() for c in choice.split(",")}
-            if "5" in choices:
-                plugins = extensions = skeleton = restructure = True
+            if "6" in choices:
+                plugins = extensions = skeleton = restructure = llm = True
             else:
                 plugins = "1" in choices
                 extensions = "2" in choices
                 skeleton = "3" in choices
                 restructure = "4" in choices
+                llm = "5" in choices
 
     from .generator.mkdocs_enhancer import (
         enhance_mkdocs_config,
@@ -422,7 +425,80 @@ def enhance(ctx: click.Context, plugins: bool, extensions: bool, skeleton: bool,
     if restructure:
         _run_restructure(config, output_dir, auto)
 
+    # ── LLM Enhancement ──────────────────────────────────────────
+    if llm:
+        _run_llm_enhance_cli(config, output_dir, auto)
+
     click.echo("\nFertig.")
+
+
+def _run_llm_enhance_cli(config, output_dir: Path, auto: bool) -> None:
+    """Run KI-gesteuerte Verbesserung via CLI."""
+    mkdocs_path = output_dir / "mkdocs.yml"
+    if not mkdocs_path.exists():
+        click.echo(f"mkdocs.yml nicht gefunden unter {mkdocs_path}. Zuerst 'init' ausführen.")
+        return
+
+    slaves = config.preferences.selected_analysts
+    master = config.preferences.selected_judge
+    if not slaves:
+        click.echo("Keine Modelle konfiguriert. Zuerst 'discover' ausführen.")
+        return
+
+    click.echo(f"\n--- KI-gesteuerte Verbesserung ---")
+    click.echo(f"Modelle: {', '.join(slaves)}")
+    if master:
+        click.echo(f"Master: {master}")
+
+    from .generator.llm_enhancer import run_llm_enhancement
+    from .orchestrator.opencode_runner import configure_http_fallback
+    from .orchestrator.semaphore import WorkerPool
+
+    def print_progress(completed: int, total: int, model_id: str, status: str) -> None:
+        click.echo(f"  [{completed}/{total}] {status}" + (f" ({model_id})" if model_id else ""))
+
+    pool = WorkerPool(max_workers=3)
+    changes = asyncio.run(run_llm_enhancement(
+        config=config,
+        slaves=slaves,
+        master=master,
+        pool=pool,
+        progress_cb=print_progress,
+    ))
+
+    if not changes:
+        click.echo("Keine Verbesserungsvorschläge erhalten.")
+        return
+
+    click.echo(f"\n{len(changes)} Änderungsvorschläge:")
+    for i, change in enumerate(changes, 1):
+        action = "NEU" if change.is_new_file else "GEÄNDERT"
+        click.echo(f"  {i}. [{action}] {change.file_path}")
+        if change.description:
+            click.echo(f"     {change.description}")
+
+    if auto:
+        click.echo("\nAuto-Modus: Alle Änderungen werden angewendet...")
+        applied = 0
+        for change in changes:
+            if change.apply():
+                applied += 1
+                click.echo(f"  ✓ {change.file_path}")
+            else:
+                click.echo(f"  ✗ {change.file_path}")
+        click.echo(f"\n{applied}/{len(changes)} Änderungen angewendet.")
+    else:
+        if click.confirm("\nAlle Änderungen anwenden?", default=True):
+            applied = 0
+            for change in changes:
+                if change.apply():
+                    applied += 1
+                    click.echo(f"  ✓ {change.file_path}")
+                else:
+                    click.echo(f"  ✗ {change.file_path}")
+            click.echo(f"\n{applied}/{len(changes)} Änderungen angewendet.")
+        else:
+            click.echo("Keine Änderungen angewendet.")
 
 
 def _run_restructure(config, output_dir: Path, auto: bool) -> None:

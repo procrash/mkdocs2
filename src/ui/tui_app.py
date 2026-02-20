@@ -21,9 +21,11 @@ from ..discovery.model_classifier import ClassifiedModel
 from ..discovery.role_assigner import RoleAssignment
 from .tui_screens import (
     ChatScreen,
+    DiffReviewScreen,
     DiscoveryScreen,
     FailureScreen,
     GenerationScreen,
+    LlmEnhanceScreen,
     ModelSelectionScreen,
     SkeletonScreen,
     SkeletonSuggestionsScreen,
@@ -183,6 +185,8 @@ class MkDocsTUI(App):
             self._run_init_skeleton()
         elif action == "enhance":
             self._run_enhance()
+        elif action == "enhance_llm":
+            self._run_llm_enhance()
         elif action == "restructure":
             self._run_restructure()
         elif action == "serve":
@@ -228,6 +232,45 @@ class MkDocsTUI(App):
             self.notify(f"+{len(result['plugins'])} Plugins, +{len(result['extensions'])} Extensions", title="Enhance")
         else:
             self.notify("Alles bereits aktiv — nichts hinzugefügt", title="Enhance")
+        self._start_welcome()
+
+    def _run_llm_enhance(self) -> None:
+        """Run KI-gesteuerte Verbesserung via ensemble analysis."""
+        mkdocs_path = self.config.project.output_dir / "mkdocs.yml"
+        if not mkdocs_path.exists():
+            self.notify("mkdocs.yml nicht gefunden — zuerst Skeleton erstellen", severity="error")
+            self._start_welcome()
+            return
+
+        slaves = self.config.preferences.selected_analysts
+        master = self.config.preferences.selected_judge
+        if not slaves:
+            self.notify("Keine Modelle ausgewählt — zuerst Discovery durchführen", severity="error")
+            self._start_welcome()
+            return
+
+        def on_enhance_result(file_changes) -> None:
+            if file_changes:
+                self.push_screen(
+                    DiffReviewScreen(file_changes),
+                    callback=self._on_diff_review_done,
+                )
+            else:
+                self._start_welcome()
+
+        self.push_screen(
+            LlmEnhanceScreen(self.config, slaves, master),
+            callback=on_enhance_result,
+        )
+
+    def _on_diff_review_done(self, result) -> None:
+        """Handle result from DiffReviewScreen after LLM enhancement."""
+        if result:
+            applied = result.get("applied", 0)
+            if applied:
+                self.notify(f"{applied} Änderungen angewendet", title="KI-Verbesserung")
+            else:
+                self.notify("Keine Änderungen angewendet", title="KI-Verbesserung")
         self._start_welcome()
 
     def _run_restructure(self) -> None:

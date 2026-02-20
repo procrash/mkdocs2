@@ -43,4 +43,5 @@ def ensure_loaded():
         mermaid_diagram,
         judge_merge,
         index_page,
+        enhance_analysis,
     )

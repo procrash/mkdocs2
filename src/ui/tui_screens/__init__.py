@@ -23,6 +23,7 @@ from .generation_screen import GenerationScreen
 from .failure_screen import FailureScreen
 from .chat_screen import ChatScreen
 from .diff_review_screen import DiffReviewScreen
+from .llm_enhance_screen import LlmEnhanceScreen
 
 __all__ = [
     "WelcomeScreen",
@@ -34,4 +35,5 @@ __all__ = [
     "FailureScreen",
     "ChatScreen",
     "DiffReviewScreen",
+    "LlmEnhanceScreen",
 ]
