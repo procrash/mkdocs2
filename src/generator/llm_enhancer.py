@@ -58,7 +58,7 @@ def _compute_max_tokens(config, model_ids: list[str], prompt_chars: int) -> int:
     return max_tokens
 
 
-def build_enhancement_prompt(mkdocs_path: Path, docs_dir: Path) -> str:
+def build_enhancement_prompt(mkdocs_path: Path, docs_dir: Path, project_name: str = "") -> str:
     """Build the analysis prompt from mkdocs.yml and documentation files.
 
     Reads the full mkdocs.yml and collects all .md files with path + first 30 lines.
@@ -96,6 +96,7 @@ def build_enhancement_prompt(mkdocs_path: Path, docs_dir: Path) -> str:
     ctx = PromptContext(
         code_content=mkdocs_content,
         file_listing=file_listing,
+        section_name=project_name,
     )
     prompt = build_prompt("enhance", "analysis", ctx)
     if prompt:
@@ -103,10 +104,10 @@ def build_enhancement_prompt(mkdocs_path: Path, docs_dir: Path) -> str:
 
     # Fallback: build directly if template not found
     logger.warning("enhance/analysis template not found, using inline fallback")
+    pname = project_name or "das Projekt"
     return f"""Du bist ein erfahrener MkDocs-Experte und Technical Writer.
 
-Analysiere die folgende Dokumentationsstruktur und mkdocs.yml-Konfiguration.
-Schlage konkrete Verbesserungen vor als geänderte Dateien.
+## Projekt: {pname}
 
 ## Aktuelle mkdocs.yml:
 ```yaml
@@ -117,22 +118,25 @@ Schlage konkrete Verbesserungen vor als geänderte Dateien.
 {file_listing}
 
 ## Deine Aufgabe:
-1. Analysiere die Struktur auf Schwächen (fehlende Seiten, schlechte Navigation, etc.)
-2. Prüfe die mkdocs.yml auf Optimierungspotenzial (Theme-Einstellungen, Features, etc.)
-3. Schlage neue oder verbesserte Markdown-Seiten vor
-4. Schlage mkdocs.yml-Änderungen vor falls sinnvoll
+Analysiere den nav:-Abschnitt der mkdocs.yml.
+Identifiziere fehlende Abschnitte die eine vollständige Dokumentation haben sollte.
+Für jeden fehlenden Abschnitt:
+1. Füge ihn in die nav:-Hierarchie der mkdocs.yml ein
+2. Erstelle die Markdown-Datei mit Inhaltsbeschreibung
 
 ## Ausgabeformat (STRIKT einhalten):
-
-Für jede geänderte/neue Datei:
-<<<FILE pfad/zur/datei.md
-DESCRIPTION: Kurze Beschreibung der Änderung
+<<<FILE mkdocs.yml
+DESCRIPTION: Navigation ergänzt
 >>>
-Kompletter neuer Dateiinhalt hier
+komplette mkdocs.yml
 <<<END>>>
 
-Nur Dateien ausgeben die sich tatsächlich ändern oder neu sind.
-Bestehende Inhalte verbessern, nicht löschen.
+<<<FILE docs/pfad/neue_seite.md
+DESCRIPTION: Was diese Seite abdeckt
+>>>
+Markdown-Inhalt
+<<<END>>>
+
 Alle Texte auf Deutsch."""
 
 
@@ -194,7 +198,7 @@ async def run_llm_enhancement(
     mkdocs_path = output_dir / "mkdocs.yml"
     docs_dir = output_dir / "docs"
 
-    prompt = build_enhancement_prompt(mkdocs_path, docs_dir)
+    prompt = build_enhancement_prompt(mkdocs_path, docs_dir, project_name=config.project.name)
     logger.info("Enhancement prompt: %d chars", len(prompt))
 
     # Compute max_tokens from detected context window sizes
@@ -338,7 +342,7 @@ async def run_llm_enhancement_single(
     mkdocs_path = output_dir / "mkdocs.yml"
     docs_dir = output_dir / "docs"
 
-    prompt = build_enhancement_prompt(mkdocs_path, docs_dir)
+    prompt = build_enhancement_prompt(mkdocs_path, docs_dir, project_name=config.project.name)
 
     if progress_cb:
         progress_cb(0, 1, model_id, f"Modell {model_id} analysiert...")

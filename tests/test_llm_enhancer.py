@@ -39,6 +39,7 @@ def _make_mock_config(tmp_path, analysts=None, judge="", health_entries=None):
             timeout_read = 60
         class project:
             output_dir = tmp_path
+            name = "TestProject"
         class preferences:
             selected_analysts = analysts or ["model-a", "model-b"]
             selected_judge = judge
