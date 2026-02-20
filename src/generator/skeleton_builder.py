@@ -7215,6 +7215,49 @@ TODO: Sind alle Abhängigkeits-Lizenzen kompatibel?
 Durch das Einreichen von Pull Requests erklären Sie sich damit einverstanden,
 dass Ihre Beiträge unter derselben Lizenz veröffentlicht werden.
 """),
+
+    ("reference/tags.md", "Tags", """
+Auf dieser Seite werden automatisch alle verwendeten Tags und die zugehörigen Seiten aufgelistet.
+
+[TAGS]
+"""),
+
+    # ━━ Asset-Dateien (kein Markdown, aber vom Template referenziert) ━━━━
+    ("includes/abbreviations.md", "", """
+*[HTML]: Hyper Text Markup Language
+*[CSS]: Cascading Style Sheets
+*[JS]: JavaScript
+*[API]: Application Programming Interface
+*[REST]: Representational State Transfer
+*[JSON]: JavaScript Object Notation
+*[YAML]: YAML Ain't Markup Language
+*[CLI]: Command Line Interface
+*[GUI]: Graphical User Interface
+*[TUI]: Text User Interface
+*[CI]: Continuous Integration
+*[CD]: Continuous Deployment
+*[DSGVO]: Datenschutz-Grundverordnung
+*[GDPR]: General Data Protection Regulation
+*[SSO]: Single Sign-On
+*[JWT]: JSON Web Token
+*[OAuth]: Open Authorization
+*[SDK]: Software Development Kit
+*[SLA]: Service Level Agreement
+*[URL]: Uniform Resource Locator
+*[SQL]: Structured Query Language
+*[ORM]: Object-Relational Mapping
+*[TLS]: Transport Layer Security
+*[SSL]: Secure Sockets Layer
+*[DNS]: Domain Name System
+*[CDN]: Content Delivery Network
+*[RBAC]: Role-Based Access Control
+*[MFA]: Multi-Factor Authentication
+*[TOTP]: Time-based One-Time Password
+*[CRUD]: Create, Read, Update, Delete
+*[EOF]: End of File
+*[i18n]: Internationalization
+*[l10n]: Localization
+"""),
 ]
 
 
@@ -7233,9 +7276,52 @@ def create_skeleton(output_dir: Path, project_name: str = "Documentation") -> li
 
         file_path.parent.mkdir(parents=True, exist_ok=True)
         body = body_template.format(project_name=project_name) if "{project_name}" in body_template else body_template
-        content = f"# {title}\n{body}"
+        if title:
+            content = f"# {title}\n{body}"
+        else:
+            content = body
         file_path.write_text(content.strip() + "\n", encoding="utf-8")
         created.append(file_path)
+
+    # Create stylesheets/extra.css (asset file, not in DEFAULT_SKELETON)
+    css_file = docs_dir / "stylesheets" / "extra.css"
+    if not css_file.exists():
+        css_file.parent.mkdir(parents=True, exist_ok=True)
+        css_file.write_text(
+            "/* Custom styles for MkDocs Material */\n\n"
+            "/* Admonition tweaks */\n"
+            ".md-typeset .admonition,\n"
+            ".md-typeset details {\n"
+            "  border-radius: 4px;\n"
+            "}\n\n"
+            "/* Table improvements */\n"
+            ".md-typeset table:not([class]) th {\n"
+            "  min-width: 6rem;\n"
+            "}\n",
+            encoding="utf-8",
+        )
+        created.append(css_file)
+
+    # Create javascripts/mathjax.js (for MathJax support)
+    mathjax_file = docs_dir / "javascripts" / "mathjax.js"
+    if not mathjax_file.exists():
+        mathjax_file.parent.mkdir(parents=True, exist_ok=True)
+        mathjax_file.write_text(
+            "window.MathJax = {\n"
+            "  tex: {\n"
+            '    inlineMath: [["$", "$"], ["\\\\(", "\\\\)"]],\n'
+            '    displayMath: [["$$", "$$"], ["\\\\[", "\\\\]"]],\n'
+            "    processEscapes: true,\n"
+            "    processEnvironments: true\n"
+            "  },\n"
+            "  options: {\n"
+            '    ignoreHtmlClass: ".*|",\n'
+            '    processHtmlClass: "arithmatex"\n'
+            "  }\n"
+            "};\n",
+            encoding="utf-8",
+        )
+        created.append(mathjax_file)
 
     logger.info("Skeleton created: %d files in %s", len(created), docs_dir)
     return created

@@ -1,6 +1,7 @@
 """Generate mkdocs.yml from template and configuration."""
 from __future__ import annotations
 import logging
+import re
 from pathlib import Path
 
 import yaml
@@ -62,12 +63,7 @@ def write_mkdocs_config(config: AppConfig, output_dir: Path) -> Path:
         )
 
     # Post-process: restore !!python/name: tags that yaml.dump quoted
-    content = mkdocs_path.read_text(encoding="utf-8")
-    content = content.replace(
-        "'!!python/name:pymdownx.superfences.fence_code_format'",
-        "!!python/name:pymdownx.superfences.fence_code_format",
-    )
-    mkdocs_path.write_text(content, encoding="utf-8")
+    _unquote_python_name_tags(mkdocs_path)
 
     # Write mathjax.js helper if LaTeX enabled
     if config.output.latex_enabled:
@@ -75,6 +71,21 @@ def write_mkdocs_config(config: AppConfig, output_dir: Path) -> Path:
 
     logger.info("Written mkdocs.yml to %s", mkdocs_path)
     return mkdocs_path
+
+
+def _unquote_python_name_tags(mkdocs_path: Path) -> None:
+    """Remove quotes around !!python/name: tags so MkDocs can resolve them.
+
+    yaml.dump wraps these as '!!python/name:...' or "!!python/name:..."
+    but MkDocs needs them unquoted.
+    """
+    content = mkdocs_path.read_text(encoding="utf-8")
+    content = re.sub(
+        r"""['"](!!python/name:[a-zA-Z0-9_.]+)['"]""",
+        r"\1",
+        content,
+    )
+    mkdocs_path.write_text(content, encoding="utf-8")
 
 
 def _ensure_latex_extensions(config: dict) -> None:
@@ -137,46 +148,113 @@ def _write_mathjax_js(output_dir: Path) -> None:
 
 
 def _default_mkdocs_config() -> dict:
-    """Return a minimal default MkDocs configuration."""
+    """Return a full default MkDocs Material 9.x configuration."""
     return {
         "site_name": "Documentation",
+        "site_description": "Auto-generated documentation by mkdocsOnSteroids",
         "theme": {
             "name": "material",
+            "language": "de",
             "features": [
                 "navigation.tabs",
+                "navigation.tabs.sticky",
                 "navigation.sections",
                 "navigation.expand",
                 "navigation.top",
+                "navigation.indexes",
+                "navigation.instant",
+                "navigation.instant.progress",
+                "navigation.tracking",
+                "navigation.path",
+                "navigation.footer",
                 "search.suggest",
                 "search.highlight",
+                "search.share",
+                "content.tabs.link",
                 "content.code.copy",
+                "content.code.annotate",
+                "content.code.select",
+                "content.tooltips",
+                "content.action.edit",
+                "content.action.view",
+                "toc.follow",
+                "header.autohide",
+                "announce.dismiss",
             ],
             "palette": [
                 {
+                    "media": "(prefers-color-scheme: light)",
                     "scheme": "default",
                     "primary": "indigo",
                     "accent": "indigo",
-                    "toggle": {"icon": "material/brightness-7", "name": "Dark Mode"},
+                    "toggle": {"icon": "material/brightness-7", "name": "Dark Mode aktivieren"},
                 },
                 {
+                    "media": "(prefers-color-scheme: dark)",
                     "scheme": "slate",
                     "primary": "indigo",
                     "accent": "indigo",
-                    "toggle": {"icon": "material/brightness-4", "name": "Light Mode"},
+                    "toggle": {"icon": "material/brightness-4", "name": "Light Mode aktivieren"},
                 },
             ],
+            "font": {"text": "Roboto", "code": "Roboto Mono"},
+            "icon": {"repo": "fontawesome/brands/github"},
         },
         "markdown_extensions": [
+            "abbr",
             "admonition",
             "attr_list",
+            "def_list",
+            "footnotes",
             "md_in_html",
             "tables",
-            {"toc": {"permalink": True}},
-            {"pymdownx.highlight": {"anchor_linenums": True}},
-            "pymdownx.inlinehilite",
-            {"pymdownx.tabbed": {"alternate_style": True}},
+            {"toc": {"permalink": True, "toc_depth": 3}},
+            {"pymdownx.arithmatex": {"generic": True}},
+            {"pymdownx.betterem": {"smart_enable": "all"}},
+            "pymdownx.caret",
+            "pymdownx.critic",
             "pymdownx.details",
+            {"pymdownx.emoji": {
+                "emoji_index": "!!python/name:material.extensions.emoji.twemoji",
+                "emoji_generator": "!!python/name:material.extensions.emoji.to_svg",
+            }},
+            {"pymdownx.highlight": {
+                "anchor_linenums": True,
+                "line_spans": "__span",
+                "pygments_lang_class": True,
+                "auto_title": True,
+            }},
+            "pymdownx.inlinehilite",
+            "pymdownx.keys",
+            "pymdownx.mark",
+            "pymdownx.smartsymbols",
+            {"pymdownx.snippets": {
+                "auto_append": ["includes/abbreviations.md"],
+                "check_paths": False,
+            }},
+            {"pymdownx.superfences": {
+                "custom_fences": [{
+                    "name": "mermaid",
+                    "class": "mermaid",
+                    "format": "!!python/name:pymdownx.superfences.fence_code_format",
+                }],
+            }},
+            {"pymdownx.tabbed": {
+                "alternate_style": True,
+                "combine_header_slug": True,
+                "slugify": "!!python/name:pymdownx.slugs.slugify",
+            }},
             {"pymdownx.tasklist": {"custom_checkbox": True}},
+            "pymdownx.tilde",
         ],
-        "plugins": ["search"],
+        "extra_javascript": [
+            "javascripts/mathjax.js",
+            "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
+        ],
+        "extra_css": ["stylesheets/extra.css"],
+        "plugins": [
+            {"search": {"lang": "de", "separator": r"[\s\-\.]+"}},
+            {"tags": {"tags_file": "reference/tags.md"}},
+            "offline",
+        ],
     }

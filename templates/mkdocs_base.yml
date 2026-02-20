@@ -3,62 +3,156 @@ site_description: "Auto-generated documentation by mkdocsOnSteroids"
 
 theme:
   name: material
+  language: de
   features:
+    # Navigation
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.sections
     - navigation.expand
     - navigation.top
     - navigation.indexes
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.path
+    - navigation.footer
+    # Search
     - search.suggest
     - search.highlight
+    - search.share
+    # Content
     - content.tabs.link
     - content.code.copy
     - content.code.annotate
+    - content.code.select
+    - content.tooltips
+    - content.action.edit
+    - content.action.view
+    # Table of contents
+    - toc.follow
+    # Header
+    - header.autohide
+    - announce.dismiss
   palette:
-    - scheme: default
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       primary: indigo
       accent: indigo
       toggle:
         icon: material/brightness-7
-        name: Dark Mode
-    - scheme: slate
+        name: Dark Mode aktivieren
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
       primary: indigo
       accent: indigo
       toggle:
         icon: material/brightness-4
-        name: Light Mode
+        name: Light Mode aktivieren
+  font:
+    text: Roboto
+    code: Roboto Mono
   icon:
     repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+    admonition:
+      note: fontawesome/solid/note-sticky
+      abstract: fontawesome/solid/book
+      info: fontawesome/solid/circle-info
+      tip: fontawesome/solid/bullhorn
+      success: fontawesome/solid/check
+      question: fontawesome/solid/circle-question
+      warning: fontawesome/solid/triangle-exclamation
+      failure: fontawesome/solid/bomb
+      danger: fontawesome/solid/skull
+      bug: fontawesome/solid/robot
+      example: fontawesome/solid/flask
+      quote: fontawesome/solid/quote-left
 
 markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  # PyMdown Extensions
   - pymdownx.arithmatex:
       generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: "!!python/name:material.extensions.emoji.twemoji"
+      emoji_generator: "!!python/name:material.extensions.emoji.to_svg"
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      auto_title: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/abbreviations.md
+      check_paths: false
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: "!!python/name:pymdownx.superfences.fence_code_format"
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
   - pymdownx.tabbed:
       alternate_style: true
-  - pymdownx.details
-  - pymdownx.critic
+      combine_header_slug: true
+      slugify: "!!python/name:pymdownx.slugs.slugify"
   - pymdownx.tasklist:
       custom_checkbox: true
-  - admonition
-  - attr_list
-  - md_in_html
-  - tables
-  - toc:
-      permalink: true
+  - pymdownx.tilde
 
 extra_javascript:
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  social: []
+  generator: false
+  consent:
+    title: Cookie-Einstellungen
+    description: >-
+      Diese Dokumentation verwendet Cookies für die Suchfunktion und
+      Benutzereinstellungen (Theme).
+  analytics:
+    feedback:
+      title: War diese Seite hilfreich?
+      ratings:
+        - icon: material/emoticon-happy-outline
+          name: Ja, hilfreich
+          data: 1
+          note: Danke für Ihr Feedback!
+        - icon: material/emoticon-sad-outline
+          name: Verbesserungsbedarf
+          data: 0
+          note: >-
+            Danke für Ihr Feedback! Erstellen Sie gerne ein
+            <a href="https://github.com/issues" target="_blank">Issue</a>.
+
 plugins:
-  - search
-  - tags
+  - search:
+      lang: de
+      separator: '[\s\-\.]+'
+  - tags:
+      tags_file: reference/tags.md
+  - offline
