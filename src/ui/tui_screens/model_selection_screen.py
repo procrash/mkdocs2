@@ -16,8 +16,22 @@ from textual.widgets import (
     Static,
 )
 
+import re
+
 from ...config.schema import AppConfig, ModelHealthEntry
 from ...discovery.model_classifier import ClassifiedModel
+
+
+def _sanitize_id(model_id: str) -> str:
+    """Make a model ID safe for use as a Textual widget ID.
+
+    Replaces any character that is not a letter, digit, underscore or hyphen
+    with an underscore.  Ensures it doesn't start with a digit.
+    """
+    safe = re.sub(r"[^a-zA-Z0-9_-]", "_", model_id)
+    if safe and safe[0].isdigit():
+        safe = f"m{safe}"
+    return safe
 
 
 class ModelSelectionScreen(Screen):
@@ -120,7 +134,7 @@ class ModelSelectionScreen(Screen):
                     yield Checkbox(
                         f"{m.id} [{m.size_class}, ctx:{m.estimated_context:,}, {caps}]",
                         value=pre_selected,
-                        id=f"slave-{m.id}",
+                        id=f"slave-{_sanitize_id(m.id)}",
                         classes="model-row",
                     )
 
@@ -140,7 +154,7 @@ class ModelSelectionScreen(Screen):
                     yield Checkbox(
                         f"{m.id} ausschließen",
                         value=is_excluded,
-                        id=f"exclude-{m.id}",
+                        id=f"exclude-{_sanitize_id(m.id)}",
                         classes="exclude-row",
                     )
 
@@ -163,7 +177,7 @@ class ModelSelectionScreen(Screen):
         newly_excluded: set[str] = set()
         for m in self.classified:
             try:
-                cb = self.query_one(f"#exclude-{m.id}", Checkbox)
+                cb = self.query_one(f"#exclude-{_sanitize_id(m.id)}", Checkbox)
                 if cb.value:
                     newly_excluded.add(m.id)
             except Exception:
@@ -201,7 +215,7 @@ class ModelSelectionScreen(Screen):
             if m.id in newly_excluded:
                 continue
             try:
-                cb = self.query_one(f"#slave-{m.id}", Checkbox)
+                cb = self.query_one(f"#slave-{_sanitize_id(m.id)}", Checkbox)
                 if cb.value:
                     selected_slaves.append(m.id)
             except Exception:
