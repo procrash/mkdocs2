@@ -1,8 +1,10 @@
 """Model selection screen - choose master and slave models with persistent exclusion."""
 from __future__ import annotations
 
+import re
+
 from textual.app import ComposeResult
-from textual.containers import Center, Horizontal, Vertical
+from textual.containers import Center, Horizontal, Vertical, VerticalScroll
 from textual.screen import Screen
 from textual.widgets import (
     Button,
@@ -16,18 +18,12 @@ from textual.widgets import (
     Static,
 )
 
-import re
-
 from ...config.schema import AppConfig, ModelHealthEntry
 from ...discovery.model_classifier import ClassifiedModel
 
 
 def _sanitize_id(model_id: str) -> str:
-    """Make a model ID safe for use as a Textual widget ID.
-
-    Replaces any character that is not a letter, digit, underscore or hyphen
-    with an underscore.  Ensures it doesn't start with a digit.
-    """
+    """Make a model ID safe for use as a Textual widget ID."""
     safe = re.sub(r"[^a-zA-Z0-9_-]", "_", model_id)
     if safe and safe[0].isdigit():
         safe = f"m{safe}"
@@ -42,36 +38,33 @@ class ModelSelectionScreen(Screen):
         align: center middle;
     }
     #selection-box {
-        width: 95;
-        height: auto;
-        max-height: 90%;
+        width: 1fr;
+        max-width: 120;
+        height: 1fr;
+        max-height: 95%;
         border: solid $primary;
         padding: 1 2;
-        overflow-y: auto;
+        margin: 0 2;
+    }
+    #scroll-area {
+        height: 1fr;
     }
     .section-title {
         margin-top: 1;
         margin-bottom: 0;
     }
-    .model-row {
-        height: 3;
-        padding: 0 1;
-    }
-    .exclude-row {
-        height: 3;
-        padding: 0 1;
-    }
-    #btn-row {
-        margin-top: 1;
-        align: center middle;
-        height: 5;
-    }
-    #btn-row Button {
-        margin: 0 2;
-    }
     .hint-text {
         color: $text-muted;
         margin-bottom: 1;
+    }
+    #nav-row {
+        margin-top: 1;
+        align: center middle;
+        height: 3;
+        dock: bottom;
+    }
+    #nav-row Button {
+        margin: 0 2;
     }
     """
 
@@ -83,6 +76,8 @@ class ModelSelectionScreen(Screen):
         super().__init__()
         self.config = config
         self.classified = classified
+        # Build lookup: model_id → index in classified list
+        self._model_index = {m.id: i for i, m in enumerate(classified)}
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -95,72 +90,63 @@ class ModelSelectionScreen(Screen):
 
         with Center():
             with Vertical(id="selection-box"):
-                yield Label("[bold]Modellauswahl — Master / Slave[/bold]", classes="section-title")
                 yield Label(
-                    "Wähle ein Master-Modell (bewertet & synthetisiert Ergebnisse) und\n"
-                    "Slave-Modelle (erzeugen die Dokumentation). Das Master-Modell\n"
-                    "kann auch als Slave eingesetzt werden.",
+                    f"[bold]Modellauswahl — Master / Slave[/bold]  "
+                    f"({len(self.classified)} Modelle verfügbar)",
+                    classes="section-title",
+                )
+                yield Label(
+                    "Master bewertet & synthetisiert, Slaves erzeugen Dokumentation.\n"
+                    "Master kann auch als Slave eingesetzt werden.",
                     classes="hint-text",
                 )
 
-                # ── Master Selection ────────────────────────────────
-                yield Label("[bold yellow]Master-Modell[/bold yellow] (eines auswählen):", classes="section-title")
-                master_buttons = [RadioButton("Kein Master (kein Ensemble)", value=(prev_master == ""))]
-                for m in self.classified:
-                    if m.id in disabled_ids:
-                        continue
-                    is_prev = (m.id == prev_master)
-                    caps = ", ".join(c.value for c in m.capabilities)
-                    master_buttons.append(
-                        RadioButton(
-                            f"{m.id} [{m.size_class}, ctx:{m.estimated_context:,}, {caps}]",
-                            value=is_prev,
+                with VerticalScroll(id="scroll-area"):
+                    # ── Master Selection ────────────────────────────
+                    yield Label("[bold yellow]Master[/bold yellow]", classes="section-title")
+                    master_radio = RadioSet(id="master-radio")
+                    with master_radio:
+                        yield RadioButton(
+                            "Kein Master",
+                            value=(prev_master == ""),
                         )
-                    )
-                yield RadioSet(*master_buttons, id="master-radio")
+                        for m in self.classified:
+                            is_prev = (m.id == prev_master)
+                            tag = " [red][X][/red]" if m.id in disabled_ids else ""
+                            caps = ", ".join(c.value for c in m.capabilities)
+                            yield RadioButton(
+                                f"{m.id}{tag}  {m.size_class} {m.estimated_context:,} [{caps}]",
+                                value=is_prev,
+                            )
 
-                yield Rule()
+                    yield Rule()
 
-                # ── Slave Selection ─────────────────────────────────
-                yield Label(
-                    "[bold cyan]Slave-Modelle[/bold cyan] (mehrere möglich, Master kann auch Slave sein):",
-                    classes="section-title",
-                )
-                for m in self.classified:
-                    if m.id in disabled_ids:
-                        continue
-                    caps = ", ".join(c.value for c in m.capabilities)
-                    pre_selected = m.id in prev_slaves if prev_slaves else True
-                    yield Checkbox(
-                        f"{m.id} [{m.size_class}, ctx:{m.estimated_context:,}, {caps}]",
-                        value=pre_selected,
-                        id=f"slave-{_sanitize_id(m.id)}",
-                        classes="model-row",
-                    )
+                    # ── Slave Selection ─────────────────────────────
+                    yield Label("[bold cyan]Slaves[/bold cyan] (mehrere möglich)", classes="section-title")
+                    for m in self.classified:
+                        tag = " [red][X][/red]" if m.id in disabled_ids else ""
+                        caps = ", ".join(c.value for c in m.capabilities)
+                        pre_selected = m.id in prev_slaves if prev_slaves else (m.id not in disabled_ids)
+                        yield Checkbox(
+                            f"{m.id}{tag}  {m.size_class} {m.estimated_context:,} [{caps}]",
+                            value=pre_selected,
+                            id=f"slave-{_sanitize_id(m.id)}",
+                        )
 
-                yield Rule()
+                    yield Rule()
 
-                # ── Persistent Exclusion ────────────────────────────
-                yield Label(
-                    "[bold red]Modelle dauerhaft ausschließen[/bold red] (werden in config.yaml gespeichert):",
-                    classes="section-title",
-                )
-                yield Label(
-                    "Ausgeschlossene Modelle werden bei zukünftigen Starts ignoriert.",
-                    classes="hint-text",
-                )
-                for m in self.classified:
-                    is_excluded = m.id in disabled_ids
-                    yield Checkbox(
-                        f"{m.id} ausschließen",
-                        value=is_excluded,
-                        id=f"exclude-{_sanitize_id(m.id)}",
-                        classes="exclude-row",
-                    )
+                    # ── Exclusion ───────────────────────────────────
+                    yield Label("[bold red]Ausschließen[/bold red]", classes="section-title")
+                    for m in self.classified:
+                        yield Checkbox(
+                            m.id,
+                            value=(m.id in disabled_ids),
+                            id=f"exclude-{_sanitize_id(m.id)}",
+                        )
 
-                with Horizontal(id="btn-row"):
-                    yield Button("← Zurück", variant="default", id="btn-back")
-                    yield Button("Weiter →", variant="primary", id="btn-next")
+                with Horizontal(id="nav-row"):
+                    yield Button("Zurück", id="btn-back")
+                    yield Button("Weiter", variant="primary", id="btn-next")
         yield Footer()
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -170,7 +156,6 @@ class ModelSelectionScreen(Screen):
             self.dismiss(None)
 
     def _apply_and_dismiss(self) -> None:
-        # Build set of non-excluded model IDs (for filtering)
         available_ids = [m.id for m in self.classified]
 
         # ── Collect exclusions ──────────────────────────────
@@ -183,7 +168,7 @@ class ModelSelectionScreen(Screen):
             except Exception:
                 pass
 
-        # Update model_health entries in config
+        # Update model_health entries
         existing_ids = {e.model_id for e in self.config.model_health.entries}
         for m_id in newly_excluded:
             if m_id in existing_ids:
@@ -195,7 +180,7 @@ class ModelSelectionScreen(Screen):
                 self.config.model_health.entries.append(
                     ModelHealthEntry(model_id=m_id, enabled=False)
                 )
-        # Re-enable models that were un-checked
+        # Re-enable un-checked models
         for e in self.config.model_health.entries:
             if e.model_id in available_ids and e.model_id not in newly_excluded:
                 e.enabled = True
@@ -204,10 +189,12 @@ class ModelSelectionScreen(Screen):
         master_radio = self.query_one("#master-radio", RadioSet)
         master_idx = master_radio.pressed_index
         selected_master = ""
-        # Index 0 = "Kein Master", rest map to non-excluded classified models
-        non_excluded = [m for m in self.classified if m.id not in newly_excluded]
-        if master_idx > 0 and master_idx <= len(non_excluded):
-            selected_master = non_excluded[master_idx - 1].id
+        # Index 0 = "Kein Master", indices 1..N map to self.classified
+        if master_idx is not None and master_idx > 0 and master_idx <= len(self.classified):
+            selected_master = self.classified[master_idx - 1].id
+            # Don't select excluded model as master
+            if selected_master in newly_excluded:
+                selected_master = ""
 
         # ── Collect slaves ──────────────────────────────────
         selected_slaves: list[str] = []
@@ -221,7 +208,7 @@ class ModelSelectionScreen(Screen):
             except Exception:
                 pass
 
-        # If no slaves selected, select all non-excluded as fallback
+        # Fallback: select all non-excluded
         if not selected_slaves:
             selected_slaves = [m.id for m in self.classified if m.id not in newly_excluded]
 
