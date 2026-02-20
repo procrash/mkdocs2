@@ -167,9 +167,9 @@ class MkDocsTUI(App):
         self.auto_mode = result.get("automation_enabled", False)
 
         action = result.get("action", "run")
-        self._dispatch_action(action)
+        self._handle_action(action)
 
-    def _dispatch_action(self, action: str) -> None:
+    def _handle_action(self, action: str) -> None:
         """Route an action from the welcome screen to the corresponding flow."""
         if action == "run":
             self._start_discovery()
