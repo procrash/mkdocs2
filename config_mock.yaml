@@ -1,0 +1,59 @@
+project:
+  name: "mkdocsOnSteroids Documentation"
+  source_dir: "./src"
+  output_dir: "./docs_project"
+  repo_url: ""
+  languages:
+    - python
+  ignore_patterns:
+    - "*/__pycache__/*"
+    - "*.pyc"
+
+server:
+  url: "http://localhost:11434"
+  api_key: ""
+  timeout_connect: 5
+  timeout_read: 30
+
+system:
+  global_timeout_seconds: 30
+  max_retries: 1
+  retry_base_delay: 1
+  parallel_workers: 3
+  mock_mode: true
+
+models:
+  analysts: []
+  judge: null
+
+stakeholders:
+  developer:
+    enabled: true
+    models: "analysts"
+    doc_types:
+      - classes
+      - modules
+      - functions
+      - architecture
+      - diagrams
+  api:
+    enabled: true
+    models: "analysts"
+    doc_types:
+      - endpoints
+      - schemas
+      - examples
+  user:
+    enabled: true
+    models: "analysts"
+    doc_types:
+      - features
+      - tutorials
+      - getting_started
+
+output:
+  mkdocs_theme: "material"
+  latex_enabled: true
+  mermaid_enabled: true
+  code_copy_enabled: true
+  serve_port: 8000

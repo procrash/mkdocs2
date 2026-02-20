@@ -1,0 +1,10 @@
+# mkdocsOnSteroids dependencies
+pydantic>=2.0,<3.0
+pyyaml>=6.0
+click>=8.0
+rich>=13.0
+textual>=0.40
+httpx>=0.25
+mkdocs>=1.5
+mkdocs-material>=9.0
+pymdown-extensions>=10.0

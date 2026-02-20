@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.env
+*.pyc
+docs_project/
+config_backup.yaml
+config_live.yaml
+uncomp.txt
+mkdocsOnSteroids_email.txt

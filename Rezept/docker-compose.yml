@@ -1,0 +1,19 @@
+services:
+  mkdocs-steroids:
+    build: ./app
+    ports:
+      - "${SERVE_PORT:-8000}:8000"
+    volumes:
+      - ${SOURCE_DIR:-.}:/src:ro
+      - ${OUTPUT_DIR:-./output}:/docs
+    environment:
+      - OPENAPI_SERVER_URL=${OPENAPI_SERVER_URL:-http://host.docker.internal:11434}
+      - OPENAPI_KEY=${OPENAPI_KEY:-}
+      - MOCK_MODE=${MOCK_MODE:-false}
+      - AUTO_SERVE=${AUTO_SERVE:-false}
+      - PROJECT_NAME=${PROJECT_NAME:-Documentation}
+      - PARALLEL_WORKERS=${PARALLEL_WORKERS:-3}
+      - FORCE_CONFIG=true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: "no"

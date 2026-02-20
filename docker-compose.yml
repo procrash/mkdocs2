@@ -1,0 +1,16 @@
+services:
+  mkdocs-steroids:
+    build: .
+    ports:
+      - "${SERVE_PORT:-8000}:8000"
+    volumes:
+      - ${SOURCE_DIR:-.}:/src:ro
+      - ${OUTPUT_DIR:-./docs_project}:/docs
+      - ./docs_project/docs/manual:/docs/docs/manual:ro
+    environment:
+      - OPENAPI_SERVER_URL=${OPENAPI_SERVER_URL:-http://host.docker.internal:11434}
+      - OPENAPI_KEY=${OPENAPI_KEY:-}
+      - MOCK_MODE=${MOCK_MODE:-false}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: "no"

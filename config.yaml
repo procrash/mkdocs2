@@ -1,0 +1,62 @@
+project:
+  name: "MyProject Documentation"
+  source_dir: "/src"
+  output_dir: "/docs"
+  repo_url: ""
+  languages:
+    - cpp
+    - python
+  ignore_patterns:
+    - "*/test/*"
+    - "*/build/*"
+    - "*/__pycache__/*"
+    - "*.generated.*"
+
+server:
+  url: "http://host.docker.internal:11434"
+  api_key: ""
+  timeout_connect: 10
+  timeout_read: 60
+
+system:
+  global_timeout_seconds: 120
+  max_retries: 3
+  retry_base_delay: 2
+  parallel_workers: 3
+  mock_mode: false
+
+models:
+  analysts: []
+  judge: null
+
+stakeholders:
+  developer:
+    enabled: true
+    models: "analysts"
+    doc_types:
+      - classes
+      - modules
+      - functions
+      - architecture
+      - diagrams
+  api:
+    enabled: true
+    models: "analysts"
+    doc_types:
+      - endpoints
+      - schemas
+      - examples
+  user:
+    enabled: true
+    models: "analysts"
+    doc_types:
+      - features
+      - tutorials
+      - getting_started
+
+output:
+  mkdocs_theme: "material"
+  latex_enabled: true
+  mermaid_enabled: true
+  code_copy_enabled: true
+  serve_port: 8000
