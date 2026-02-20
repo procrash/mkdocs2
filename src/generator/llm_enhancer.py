@@ -74,8 +74,10 @@ def build_enhancement_prompt(mkdocs_path: Path, docs_dir: Path) -> str:
 
     # Collect .md files with previews
     file_listing_parts: list[str] = []
+    md_count = 0
     if docs_dir.exists():
         for md_file in sorted(docs_dir.rglob("*.md")):
+            md_count += 1
             rel_path = md_file.relative_to(docs_dir.parent)
             try:
                 lines = md_file.read_text(encoding="utf-8").splitlines()
@@ -87,6 +89,7 @@ def build_enhancement_prompt(mkdocs_path: Path, docs_dir: Path) -> str:
                 file_listing_parts.append(f"### {rel_path}\n(nicht lesbar)")
 
     file_listing = "\n\n".join(file_listing_parts) if file_listing_parts else "(keine Dateien gefunden)"
+    logger.info("Enhancement context: mkdocs.yml + %d .md files from docs/", md_count)
 
     # Use registered template
     ensure_loaded()

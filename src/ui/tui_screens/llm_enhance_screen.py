@@ -89,10 +89,17 @@ class LlmEnhanceScreen(Screen):
         from ...orchestrator.semaphore import WorkerPool
 
         log = self.query_one("#enhance-log", RichLog)
-        log.write(f"Modelle: {', '.join(self.slaves)}")
+        log.write("[bold]Ablauf:[/bold]")
+        log.write("  1. mkdocs.yml + alle Markdown-Dateien werden als Kontext gesammelt")
+        log.write(f"  2. Prompt an {len(self.slaves)} Slave-Modelle parallel senden:")
+        for s in self.slaves:
+            log.write(f"     - {s}")
         if self.master:
-            log.write(f"Master: {self.master}")
-        log.write(f"Starte Ensemble-Analyse mit {len(self.slaves)} Modellen...\n")
+            log.write(f"  3. Master ({self.master}) synthetisiert die besten Vorschläge")
+            log.write("  4. Ergebnis als Datei-Änderungen parsen → Diff-Vorschau")
+        else:
+            log.write("  3. Besten Vorschlag auswählen → Diff-Vorschau")
+        log.write("")
 
         pool = WorkerPool(max_workers=3)
 

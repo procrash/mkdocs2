@@ -445,19 +445,58 @@ def _run_llm_enhance_cli(config, output_dir: Path, auto: bool) -> None:
         click.echo("Keine Modelle konfiguriert. Zuerst 'discover' ausführen.")
         return
 
-    click.echo(f"\n--- KI-gesteuerte Verbesserung ---")
-    click.echo(f"Modelle: {', '.join(slaves)}")
+    # Suppress noisy httpx request logging
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
+
+    # Count docs files for user info
+    docs_dir = output_dir / "docs"
+    md_count = len(list(docs_dir.rglob("*.md"))) if docs_dir.exists() else 0
+
+    click.echo(f"\n{'=' * 56}")
+    click.echo(f"  KI-gesteuerte Verbesserung der Dokumentation")
+    click.echo(f"{'=' * 56}")
+    click.echo()
+    click.echo(f"  Kontext der Analyse:")
+    click.echo(f"    - mkdocs.yml (komplette Konfiguration)")
+    click.echo(f"    - {md_count} Markdown-Dateien aus docs/ (je erste 30 Zeilen)")
+    click.echo()
+    click.echo(f"  Ablauf:")
+    click.echo(f"    1. Prompt an {len(slaves)} Slave-Modelle parallel senden")
+    for s in slaves:
+        click.echo(f"       - {s}")
     if master:
-        click.echo(f"Master: {master}")
+        click.echo(f"    2. Master-Modell ({master}) synthetisiert beste Vorschläge")
+        click.echo(f"    3. Ergebnis als Datei-Änderungen parsen")
+    else:
+        click.echo(f"    2. Besten Vorschlag auswählen (kein Master konfiguriert)")
+        click.echo(f"    3. Ergebnis als Datei-Änderungen parsen")
+    click.echo()
 
     from .generator.llm_enhancer import run_llm_enhancement
-    from .orchestrator.opencode_runner import configure_http_fallback
     from .orchestrator.semaphore import WorkerPool
 
+    _last_phase = [""]
+
     def print_progress(completed: int, total: int, model_id: str, status: str) -> None:
-        click.echo(f"  [{completed}/{total}] {status}" + (f" ({model_id})" if model_id else ""))
+        # Detect phase changes for clear output
+        if "Prompt erstellt" in status:
+            click.echo(f"  [1/3] Prompt erstellt, sende an Modelle...")
+        elif "Modelle erfolgreich" in status:
+            click.echo(f"  [2/3] {status}")
+        elif "synthetisiert" in status:
+            click.echo(f"  [2/3] {status}")
+        elif "geparst" in status:
+            click.echo(f"  [3/3] {status}")
+        else:
+            # Generic progress — overwrite line
+            bar = f"{'#' * completed}{'.' * max(0, total - completed)}"
+            click.echo(f"\r  [{bar}] {completed}/{total} {status:<40}", nl=False)
+            if completed >= total:
+                click.echo()
 
     pool = WorkerPool(max_workers=3)
+    click.echo("  Starte... (das kann je nach Modellgröße 1-5 Minuten dauern)\n")
     changes = asyncio.run(run_llm_enhancement(
         config=config,
         slaves=slaves,
@@ -466,8 +505,14 @@ def _run_llm_enhance_cli(config, output_dir: Path, auto: bool) -> None:
         progress_cb=print_progress,
     ))
 
+    debug_dir = output_dir / "_enhance_debug"
+    if debug_dir.exists():
+        click.echo(f"\n  Debug-Dateien: {debug_dir}/")
+
     if not changes:
-        click.echo("Keine Verbesserungsvorschläge erhalten.")
+        click.echo("\n  Keine Verbesserungsvorschläge erhalten.")
+        click.echo("  Prüfe die Debug-Dateien für Details:")
+        click.echo(f"    cat {debug_dir}/02_merged_result.txt")
         return
 
     click.echo(f"\n{len(changes)} Änderungsvorschläge:")
