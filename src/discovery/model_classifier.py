@@ -53,8 +53,13 @@ _VISION_PATTERNS = re.compile(
 )
 
 
-def classify_model(model_id: str) -> ClassifiedModel:
-    """Classify a single model by its ID using heuristics."""
+def classify_model(model_id: str, detected_context: int = 0) -> ClassifiedModel:
+    """Classify a single model by its ID using heuristics.
+
+    If *detected_context* > 0 (obtained from the server API), it overrides the
+    heuristic estimate.  A detected context length ≥ 32768 also triggers the
+    LONG_CONTEXT capability flag.
+    """
     caps: list[ModelCapability] = []
     ctx = 4096
     size = "small"
@@ -79,6 +84,12 @@ def classify_model(model_id: str) -> ClassifiedModel:
         size = "medium"
         ctx = max(ctx, 16384)
 
+    # Server-detected context overrides heuristic
+    if detected_context > 0:
+        ctx = detected_context
+        if detected_context >= 32768 and ModelCapability.LONG_CONTEXT not in caps:
+            caps.append(ModelCapability.LONG_CONTEXT)
+
     if not caps:
         caps.append(ModelCapability.BASIC)
 
@@ -90,6 +101,10 @@ def classify_model(model_id: str) -> ClassifiedModel:
     )
 
 
-def classify_models(model_ids: list[str]) -> list[ClassifiedModel]:
-    """Classify a list of model IDs."""
-    return [classify_model(mid) for mid in model_ids]
+def classify_models(model_ids: list[str], detected_contexts: dict[str, int] | None = None) -> list[ClassifiedModel]:
+    """Classify a list of model IDs.
+
+    *detected_contexts* maps model_id → context_length as discovered from the server.
+    """
+    ctx_map = detected_contexts or {}
+    return [classify_model(mid, ctx_map.get(mid, 0)) for mid in model_ids]

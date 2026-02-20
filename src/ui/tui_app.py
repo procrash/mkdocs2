@@ -2,11 +2,14 @@
 
 Orchestrates the full workflow: welcome → discovery → model selection →
 skeleton suggestions → skeleton → generation → chat.
+
 All user decisions are persisted in config.yaml for resume support.
+All logging is captured into the TUI – nothing leaks to the raw console.
 """
 from __future__ import annotations
 import asyncio
 import logging
+import os
 from pathlib import Path
 
 from textual.app import App, ComposeResult
@@ -30,6 +33,68 @@ from .tui_screens import (
 logger = logging.getLogger(__name__)
 
 
+# ── Logging into the TUI ─────────────────────────────────────────────
+
+
+class _TuiLogHandler(logging.Handler):
+    """Routes all log records into the currently-active GenerationScreen log widget.
+
+    Falls back to /dev/null – never to stdout/stderr, so the TUI stays clean.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._target_widget = None          # set by GenerationScreen when active
+        self._buffer: list[str] = []        # buffer while no widget is attached
+
+    def attach(self, log_widget) -> None:
+        self._target_widget = log_widget
+        # flush buffer
+        for line in self._buffer:
+            try:
+                self._target_widget.write_line(line)
+            except Exception:
+                pass
+        self._buffer.clear()
+
+    def detach(self) -> None:
+        self._target_widget = None
+
+    def emit(self, record: logging.LogRecord) -> None:
+        try:
+            msg = self.format(record)
+            if self._target_widget is not None:
+                self._target_widget.write_line(f"[dim]{msg}[/dim]")
+            else:
+                self._buffer.append(msg)
+                # Keep buffer bounded
+                if len(self._buffer) > 500:
+                    self._buffer = self._buffer[-200:]
+        except Exception:
+            pass                            # never crash, never print
+
+
+def _redirect_logging_to_tui() -> _TuiLogHandler:
+    """Replace every stdlib log handler with our TUI handler.
+
+    This is the key to keeping the terminal clean: nothing goes to
+    stdout/stderr anymore once this is called.
+    """
+    handler = _TuiLogHandler()
+    handler.setFormatter(
+        logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s", datefmt="%H:%M:%S")
+    )
+    root = logging.getLogger()
+    for h in root.handlers[:]:
+        root.removeHandler(h)
+    root.addHandler(handler)
+    root.setLevel(logging.INFO)
+    return handler
+
+
+# ── Main TUI App ─────────────────────────────────────────────────────
+
+
 class MkDocsTUI(App):
     """Main multi-screen TUI application."""
 
@@ -49,12 +114,13 @@ class MkDocsTUI(App):
         self.config = config
         self.config_path = config_path
         self.auto_mode = auto_mode or config.automation.enabled
+        self._log_handler: _TuiLogHandler | None = None
 
         # Runtime state
         self._classified: list[ClassifiedModel] = []
         self._assignment: RoleAssignment = RoleAssignment()
-        self._selected_analysts: list[str] = []
-        self._selected_judge: str = ""
+        self._selected_slaves: list[str] = []
+        self._selected_master: str = ""
         self._mkdocs_url: str = ""
         self._mkdocs_server = None
         self._file_listing: str = ""
@@ -63,7 +129,6 @@ class MkDocsTUI(App):
         self.title = "mkdocsOnSteroids"
         self.sub_title = self.config.project.name
 
-        # Check resume state to decide starting screen
         resume = self.config.resume
         if resume.last_screen and not self.auto_mode:
             self._resume_from(resume.last_screen)
@@ -73,21 +138,18 @@ class MkDocsTUI(App):
             self._start_welcome()
 
     def _save_config(self) -> None:
-        """Persist current config to YAML."""
         try:
             save_config(self.config, self.config_path)
         except Exception as exc:
             logger.error("Failed to save config: %s", exc)
 
     def _update_resume(self, screen_name: str) -> None:
-        """Update resume state and persist."""
         self.config.resume.last_screen = screen_name
         self._save_config()
 
     # ── Screen Flow ──────────────────────────────────────────────────
 
     def _start_welcome(self) -> None:
-        """Screen 1: Welcome & automation mode."""
         self._update_resume("welcome")
         self.push_screen(WelcomeScreen(self.config), callback=self._on_welcome_result)
 
@@ -102,7 +164,6 @@ class MkDocsTUI(App):
         self._start_discovery()
 
     def _start_discovery(self) -> None:
-        """Screen 2: LLM server probe."""
         self._update_resume("discovery")
         self.push_screen(DiscoveryScreen(self.config), callback=self._on_discovery_result)
 
@@ -116,21 +177,26 @@ class MkDocsTUI(App):
 
         self._classified = result.get("classified", [])
         self._assignment = result.get("assignment", RoleAssignment())
-
-        # Build file listing for suggestions
         self._build_file_listing()
 
         if self.auto_mode:
-            # Auto: use all models, skip selection
-            self._selected_analysts = [m.id for m in self._classified]
-            self._selected_judge = self._assignment.judge.id if self._assignment.judge else ""
+            # In auto mode: auto-assign models but still respect exclusions
+            disabled = self._get_disabled_models()
+            self._selected_slaves = [m.id for m in self._classified if m.id not in disabled]
+            if self._assignment.judge and self._assignment.judge.id not in disabled:
+                self._selected_master = self._assignment.judge.id
+            else:
+                self._selected_master = ""
             self._apply_model_config()
-            self._start_skeleton()
+            # Still fetch skeleton suggestions (use defaults if LLM unavailable)
+            if not self.config.resume.suggestions_fetched:
+                self._start_skeleton_suggestions()
+            else:
+                self._start_skeleton()
         else:
             self._start_model_selection()
 
     def _start_model_selection(self) -> None:
-        """Screen 3: Model selection (manual only)."""
         self._update_resume("model_selection")
         self.push_screen(
             ModelSelectionScreen(self.config, self._classified),
@@ -142,20 +208,19 @@ class MkDocsTUI(App):
             self._start_discovery()
             return
 
-        self._selected_analysts = result.get("selected_analysts", [])
-        self._selected_judge = result.get("selected_judge", "")
+        self._selected_slaves = result.get("selected_slaves", [])
+        self._selected_master = result.get("selected_master", "")
         self._apply_model_config()
         self._save_config()
         self._start_skeleton_suggestions()
 
     def _start_skeleton_suggestions(self) -> None:
-        """Screen 4: LLM skeleton suggestions."""
         self._update_resume("skeleton_suggestions")
         self.push_screen(
             SkeletonSuggestionsScreen(
                 self.config,
                 file_listing=self._file_listing,
-                model_ids=self._selected_analysts,
+                model_ids=self._selected_slaves,
             ),
             callback=self._on_suggestions_result,
         )
@@ -164,13 +229,11 @@ class MkDocsTUI(App):
         if result is None:
             self._start_model_selection()
             return
-
         self.config.preferences.skeleton_suggestions = result.get("suggestions", [])
         self._save_config()
         self._start_skeleton()
 
     def _start_skeleton(self) -> None:
-        """Screen 5: Skeleton preview & MkDocs start."""
         self._update_resume("skeleton")
         self.push_screen(SkeletonScreen(self.config), callback=self._on_skeleton_result)
 
@@ -185,17 +248,14 @@ class MkDocsTUI(App):
         start_mkdocs = result.get("start_mkdocs", False)
         port = result.get("port", 8000)
 
-        # Create skeleton
         from ..generator.skeleton_builder import create_skeleton, create_suggestion_files
         create_skeleton(self.config.project.output_dir, self.config.project.name)
         create_suggestion_files(self.config.project.output_dir, self.config.preferences.skeleton_suggestions)
         self.config.resume.skeleton_created = True
 
-        # Generate mkdocs.yml for skeleton
         from ..generator.mkdocs_builder import write_mkdocs_config
         write_mkdocs_config(self.config, self.config.project.output_dir)
 
-        # Start MkDocs server
         if start_mkdocs:
             from ..generator.mkdocs_server import MkDocsServer
             self._mkdocs_server = MkDocsServer(self.config.project.output_dir, port=port)
@@ -210,20 +270,30 @@ class MkDocsTUI(App):
         self._start_generation()
 
     def _start_generation(self) -> None:
-        """Screen 6: Generation with live progress."""
         self._update_resume("generation")
         gen_screen = GenerationScreen(self.config, mkdocs_url=self._mkdocs_url)
         self.push_screen(gen_screen, callback=self._on_generation_result)
 
-        # Start pipeline in background
+        # Attach the TUI log handler to the generation screen's log widget
+        if self._log_handler:
+            # Will be attached once the screen mounts and the widget exists
+            self.call_later(self._attach_log_to_gen_screen, gen_screen)
+
         self.run_worker(self._run_pipeline(gen_screen), exclusive=True)
 
+    def _attach_log_to_gen_screen(self, gen_screen: GenerationScreen) -> None:
+        """Attach the log handler to the generation screen's log widget."""
+        if self._log_handler:
+            try:
+                from textual.widgets import Log as LogWidget
+                log_widget = gen_screen.query_one("#log-panel", LogWidget)
+                self._log_handler.attach(log_widget)
+            except Exception:
+                pass
+
     async def _run_pipeline(self, gen_screen: GenerationScreen) -> None:
-        """Run the documentation generation pipeline."""
         from ..analyzer.file_classifier import classify_file
         from ..analyzer.scanner import scan_directory
-        from ..discovery.model_classifier import ClassifiedModel as CM
-        from ..discovery.role_assigner import RoleAssignment as RA
         from ..generator.index_generator import generate_index_pages
         from ..generator.markdown_writer import write_markdown, write_manual_placeholder
         from ..generator.mkdocs_builder import write_mkdocs_config
@@ -241,23 +311,16 @@ class MkDocsTUI(App):
             classify_file(sf.path, sf.relative_path, sf.language)
             for sf in scan_result.files
         ]
-
         gen_screen.log_message(f"Gefunden: {scan_result.total_files} Dateien")
 
-        # Build assignment from selected models
         assignment = self._build_assignment()
-
-        # Determine completed tasks for resume
         completed_ids = set(self.config.resume.completed_tasks)
 
-        # Create failure callback
         async def failure_cb(model_id: str, error: str) -> str | None:
             if self.auto_mode:
-                # Auto: disable and pick replacement
                 self._auto_handle_failure(model_id, error)
                 return self._find_replacement(model_id)
             else:
-                # Manual: show failure dialog
                 return await self._show_failure_dialog(model_id, error)
 
         engine = OrchestrationEngine(
@@ -277,7 +340,6 @@ class MkDocsTUI(App):
         gen_screen.log_message("Starte Generierung...")
         pipeline_result = await engine.run()
 
-        # Track completed tasks for resume
         for r in pipeline_result.results:
             if r.success:
                 tid = engine.task_id(r.task)
@@ -288,7 +350,6 @@ class MkDocsTUI(App):
 
         gen_screen.log_message("Schreibe Ausgabedateien...")
 
-        # Write outputs
         output_dir = self.config.project.output_dir
         for result in pipeline_result.results:
             if result.success and result.content and result.content != "[resumed - already completed]":
@@ -307,24 +368,25 @@ class MkDocsTUI(App):
         write_manual_placeholder(output_dir, "faq.md", "FAQ")
         write_mkdocs_config(self.config, output_dir)
 
+        # Detach log handler
+        if self._log_handler:
+            self._log_handler.detach()
+
         gen_screen.mark_finished(pipeline_result)
 
     def _on_generation_result(self, result: dict | None) -> None:
-        # Stop MkDocs server if it was started
         if result and result.get("interrupted"):
             self._save_config()
-        # Offer chat screen
         if not self.auto_mode:
             self._start_chat()
         else:
             self._cleanup_and_exit()
 
     def _start_chat(self) -> None:
-        """Screen 7: Project chat."""
         self._update_resume("chat")
-        all_models = self._selected_analysts.copy()
-        if self._selected_judge and self._selected_judge not in all_models:
-            all_models.insert(0, self._selected_judge)
+        all_models = self._selected_slaves.copy()
+        if self._selected_master and self._selected_master not in all_models:
+            all_models.insert(0, self._selected_master)
         self.push_screen(
             ChatScreen(self.config, available_models=all_models),
             callback=self._on_chat_result,
@@ -334,10 +396,8 @@ class MkDocsTUI(App):
         self._cleanup_and_exit()
 
     def _cleanup_and_exit(self) -> None:
-        """Clean up resources and exit."""
         if self._mkdocs_server:
             self._mkdocs_server.stop()
-        # Reset resume state for fresh start next time
         self.config.resume.last_screen = ""
         self._save_config()
         self.exit()
@@ -345,25 +405,26 @@ class MkDocsTUI(App):
     # ── Helpers ───────────────────────────────────────────────────────
 
     def _apply_model_config(self) -> None:
-        """Apply selected analysts/judge to config.models."""
         from ..config.schema import ModelConfig
         self.config.models.analysts = [
-            ModelConfig(id=mid) for mid in self._selected_analysts
+            ModelConfig(id=mid) for mid in self._selected_slaves
         ]
-        if self._selected_judge:
-            self.config.models.judge = ModelConfig(id=self._selected_judge)
+        if self._selected_master:
+            self.config.models.judge = ModelConfig(id=self._selected_master)
         else:
             self.config.models.judge = None
 
+        # Persist to preferences
+        self.config.preferences.selected_analysts = list(self._selected_slaves)
+        self.config.preferences.selected_judge = self._selected_master
+
     def _build_assignment(self) -> RoleAssignment:
-        """Build RoleAssignment from selected models."""
         from ..discovery.model_classifier import ClassifiedModel, classify_model
-        analysts = [classify_model(mid) for mid in self._selected_analysts]
-        judge = classify_model(self._selected_judge) if self._selected_judge else None
+        analysts = [classify_model(mid) for mid in self._selected_slaves]
+        judge = classify_model(self._selected_master) if self._selected_master else None
         return RoleAssignment(analysts=analysts, judge=judge)
 
     def _build_file_listing(self) -> None:
-        """Build a short file listing for LLM context."""
         try:
             from ..analyzer.scanner import scan_directory
             scan = scan_directory(
@@ -379,32 +440,24 @@ class MkDocsTUI(App):
             self._file_listing = "(Verzeichnis nicht lesbar)"
 
     def _get_disabled_models(self) -> set[str]:
-        """Get set of disabled model IDs from health config."""
         return {e.model_id for e in self.config.model_health.entries if not e.enabled}
 
     def _find_replacement(self, failed_model_id: str) -> str | None:
-        """Find a replacement model for a failed one."""
-        # Check health config for explicit replacement
         for e in self.config.model_health.entries:
             if e.model_id == failed_model_id and e.replacement_model_id:
                 return e.replacement_model_id
-        # Pick first available non-disabled analyst
         disabled = self._get_disabled_models()
         disabled.add(failed_model_id)
-        for mid in self._selected_analysts:
+        for mid in self._selected_slaves:
             if mid not in disabled:
                 return mid
         return None
 
     def _auto_handle_failure(self, model_id: str, error: str) -> None:
-        """Automatically handle model failure in automation mode."""
-        entry = ModelHealthEntry(
-            model_id=model_id, enabled=False, failure_count=1,
-        )
+        entry = ModelHealthEntry(model_id=model_id, enabled=False, failure_count=1)
         replacement = self._find_replacement(model_id)
         if replacement:
             entry.replacement_model_id = replacement
-
         found = False
         for i, e in enumerate(self.config.model_health.entries):
             if e.model_id == model_id:
@@ -416,12 +469,9 @@ class MkDocsTUI(App):
                 break
         if not found:
             self.config.model_health.entries.append(entry)
-
         self._save_config()
-        logger.info("Auto-disabled model %s, replacement: %s", model_id, replacement or "none")
 
     async def _show_failure_dialog(self, model_id: str, error: str) -> str | None:
-        """Show failure modal and wait for user decision."""
         future: asyncio.Future = asyncio.get_event_loop().create_future()
 
         def on_result(result: dict | None):
@@ -435,25 +485,20 @@ class MkDocsTUI(App):
                 config=self.config,
                 failed_model_id=model_id,
                 error_message=error,
-                available_models=self._selected_analysts,
+                available_models=self._selected_slaves,
             ),
             callback=on_result,
         )
-
         result = await future
         if result is None:
             return None
-
         if result.get("disable"):
             if result.get("persist"):
                 self._save_config()
             return result.get("replacement") or None
-
-        # Retry = return same model
         return model_id
 
     def _resume_from(self, screen_name: str) -> None:
-        """Resume from the given screen."""
         screen_map = {
             "welcome": self._start_welcome,
             "discovery": self._start_discovery,
@@ -464,13 +509,10 @@ class MkDocsTUI(App):
             "chat": self._start_chat,
         }
         starter = screen_map.get(screen_name, self._start_welcome)
-
-        # Restore runtime state from config
         if self.config.preferences.selected_analysts:
-            self._selected_analysts = list(self.config.preferences.selected_analysts)
+            self._selected_slaves = list(self.config.preferences.selected_analysts)
         if self.config.preferences.selected_judge:
-            self._selected_judge = self.config.preferences.selected_judge
-
+            self._selected_master = self.config.preferences.selected_judge
         starter()
 
     def action_toggle_dark(self) -> None:
@@ -479,5 +521,10 @@ class MkDocsTUI(App):
 
 def run_tui(config: AppConfig, config_path: Path = Path("config.yaml"), auto: bool = False) -> None:
     """Launch the TUI application."""
+    # Redirect ALL logging into our TUI handler BEFORE the app starts.
+    # This prevents any logging.info / print from corrupting the terminal.
+    log_handler = _redirect_logging_to_tui()
+
     app = MkDocsTUI(config, config_path=config_path, auto_mode=auto)
+    app._log_handler = log_handler
     app.run()

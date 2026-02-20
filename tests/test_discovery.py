@@ -40,6 +40,26 @@ class TestModelClassifier:
         assert len(results) == 3
 
 
+    def test_classify_with_detected_context(self):
+        """Server-detected context length should override heuristic."""
+        result = classify_model("some-tiny-model-1b", detected_context=131072)
+        assert result.estimated_context == 131072
+        assert ModelCapability.LONG_CONTEXT in result.capabilities
+
+    def test_classify_detected_context_zero_uses_heuristic(self):
+        """detected_context=0 should fall back to heuristic."""
+        result = classify_model("qwen2.5-72b", detected_context=0)
+        assert result.estimated_context == 65536  # heuristic for long_context pattern
+
+    def test_classify_models_with_detected_map(self):
+        """classify_models should pass detected contexts through."""
+        ctx_map = {"model-a": 8192, "model-b": 65536}
+        results = classify_models(["model-a", "model-b", "model-c"], ctx_map)
+        assert results[0].estimated_context == 8192
+        assert results[1].estimated_context == 65536
+        assert results[2].estimated_context == 4096  # default heuristic for unknown
+
+
 class TestRoleAssigner:
     def test_single_model(self):
         models = [ClassifiedModel(id="test-model")]

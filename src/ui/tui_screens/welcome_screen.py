@@ -53,7 +53,9 @@ class WelcomeScreen(Screen):
                     f"[bold blue]mkdocsOnSteroids[/bold blue]\n\n"
                     f"Projekt: [bold]{self.config.project.name}[/bold]\n"
                     f"Quellverzeichnis: {self.config.project.source_dir}\n"
-                    f"Ausgabe: {self.config.project.output_dir}",
+                    f"Ausgabe: {self.config.project.output_dir}\n\n"
+                    f"[dim]Ablauf: Server-Erkennung → Master/Slave-Auswahl →\n"
+                    f"Skelett-Vorschläge vom LLM → Skelett erstellen → Generierung → Chat[/dim]",
                     id="project-info",
                 )
                 with Vertical(id="automation-section"):
