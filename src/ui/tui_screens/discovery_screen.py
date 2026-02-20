@@ -36,11 +36,13 @@ class DiscoveryScreen(Screen):
         align: center middle;
     }
     #discovery-box {
-        width: 100;
+        width: 1fr;
+        max-width: 120;
         height: auto;
-        max-height: 90%;
+        max-height: 95%;
         border: solid $primary;
         padding: 1 2;
+        margin: 0 2;
         overflow-y: auto;
     }
     #status-label {
@@ -53,15 +55,17 @@ class DiscoveryScreen(Screen):
     }
     #model-table {
         height: auto;
-        max-height: 20;
+        max-height: 25;
     }
     #btn-row {
         margin-top: 1;
         align: center middle;
-        height: 5;
+        height: auto;
+        min-height: 3;
     }
     #btn-row Button {
         margin: 0 1;
+        min-width: 14;
     }
     #probe-status {
         margin-top: 1;
@@ -110,26 +114,10 @@ class DiscoveryScreen(Screen):
                 yield DataTable(id="model-table")
                 yield Label("", id="probe-status")
                 with Horizontal(id="btn-row"):
-                    yield Button("← Zurück", variant="default", id="btn-back")
-                    yield Button(
-                        "Ctx diagnostizieren (alle)",
-                        variant="warning",
-                        id="btn-probe-ctx",
-                        disabled=True,
-                    )
-                    yield Button(
-                        "Ctx diagnostizieren (neue)",
-                        variant="warning",
-                        id="btn-probe-ctx-new",
-                        disabled=True,
-                    )
-                    yield Button(
-                        "Capabilities prüfen (neue)",
-                        variant="warning",
-                        id="btn-probe-caps-new",
-                        disabled=True,
-                    )
-                    yield Button("Weiter →", variant="primary", id="btn-next", disabled=True)
+                    yield Button("Zurück", id="btn-back")
+                    yield Button("Alle proben", variant="warning", id="btn-probe-all", disabled=True)
+                    yield Button("Neue proben", variant="warning", id="btn-probe-new", disabled=True)
+                    yield Button("Weiter", variant="primary", id="btn-next", disabled=True)
         yield Footer()
 
     def on_mount(self) -> None:
@@ -182,15 +170,12 @@ class DiscoveryScreen(Screen):
             self._finish()
         elif bid == "btn-back":
             self.dismiss(None)
-        elif bid == "btn-probe-ctx":
+        elif bid == "btn-probe-all":
             event.button.disabled = True
-            self.run_worker(self._run_context_probe(new_only=False), exclusive=True)
-        elif bid == "btn-probe-ctx-new":
+            self.run_worker(self._run_full_probe(new_only=False), exclusive=True)
+        elif bid == "btn-probe-new":
             event.button.disabled = True
-            self.run_worker(self._run_context_probe(new_only=True), exclusive=True)
-        elif bid == "btn-probe-caps-new":
-            event.button.disabled = True
-            self.run_worker(self._run_caps_probe(new_only=True), exclusive=True)
+            self.run_worker(self._run_full_probe(new_only=True), exclusive=True)
 
     # ── Discovery Modes ───────────────────────────────────────────
 
@@ -213,9 +198,8 @@ class DiscoveryScreen(Screen):
 
         self.query_one("#btn-next", Button).disabled = False
         if self._discovered or self._classified:
-            self.query_one("#btn-probe-ctx", Button).disabled = False
-            self.query_one("#btn-probe-ctx-new", Button).disabled = False
-            self.query_one("#btn-probe-caps-new", Button).disabled = False
+            self.query_one("#btn-probe-all", Button).disabled = False
+            self.query_one("#btn-probe-new", Button).disabled = False
 
         # Auto-advance in automation mode
         if self.config.automation.enabled and self._classified:
@@ -412,26 +396,28 @@ class DiscoveryScreen(Screen):
 
         table.display = True
 
-    # ── Context Probe ──────────────────────────────────────────────
+    # ── Combined Probe (Context + Capabilities) ─────────────────
 
-    async def _run_context_probe(self, new_only: bool = False) -> None:
-        """Actively probe context lengths via chat completions."""
+    async def _run_full_probe(self, new_only: bool = False) -> None:
+        """Probe context lengths AND capabilities for models."""
         probe_label = self.query_one("#probe-status", Label)
         probe_label.display = True
 
         if new_only:
-            models_to_probe = [
+            ctx_models = [
                 m for m in self._discovered
-                if m.id not in self._cached_model_ids or self._detected_contexts.get(m.id, 0) == 0
+                if m.id not in self._cached_model_ids
+                or self._detected_contexts.get(m.id, 0) == 0
+            ]
+            cap_models = [
+                m for m in self._discovered
+                if m.id not in self._detected_capabilities
             ]
             label_suffix = " (nur neue)"
         else:
-            models_to_probe = list(self._discovered)
+            ctx_models = list(self._discovered)
+            cap_models = list(self._discovered)
             label_suffix = ""
-
-        if not models_to_probe:
-            probe_label.update("[green]Keine neuen Modelle zu diagnostizieren[/green]")
-            return
 
         def on_progress(model_id: str, current_test: int, msg: str):
             try:
@@ -439,23 +425,37 @@ class DiscoveryScreen(Screen):
             except Exception:
                 pass
 
-        probe_label.update(
-            f"[yellow]Starte Kontextfenster-Diagnose{label_suffix} "
-            f"({len(models_to_probe)} Modelle)...[/yellow]"
-        )
+        # 1. Context probe
+        if ctx_models:
+            probe_label.update(
+                f"[yellow]Kontextfenster{label_suffix}: "
+                f"{len(ctx_models)} Modelle...[/yellow]"
+            )
+            probed_ctx = await probe_all_context_lengths(
+                self.config.server.url,
+                ctx_models,
+                self.config.server.api_key,
+                timeout=30,
+                progress_callback=on_progress,
+            )
+            self._detected_contexts.update(probed_ctx)
 
-        probed = await probe_all_context_lengths(
-            self.config.server.url,
-            models_to_probe,
-            self.config.server.api_key,
-            timeout=30,
-            progress_callback=on_progress,
-        )
+        # 2. Capability probe
+        if cap_models:
+            probe_label.update(
+                f"[yellow]Capabilities{label_suffix}: "
+                f"{len(cap_models)} Modelle...[/yellow]"
+            )
+            probed_caps = await probe_all_capabilities(
+                self.config.server.url,
+                cap_models,
+                self.config.server.api_key,
+                timeout=15,
+                progress_callback=on_progress,
+            )
+            self._detected_capabilities.update(probed_caps)
 
-        # Merge probed values
-        self._detected_contexts.update(probed)
-
-        # Re-classify
+        # Re-classify and update
         model_ids = [m.id for m in self._discovered]
         self._classified = classify_models(
             model_ids, self._detected_contexts, self._detected_capabilities,
@@ -465,64 +465,10 @@ class DiscoveryScreen(Screen):
         self._refresh_table()
         self._save_model_data()
 
-        n_probed = sum(1 for v in probed.values() if v > 0)
+        n_ctx = len(ctx_models)
+        n_cap = len(cap_models)
         probe_label.update(
-            f"[green]Diagnose abgeschlossen: {n_probed} Modelle getestet{label_suffix}[/green]"
-        )
-
-        status = self.query_one("#status-label", Label)
-        self._update_status_summary(status)
-
-    # ── Capability Probe ───────────────────────────────────────────
-
-    async def _run_caps_probe(self, new_only: bool = True) -> None:
-        """Probe instruct/tool capabilities for models."""
-        probe_label = self.query_one("#probe-status", Label)
-        probe_label.display = True
-
-        if new_only:
-            models_to_probe = [
-                m for m in self._discovered
-                if m.id not in self._detected_capabilities
-            ]
-        else:
-            models_to_probe = list(self._discovered)
-
-        if not models_to_probe:
-            probe_label.update("[green]Alle Modelle haben bereits Capability-Daten[/green]")
-            return
-
-        def on_progress(model_id: str, _: int, msg: str):
-            try:
-                probe_label.update(f"[yellow]{model_id}[/yellow]: {msg}")
-            except Exception:
-                pass
-
-        probe_label.update(
-            f"[yellow]Prüfe Capabilities für {len(models_to_probe)} Modelle...[/yellow]"
-        )
-
-        probed_caps = await probe_all_capabilities(
-            self.config.server.url,
-            models_to_probe,
-            self.config.server.api_key,
-            timeout=15,
-            progress_callback=on_progress,
-        )
-        self._detected_capabilities.update(probed_caps)
-
-        # Re-classify
-        model_ids = [m.id for m in self._discovered]
-        self._classified = classify_models(
-            model_ids, self._detected_contexts, self._detected_capabilities,
-        )
-        self._assignment = assign_roles(self._classified)
-
-        self._refresh_table()
-        self._save_model_data()
-
-        probe_label.update(
-            f"[green]Capabilities geprüft: {len(probed_caps)} Modelle[/green]"
+            f"[green]Fertig: {n_ctx} Ctx + {n_cap} Capabilities geprüft{label_suffix}[/green]"
         )
         status = self.query_one("#status-label", Label)
         self._update_status_summary(status)
