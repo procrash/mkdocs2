@@ -29,6 +29,7 @@ from textual.widgets import (
 
 from ...config.schema import AppConfig
 from ...orchestrator.opencode_runner import configure_http_fallback, run_opencode
+from . import sanitize_widget_id as _sanitize_id
 from .diff_review_screen import DiffReviewScreen, FileChange, parse_file_changes
 
 logger = logging.getLogger(__name__)
@@ -168,7 +169,7 @@ class ChatScreen(Screen):
                 yield Label("Slave-LLMs: ")
             with Horizontal():
                 for m in self.available_models:
-                    yield Checkbox(m, value=True, id=f"chat-model-{m}", classes="model-check")
+                    yield Checkbox(m, value=True, id=f"chat-model-{_sanitize_id(m)}", classes="model-check")
 
         yield Log(id="chat-log", highlight=True)
 
@@ -213,7 +214,7 @@ class ChatScreen(Screen):
         selected_models: list[str] = []
         for m in self.available_models:
             try:
-                cb = self.query_one(f"#chat-model-{m}", Checkbox)
+                cb = self.query_one(f"#chat-model-{_sanitize_id(m)}", Checkbox)
                 if cb.value:
                     selected_models.append(m)
             except Exception:

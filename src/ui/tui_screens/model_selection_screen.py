@@ -1,8 +1,6 @@
 """Model selection screen - choose master and slave models with persistent exclusion."""
 from __future__ import annotations
 
-import re
-
 from textual.app import ComposeResult
 from textual.containers import Center, Horizontal, Vertical, VerticalScroll
 from textual.screen import Screen
@@ -20,14 +18,7 @@ from textual.widgets import (
 
 from ...config.schema import AppConfig, ModelHealthEntry
 from ...discovery.model_classifier import ClassifiedModel
-
-
-def _sanitize_id(model_id: str) -> str:
-    """Make a model ID safe for use as a Textual widget ID."""
-    safe = re.sub(r"[^a-zA-Z0-9_-]", "_", model_id)
-    if safe and safe[0].isdigit():
-        safe = f"m{safe}"
-    return safe
+from . import sanitize_widget_id as _sanitize_id
 
 
 class ModelSelectionScreen(Screen):

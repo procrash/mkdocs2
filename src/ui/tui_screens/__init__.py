@@ -1,4 +1,19 @@
 """TUI screen package for mkdocsOnSteroids multi-screen workflow."""
+import re
+
+
+def sanitize_widget_id(raw_id: str) -> str:
+    """Make a string safe for use as a Textual widget ID.
+
+    Replaces any character that is not a letter, digit, underscore or hyphen
+    with an underscore.  Ensures it doesn't start with a digit.
+    """
+    safe = re.sub(r"[^a-zA-Z0-9_-]", "_", raw_id)
+    if safe and safe[0].isdigit():
+        safe = f"m{safe}"
+    return safe
+
+
 from .welcome_screen import WelcomeScreen
 from .discovery_screen import DiscoveryScreen
 from .model_selection_screen import ModelSelectionScreen
