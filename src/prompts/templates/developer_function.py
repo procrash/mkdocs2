@@ -1,5 +1,6 @@
 """Prompt template for function documentation (developer stakeholder)."""
 from ..registry import register
+from . import format_guideline_section
 
 
 @register("developer", "functions")
@@ -8,8 +9,11 @@ def render(ctx) -> str:
     if ctx.doxygen_section:
         doxygen = f"\n## Vorhandene Doxygen-Dokumentation:\n{ctx.doxygen_section}\n"
 
+    guideline_section = format_guideline_section(ctx)
+
     sig = ctx.function_signature or "(see code below)"
     return f"""Dokumentiere die folgende {ctx.language}-Funktion technisch präzise.
+{guideline_section}
 
 ## Format:
 ### `{sig}`

@@ -10,10 +10,21 @@ from ..registry import register
 @register("enhance", "formats")
 def render(ctx) -> str:
     project_name = ctx.section_name or "das Projekt"
+
+    skeleton_section = ""
+    if ctx.skeleton_guidelines:
+        skeleton_section = f"""
+## Inhaltsrichtlinien für Dateiformat-Seiten:
+{ctx.skeleton_guidelines}
+
+Nutze die Richtlinien oben um die Inhalte korrekt auf die bestehenden
+Skeleton-Seiten zu verteilen.
+"""
+
     return f"""Du bist ein erfahrener Software-Dokumentar und Dateiformat-Spezialist.
 
 ## Projekt: {project_name}
-
+{skeleton_section}
 ## Quellcode des Projekts:
 {ctx.code_content}
 

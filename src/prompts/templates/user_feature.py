@@ -1,11 +1,15 @@
 """Prompt template for user-facing feature documentation."""
 from ..registry import register
+from . import format_guideline_section
 
 
 @register("user", "features")
 def render(ctx) -> str:
+    guideline_section = format_guideline_section(ctx)
+
     return f"""Erkläre die folgende Software-Funktionalität für Endanwender.
 Verwende KEINE Code-Blöcke. Keine technischen Details.
+{guideline_section}
 
 ## Anforderungen:
 1. **Was macht diese Funktion?** (2-3 einfache Sätze)

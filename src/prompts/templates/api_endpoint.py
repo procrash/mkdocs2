@@ -1,11 +1,15 @@
 """Prompt template for API endpoint documentation."""
 from ..registry import register
+from . import format_guideline_section
 
 
 @register("api", "endpoints")
 def render(ctx) -> str:
+    guideline_section = format_guideline_section(ctx)
+
     return f"""Du dokumentierst eine API für externe Entwickler. Beschreibe NUR die öffentliche
 Schnittstelle. Keine Implementierungsdetails.
+{guideline_section}
 
 ## Anforderungen:
 1. **Endpunkt-Übersicht**: Method, Path, Beschreibung

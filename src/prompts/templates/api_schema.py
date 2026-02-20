@@ -1,10 +1,14 @@
 """Prompt template for API schema/data model documentation."""
 from ..registry import register
+from . import format_guideline_section
 
 
 @register("api", "schemas")
 def render(ctx) -> str:
+    guideline_section = format_guideline_section(ctx)
+
     return f"""Dokumentiere das folgende Datenmodell/Schema für eine API-Referenz.
+{guideline_section}
 
 ## Anforderungen:
 1. **Schema-Name und Zweck**

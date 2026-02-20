@@ -64,3 +64,48 @@ class TestBuilder:
         ctx = PromptContext()
         result = build_prompt("nonexistent", "nope", ctx)
         assert result is None
+
+    def test_prompt_context_has_skeleton_fields(self):
+        ctx = PromptContext()
+        assert hasattr(ctx, "skeleton_guidelines")
+        assert hasattr(ctx, "skeleton_page_map")
+        assert hasattr(ctx, "target_page_path")
+        assert ctx.skeleton_guidelines == ""
+        assert ctx.skeleton_page_map == ""
+        assert ctx.target_page_path == ""
+
+    def test_guideline_injected_into_developer_class_prompt(self):
+        ctx = PromptContext(
+            code_content="class Bar:\n    pass",
+            file_path="bar.py",
+            language="python",
+            skeleton_guidelines="**Zielgruppe:** Entwickler\n**Pflicht-Abschnitte:**\n- API-Doku",
+            target_page_path="generated/developer/classes/bar.md",
+        )
+        prompt = build_prompt("developer", "classes", ctx)
+        assert prompt is not None
+        assert "Inhaltsrichtlinie" in prompt
+        assert "**Zielgruppe:** Entwickler" in prompt
+        assert "generated/developer/classes/bar.md" in prompt
+
+    def test_guideline_injected_into_api_endpoint_prompt(self):
+        ctx = PromptContext(
+            code_content="@router.get('/users')\ndef get_users(): pass",
+            file_path="routes.py",
+            language="python",
+            skeleton_guidelines="**Zielgruppe:** API-Entwickler",
+            target_page_path="api/endpoints.md",
+        )
+        prompt = build_prompt("api", "endpoints", ctx)
+        assert prompt is not None
+        assert "**Zielgruppe:** API-Entwickler" in prompt
+
+    def test_no_guideline_no_injection(self):
+        ctx = PromptContext(
+            code_content="class Baz:\n    pass",
+            file_path="baz.py",
+            language="python",
+        )
+        prompt = build_prompt("developer", "classes", ctx)
+        assert prompt is not None
+        assert "Inhaltsrichtlinie der Zielseite" not in prompt

@@ -47,7 +47,23 @@ Willkommen zur Dokumentation für **{project_name}**.
     # ━━ Erste Schritte ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("getting-started/installation.md", "Installation", """
 !!! tip "Inhaltsrichtlinie"
-    Komplette Schritt-für-Schritt Installationsanleitung für alle Plattformen.
+    **Zielgruppe:** Erstnutzer, die das Produkt zum ersten Mal installieren wollen; Admins, die es in bestehende Infrastruktur einbetten.
+
+    **Pflicht-Abschnitte:**
+
+    - Voraussetzungen (Verweis auf requirements.md für Details)
+    - Installation per Paketmanager (pip, apt, brew, choco — je ein Tab)
+    - Installation per Docker (docker run / docker-compose Minimalbeispiel)
+    - Installation aus Quellcode (git clone + pip install -e .)
+    - Verifikation der Installation (Kommando + erwartete Ausgabe)
+    - Häufige Installationsprobleme und Lösungen (Tabelle)
+    - Nächste Schritte (Link → quickstart.md)
+
+    **Inhaltliche Tiefe:** Schritt-für-Schritt mit exakten Kommandos in Code-Blöcken. Jede Plattform (Linux, macOS, Windows) als eigener Tab. Versionsnummern als Platzhalter `X.Y.Z`.
+
+    **Abgrenzung:** Keine Konfigurationsdetails (→ user-guide/configuration.md). Kein Upgrade bestehender Installationen (→ getting-started/upgrade.md).
+
+    **Beispiel-Inhalte:** `pip install projektname`, `docker run -d -p 8080:8080 projektname:latest`, Ausgabe von `projektname --version`.
 
 ## Voraussetzungen
 
@@ -106,7 +122,22 @@ TODO: WSL, native Installation, Chocolatey/Scoop
 
     ("getting-started/quickstart.md", "Schnellstart", """
 !!! tip "Inhaltsrichtlinie"
-    Minimaler Guide: vom Start zum ersten Ergebnis in wenigen Minuten.
+    **Zielgruppe:** Ungeduldige Nutzer, die in unter 5 Minuten ein laufendes System sehen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - TL;DR-Box (3–5 Kommandos, die sofort funktionieren)
+    - Schritt 1: Installieren (Einzeiler, Verweis → installation.md)
+    - Schritt 2: Projekt initialisieren
+    - Schritt 3: Konfiguration anpassen (nur das Nötigste)
+    - Schritt 4: Starten und Ergebnis prüfen
+    - Was kommt als Nächstes? (Links zu hello-world.md, user-guide/basic-usage.md)
+
+    **Inhaltliche Tiefe:** Maximal eine DIN-A4-Seite. Jeder Schritt hat genau einen Code-Block und einen Satz Erklärung. Keine Optionen, keine Varianten — nur der glückliche Pfad.
+
+    **Abgrenzung:** Keine Erklärung von Konzepten (→ concepts.md). Keine alternativen Installationswege (→ installation.md). Keine fortgeschrittenen Optionen.
+
+    **Beispiel-Inhalte:** `projektname init mein-projekt && cd mein-projekt && projektname serve` — Screenshot oder ASCII-Ausgabe des laufenden Systems.
 
 ## Schnellstart in 5 Minuten
 
@@ -134,7 +165,22 @@ Beschreibung des üblichen Arbeitsablaufs mit dem Projekt.
 
     ("getting-started/requirements.md", "Systemanforderungen", """
 !!! tip "Inhaltsrichtlinie"
-    Detaillierte Systemvoraussetzungen für alle unterstützten Plattformen.
+    **Zielgruppe:** Admins und Entwickler, die vor der Installation prüfen müssen, ob ihre Umgebung kompatibel ist.
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Betriebssysteme (Tabelle: OS, Version, Architektur, Support-Status)
+    - Hardware-Mindestanforderungen (CPU, RAM, Festplatte — Minimum vs. Empfohlen)
+    - Software-Abhängigkeiten (Python-Version, Node.js, Docker, etc.)
+    - Netzwerk-Anforderungen (Ports, Firewall-Regeln, DNS)
+    - Optionale Abhängigkeiten (für bestimmte Features)
+    - Kompatibilitätsmatrix (Version × OS × Architektur)
+
+    **Inhaltliche Tiefe:** Tabellarisch, präzise Versionsnummern. Unterscheidung Minimum / Empfohlen / Optimal. Automatischer Check-Befehl, falls vorhanden.
+
+    **Abgrenzung:** Keine Installationsanleitung (→ installation.md). Keine Konfiguration (→ user-guide/configuration.md).
+
+    **Beispiel-Inhalte:** Tabelle mit Spalten OS | Min. Version | Python | RAM | Disk. Kommando `projektname doctor` zur Prüfung.
 
 ## Hardware-Anforderungen
 
@@ -179,7 +225,23 @@ Beschreibung des üblichen Arbeitsablaufs mit dem Projekt.
 
     ("getting-started/upgrade.md", "Upgrade-Anleitung", """
 !!! tip "Inhaltsrichtlinie"
-    Anleitung zum Upgrade von einer Version auf die nächste.
+    **Zielgruppe:** Bestandsnutzer, die von Version N auf N+1 aktualisieren.
+
+    **Pflicht-Abschnitte:**
+
+    - Vor dem Upgrade: Backup erstellen (Verweis → user-guide/backup-restore.md)
+    - Upgrade-Pfad-Matrix (von Version → zu Version, direkt oder stufenweise)
+    - Upgrade per Paketmanager (pip install --upgrade, etc.)
+    - Upgrade per Docker (Image-Tag ändern, Container neu starten)
+    - Datenbank-Migrationen (falls nötig, automatisch vs. manuell)
+    - Nach dem Upgrade: Verifikation und Rollback-Anleitung
+    - Breaking Changes Checkliste (je Major-Version)
+
+    **Inhaltliche Tiefe:** Konkrete Kommandos für jeden Upgrade-Pfad. Warnboxen (admonitions) für Breaking Changes. Rollback-Schritte explizit dokumentieren.
+
+    **Abgrenzung:** Keine Neuinstallation (→ installation.md). Keine Migration von Fremdprodukten (→ migration.md).
+
+    **Beispiel-Inhalte:** `pip install --upgrade projektname==X.Y.Z`, `docker pull projektname:X.Y.Z`, Migrationsskript `projektname migrate`.
 
 ## Vor dem Upgrade
 
@@ -237,7 +299,23 @@ TODO: Breaking Changes, Migrations-Schritte
 
     ("getting-started/migration.md", "Migration von anderen Systemen", """
 !!! tip "Inhaltsrichtlinie"
-    Anleitungen zur Migration von verbreiteten Alternativprodukten.
+    **Zielgruppe:** Nutzer, die von einem Konkurrenzprodukt oder einer älteren Architektur umsteigen.
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Quellsysteme (Tabelle: Produkt, Version, Migrationsgrad)
+    - Vorbereitungen (Daten-Export aus Altsystem)
+    - Automatische Migration (Import-Tool, Kommandos, erwartete Laufzeit)
+    - Manuelle Nacharbeiten (was nicht automatisch migriert wird)
+    - Datenvalidierung nach Migration
+    - Parallelbetrieb und schrittweise Umstellung
+    - Bekannte Einschränkungen
+
+    **Inhaltliche Tiefe:** Pro Quellsystem ein eigener Unterabschnitt. Mapping-Tabellen (Altes Konzept → Neues Konzept). Geschätzte Zeitangaben.
+
+    **Abgrenzung:** Kein Versions-Upgrade innerhalb des eigenen Produkts (→ upgrade.md). Keine Neuinstallation (→ installation.md).
+
+    **Beispiel-Inhalte:** `projektname migrate --from=altprodukt --source=/pfad/zum/export`, Mapping-Tabelle Felder alt → neu.
 
 ## Unterstützte Migrationsquellen
 
@@ -277,8 +355,22 @@ TODO: Können beide Systeme vorübergehend parallel laufen?
 
     ("getting-started/concepts.md", "Grundkonzepte", """
 !!! tip "Inhaltsrichtlinie"
-    Zentrale Konzepte und Begriffe die zum Verständnis des Projekts notwendig sind.
-    Diese Seite sollte ALLE grundlegenden Konzepte erklären, auf die andere Seiten verweisen.
+    **Zielgruppe:** Alle neuen Nutzer, die das mentale Modell des Produkts verstehen wollen, bevor sie loslegen.
+
+    **Pflicht-Abschnitte:**
+
+    - Architektur-Überblick (vereinfachtes Diagramm, max. 6 Komponenten)
+    - Kernbegriffe-Glossar (Tabelle: Begriff, Definition, Analogie)
+    - Datenmodell (Entitäten und ihre Beziehungen, ER-Diagramm)
+    - Lebenszyklus eines typischen Objekts (Erstellen → Bearbeiten → Archivieren)
+    - Berechtigungsmodell (Kurzüberblick, Verweis → user-guide/permissions.md)
+    - Erweiterbarkeit (Plugins, Templates, API — nur Überblick)
+
+    **Inhaltliche Tiefe:** Erklärend, nicht prozedural. Analogien zur realen Welt. Diagramme als Mermaid-Code. Maximal 1 Absatz pro Begriff.
+
+    **Abgrenzung:** Keine Schritt-für-Schritt-Anleitungen (→ quickstart.md, tutorials/). Keine vollständige API-Referenz (→ developer-guide/).
+
+    **Beispiel-Inhalte:** Mermaid-Diagramm der Architektur, Glossar-Tabelle mit 10–15 Kernbegriffen, Lebenszyklus-Diagramm.
 
 ## Kernkonzepte
 
@@ -317,7 +409,22 @@ graph TD
 
     ("getting-started/hello-world.md", "Hello World — Erstes Beispiel", """
 !!! tip "Inhaltsrichtlinie"
-    Das kürzestmögliche lauffähige Beispiel. Copy-Paste-fähig, in unter 2 Minuten ausführbar.
+    **Zielgruppe:** Absolute Anfänger, die das kleinstmögliche funktionsfähige Beispiel sehen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Ziel des Beispiels (1 Satz: was wird gebaut)
+    - Voraussetzungen (installiertes Produkt, sonst nichts)
+    - Der komplette Code / die komplette Konfiguration (ein einziger Block)
+    - Zeile-für-Zeile-Erklärung
+    - Ausführen und Ergebnis betrachten (Kommando + erwartete Ausgabe)
+    - Variationen zum Experimentieren (2–3 kleine Änderungen)
+
+    **Inhaltliche Tiefe:** So kurz wie möglich — idealerweise unter 20 Zeilen Code/Konfiguration. Jede Zeile wird erklärt. Kein externes Setup nötig.
+
+    **Abgrenzung:** Keine Produktionsreife (→ tutorials/expert-production.md). Keine Erklärung der Architektur (→ concepts.md).
+
+    **Beispiel-Inhalte:** Minimale Konfigurationsdatei, ein `projektname run` Kommando, erwartete Konsolenausgabe.
 
 ## Ziel
 
@@ -349,8 +456,21 @@ TODO: Kurze Erklärung der einzelnen Schritte (1-2 Sätze pro Schritt)
 
     ("getting-started/faq-beginners.md", "Einsteiger-FAQ", """
 !!! tip "Inhaltsrichtlinie"
-    Häufige Fragen von Einsteigern — was typischerweise beim ersten Kontakt unklar ist.
-    Unterschied zur [allgemeinen FAQ](../reference/faq.md): hier nur Einstiegsfragen.
+    **Zielgruppe:** Einsteiger mit typischen Anfängerfragen und Stolpersteinen.
+
+    **Pflicht-Abschnitte:**
+
+    - Installation & Setup (5–8 Fragen)
+    - Erste Schritte (5–8 Fragen)
+    - Häufige Fehlermeldungen (Tabelle: Fehler → Ursache → Lösung)
+    - Begriffe und Konzepte (3–5 Fragen, Verweis → concepts.md)
+    - Wo finde ich Hilfe? (Community, Doku-Verweise, Support)
+
+    **Inhaltliche Tiefe:** Jede Frage als H3-Überschrift, Antwort max. 3–5 Sätze. Code-Beispiele nur wenn nötig. Querverweise auf ausführlichere Seiten.
+
+    **Abgrenzung:** Keine fortgeschrittenen Fragen (→ separates FAQ oder user-guide/). Keine vollständige Fehlerbehebung (→ operations/troubleshooting.md).
+
+    **Beispiel-Inhalte:** „Warum startet der Server nicht?" → Port belegt, Lösung: `--port 8081`. „Was ist ein Projekt?" → Verweis auf concepts.md.
 
 ## Grundlegendes
 
@@ -402,7 +522,21 @@ TODO: Erste Diagnoseschritte
     # ━━ Benutzerhandbuch ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("user-guide/overview.md", "Benutzerhandbuch — Überblick", """
 !!! tip "Inhaltsrichtlinie"
-    Einstieg ins Benutzerhandbuch mit Übersicht der Funktionen.
+    **Zielgruppe:** Nutzer, die nach der Ersteinrichtung das Handbuch als Nachschlagewerk nutzen.
+
+    **Pflicht-Abschnitte:**
+
+    - Zweck des User Guide (1 Absatz)
+    - Kapitelübersicht (Tabelle: Kapitel, Beschreibung, Schwierigkeitsgrad)
+    - Empfohlene Lesereihenfolge für verschiedene Rollen (Admin, Endnutzer, Power-User)
+    - Schnellnavigation (Icon-Karten oder Link-Grid zu allen Unterseiten)
+    - Konventionen in dieser Dokumentation (Admonition-Typen, Code-Konventionen)
+
+    **Inhaltliche Tiefe:** Rein navigatorisch, kein fachlicher Inhalt. Maximal 1–2 Sätze pro verlinktem Kapitel. Visuell ansprechend (Grid-Cards empfohlen).
+
+    **Abgrenzung:** Keine eigenen Anleitungen (→ jeweilige Unterseite). Keine Tutorials (→ tutorials/).
+
+    **Beispiel-Inhalte:** Tabelle mit 14 Zeilen (je eine pro User-Guide-Seite), Rollen-Matrix: Admin liest X, Y, Z zuerst.
 
 ## Überblick
 
@@ -423,7 +557,22 @@ Beschreibung der Hauptfunktionen und des typischen Einsatzzwecks.
 
     ("user-guide/configuration.md", "Konfiguration", """
 !!! tip "Inhaltsrichtlinie"
-    Alle Konfigurationsoptionen mit Erklärungen und Beispielen.
+    **Zielgruppe:** Alle Nutzer, die das System an ihre Bedürfnisse anpassen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Konfigurationsdatei-Formate (YAML, TOML, ENV — Prioritätsreihenfolge)
+    - Vollständige Optionsreferenz (Tabelle: Schlüssel, Typ, Default, Beschreibung)
+    - Umgebungsvariablen (Mapping: YAML-Schlüssel → ENV-Variable)
+    - Konfigurationsbeispiele nach Anwendungsfall (Entwicklung, Test, Produktion)
+    - Validierung der Konfiguration (Kommando + häufige Fehler)
+    - Konfiguration zur Laufzeit ändern (Hot-Reload, falls unterstützt)
+
+    **Inhaltliche Tiefe:** Jede Option einzeln dokumentiert mit Typ, Default, Wertebereich und Beispiel. Zusammengehörige Optionen gruppiert. YAML-Codeblöcke mit Kommentaren.
+
+    **Abgrenzung:** Keine Plugin-spezifische Konfiguration (→ plugins.md). Keine Deployment-Konfiguration (→ operations/deployment.md).
+
+    **Beispiel-Inhalte:** Kommentierte `config.yaml` mit allen Abschnitten, ENV-Mapping-Tabelle, `projektname config validate` Ausgabe.
 
 ## Konfigurationsdatei
 
@@ -466,7 +615,22 @@ TODO: Verschiedene Profile für verschiedene Umgebungen (dev, staging, prod)
 
     ("user-guide/basic-usage.md", "Grundlegende Bedienung", """
 !!! tip "Inhaltsrichtlinie"
-    Schritt-für-Schritt Anleitung für die ersten Aufgaben nach der Installation.
+    **Zielgruppe:** Nutzer direkt nach der Installation, die die ersten produktiven Aufgaben erledigen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Erstes Projekt erstellen
+    - Daten hinzufügen (manuell und Import)
+    - Grundlegende Operationen (Anzeigen, Bearbeiten, Löschen)
+    - Suchen und Filtern
+    - Ergebnisse exportieren
+    - Typischer Tagesablauf-Workflow (Zusammenfassung)
+
+    **Inhaltliche Tiefe:** Aufgabenorientiert: „Ich will X tun → So geht's". Jede Aufgabe mit CLI-Kommando UND UI-Weg (falls beides existiert). Screenshots/Ausgaben zeigen.
+
+    **Abgrenzung:** Keine fortgeschrittenen Features (→ advanced-features.md). Keine Installation (→ getting-started/installation.md).
+
+    **Beispiel-Inhalte:** `projektname create --name "Mein Projekt"`, `projektname add datei.csv`, Filterbeispiel `projektname list --filter "status=aktiv"`.
 
 ## Erste Schritte
 
@@ -493,7 +657,23 @@ TODO: Wie verifiziert man, dass alles richtig funktioniert?
 
     ("user-guide/advanced-features.md", "Erweiterte Funktionen", """
 !!! tip "Inhaltsrichtlinie"
-    Fortgeschrittene Features für erfahrene Benutzer.
+    **Zielgruppe:** Erfahrene Nutzer, die über die Grundfunktionen hinausgehen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Feature-Übersicht (Tabelle: Feature, Kurzbeschreibung, Voraussetzung)
+    - Erweiterte Suche (Regex, Volltextsuche, gespeicherte Abfragen)
+    - Batch-Operationen (Massenverarbeitung, Bulk-Import/Export)
+    - Workflows und Pipelines (mehrstufige Verarbeitungsketten)
+    - Benutzerdefinierte Felder und Metadaten
+    - Scheduling und zeitgesteuerte Aktionen
+    - Integration mit Drittanbietern (Überblick, Verweis → Integrationsseiten)
+
+    **Inhaltliche Tiefe:** Pro Feature: Was es tut, wann man es braucht, Minimalbeispiel. Tiefergehende Tutorials verlinken (→ tutorials/).
+
+    **Abgrenzung:** Keine Grundfunktionen (→ basic-usage.md). Keine API-Programmierung (→ developer-guide/).
+
+    **Beispiel-Inhalte:** Regex-Suchbeispiel, Batch-Import-Kommando `projektname batch import *.csv`, Workflow-YAML-Definition.
 
 ## Fortgeschrittene Konfiguration
 
@@ -522,7 +702,24 @@ TODO: Komplexe Filter, Abfragesprache, reguläre Ausdrücke
 
     ("user-guide/permissions.md", "Berechtigungen & Rollen", """
 !!! tip "Inhaltsrichtlinie"
-    Benutzerverwaltung, Rollen, Zugriffsrechte und Berechtigungskonzept.
+    **Zielgruppe:** Administratoren, die Benutzer verwalten und Zugriffsrechte konfigurieren.
+
+    **Pflicht-Abschnitte:**
+
+    - Berechtigungsmodell (Überblick: Rollen, Gruppen, Rechte)
+    - Vordefinierte Rollen (Tabelle: Rolle, Rechte, typischer Einsatz)
+    - Benutzer anlegen, bearbeiten, deaktivieren
+    - Gruppen verwalten
+    - Benutzerdefinierte Rollen erstellen
+    - Ressourcen-basierte Berechtigungen (Zugriff auf Projekt-/Objektebene)
+    - LDAP/SSO-Integration (Überblick, Verweis → operations/authentication.md)
+    - Audit-Log für Berechtigungsänderungen
+
+    **Inhaltliche Tiefe:** Detaillierte Rechte-Matrix (Rolle × Aktion). Schritt-für-Schritt für jede Verwaltungsaufgabe. Sicherheitshinweise als Warnboxen.
+
+    **Abgrenzung:** Keine technische SSO-Konfiguration (→ operations/authentication.md). Keine API-Token-Verwaltung (→ developer-guide/api-reference.md).
+
+    **Beispiel-Inhalte:** Rollen-Matrix mit Leser/Bearbeiter/Admin, Kommando `projektname user create --role editor`, Gruppenbeispiel.
 
 ## Rollenmodell
 
@@ -559,7 +756,23 @@ TODO: Welche Aktionen werden protokolliert?
 
     ("user-guide/plugins.md", "Plugins & Erweiterungen", """
 !!! tip "Inhaltsrichtlinie"
-    Plugin-System: Installation, Konfiguration, verfügbare Plugins, eigene Plugins schreiben.
+    **Zielgruppe:** Nutzer, die das System durch Plugins erweitern wollen, und Admins, die Plugins verwalten.
+
+    **Pflicht-Abschnitte:**
+
+    - Plugin-Architektur (vereinfachtes Diagramm: Hooks, Events, API)
+    - Plugin-Verzeichnis durchsuchen und installieren
+    - Plugin aktivieren, deaktivieren, konfigurieren
+    - Empfohlene Plugins (Top 5–10 mit Kurzbeschreibung)
+    - Plugin-Kompatibilität prüfen
+    - Eigene Plugins entwickeln (Überblick, Verweis → developer-guide/plugin-development.md)
+    - Fehlerbehebung bei Plugin-Problemen
+
+    **Inhaltliche Tiefe:** Installationskommandos für jedes Beispiel-Plugin. Konfigurationsausschnitte. Kompatibilitäts-Hinweise pro Plugin.
+
+    **Abgrenzung:** Keine Plugin-Entwicklung im Detail (→ developer-guide/plugin-development.md). Keine Kern-Konfiguration (→ configuration.md).
+
+    **Beispiel-Inhalte:** `projektname plugin install mein-plugin`, Plugin-Konfiguration in `config.yaml`, `projektname plugin list` Ausgabe.
 
 ## Plugin-System
 
@@ -597,7 +810,23 @@ TODO: Wo findet man weitere Plugins? (Registry, GitHub, etc.)
 
     ("user-guide/cli-reference.md", "CLI-Referenz", """
 !!! tip "Inhaltsrichtlinie"
-    Vollständige Referenz aller Kommandozeilen-Befehle und -Optionen.
+    **Zielgruppe:** Alle Nutzer, die das Produkt über die Kommandozeile bedienen.
+
+    **Pflicht-Abschnitte:**
+
+    - Globale Optionen (--verbose, --config, --output-format, etc.)
+    - Befehlsübersicht (Tabelle: Befehl, Kurzbeschreibung)
+    - Detailreferenz pro Befehl (Syntax, Optionen, Beispiele, Exit-Codes)
+    - Ausgabeformate (text, json, yaml, csv)
+    - Shell-Completion einrichten (bash, zsh, fish)
+    - Umgebungsvariablen für CLI-Defaults
+    - Häufige CLI-Patterns und Einzeiler
+
+    **Inhaltliche Tiefe:** Vollständige Referenz — jede Option, jeder Schalter dokumentiert. Pro Befehl mindestens ein Beispiel. Maschinenlesbare Ausgabe hervorheben.
+
+    **Abgrenzung:** Keine konzeptionellen Erklärungen (→ concepts.md). Keine Tutorials (→ tutorials/).
+
+    **Beispiel-Inhalte:** `projektname [global-optionen] <befehl> [befehl-optionen]`, Exit-Code-Tabelle (0=OK, 1=Fehler, 2=Konfiguration).
 
 ## Übersicht
 
@@ -670,7 +899,22 @@ eval "$(<command> --completion zsh)"
 
     ("user-guide/examples.md", "Beispiele & Rezepte", """
 !!! tip "Inhaltsrichtlinie"
-    Praxisnahe Beispiele und Copy-Paste-Rezepte für häufige Aufgaben.
+    **Zielgruppe:** Nutzer, die konkrete Rezepte und Kopiervorlagen für typische Aufgaben suchen.
+
+    **Pflicht-Abschnitte:**
+
+    - Beispiel-Index (Tabelle: Name, Schwierigkeit, Thema)
+    - Grundlegende Beispiele (5–8 Alltagsaufgaben)
+    - Fortgeschrittene Beispiele (5–8 komplexere Szenarien)
+    - Integrations-Beispiele (Zusammenspiel mit externen Tools)
+    - Komplette Projekt-Beispiele (2–3 End-to-End-Szenarien)
+    - Tipps und Best Practices pro Beispiel
+
+    **Inhaltliche Tiefe:** Jedes Beispiel: Ziel (1 Satz), vollständiger Code/Konfiguration, erwartetes Ergebnis. Copy-paste-fähig. Keine langen Erklärungen.
+
+    **Abgrenzung:** Keine Schritt-für-Schritt-Tutorials (→ tutorials/). Keine API-Referenz (→ developer-guide/api-reference.md).
+
+    **Beispiel-Inhalte:** Rezept „Täglicher Export als CSV": Kommando + Cron-Eintrag. Rezept „Daten filtern und per Webhook senden".
 
 ## Beispiele
 
@@ -698,8 +942,24 @@ TODO: Beispiel-Skripte für wiederkehrende Aufgaben
 
     ("user-guide/data-management.md", "Datenverwaltung", """
 !!! tip "Inhaltsrichtlinie"
-    Daten erstellen, bearbeiten, löschen, archivieren.
-    Import/Export wird in [Import & Export](../manual/import-export.md) behandelt.
+    **Zielgruppe:** Nutzer, die Daten erstellen, importieren, bearbeiten, archivieren und löschen.
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Datenformate (Tabelle: Format, Import, Export, Einschränkungen)
+    - Daten erstellen (manuell, per Import, per API)
+    - Daten bearbeiten (Einzeln, Batch-Bearbeitung)
+    - Daten suchen und filtern (Abfragesyntax)
+    - Daten exportieren (Formate, Filter, Zeiträume)
+    - Archivierung und Aufbewahrungsrichtlinien
+    - Daten endgültig löschen (Soft-Delete vs. Hard-Delete, DSGVO)
+    - Datenintegrität und Validierung
+
+    **Inhaltliche Tiefe:** Pro Operation: CLI-Weg und UI-Weg. Import-Beispiel mit Beispieldatei. Abfragesyntax vollständig dokumentiert.
+
+    **Abgrenzung:** Keine Datenbank-Administration (→ operations/database.md). Keine Backup-Strategie (→ backup-restore.md).
+
+    **Beispiel-Inhalte:** CSV-Importbeispiel, Filterabfrage `status:aktiv AND erstellt:>2024-01`, Exportkommando `projektname export --format=json`.
 
 ## Daten erstellen
 
@@ -732,7 +992,23 @@ TODO: Speicherlimits, Dateigrößen-Limits, Quota
 
     ("user-guide/internationalization.md", "Mehrsprachigkeit & Lokalisierung", """
 !!! tip "Inhaltsrichtlinie"
-    i18n/l10n: Spracheinstellungen, Übersetzungen, Datums-/Zahlenformate, RTL-Support.
+    **Zielgruppe:** Nutzer und Admins, die das System in mehreren Sprachen betreiben oder lokalisieren.
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Sprachen (Tabelle: Sprache, Code, Übersetzungsgrad)
+    - Systemsprache ändern (global und pro Benutzer)
+    - Datumsformate, Zahlenformate, Zeitzonen konfigurieren
+    - Eigene Übersetzungen hinzufügen oder korrigieren
+    - Mehrsprachige Inhalte verwalten
+    - RTL-Unterstützung (falls vorhanden)
+    - Übersetzungs-Workflow für Mitwirkende
+
+    **Inhaltliche Tiefe:** Konfigurationsbeispiele für jede Einstellung. Dateistruktur der Sprachdateien erklären. Hinweis auf Fallback-Verhalten.
+
+    **Abgrenzung:** Keine Zeichenkodierungsprobleme auf Systemebene (→ operations/). Keine Plugin-Lokalisierung (→ developer-guide/).
+
+    **Beispiel-Inhalte:** `locale: de-DE` in config.yaml, Sprachdatei-Struktur `locales/de/messages.yaml`, Datumsformat-Optionen.
 
 ## Unterstützte Sprachen
 
@@ -768,8 +1044,24 @@ TODO: Wird RTL unterstützt? (Arabisch, Hebräisch)
 
     ("user-guide/backup-restore.md", "Sicherung & Wiederherstellung", """
 !!! tip "Inhaltsrichtlinie"
-    Benutzerorientierte Anleitung für Backup und Restore — NICHT die technischen Operations-Details.
-    Technische Details in [Backup & Recovery (Betrieb)](../operations/backup.md).
+    **Zielgruppe:** Nutzer und Admins, die ihre Daten sichern und im Notfall wiederherstellen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Was wird gesichert? (Daten, Konfiguration, Uploads, Datenbank)
+    - Manuelles Backup erstellen (Kommando + Erklärung)
+    - Automatische Backups konfigurieren (Zeitplan, Speicherort, Rotation)
+    - Backup verifizieren (Integritätsprüfung)
+    - Wiederherstellung aus Backup (Schritt-für-Schritt)
+    - Teilweise Wiederherstellung (nur bestimmte Daten)
+    - Backup-Speicherorte (lokal, S3, NFS)
+    - Disaster-Recovery-Szenario (kompletter Datenverlust)
+
+    **Inhaltliche Tiefe:** Exakte Kommandos für jede Aktion. Zeitschätzungen für typische Datenmengen. Checkliste für regelmäßige Backup-Tests.
+
+    **Abgrenzung:** Keine Infrastruktur-Backups (→ operations/backup-strategy.md). Keine Hochverfügbarkeit (→ tutorials/expert-high-availability.md).
+
+    **Beispiel-Inhalte:** `projektname backup create --output /backups/`, Cron-Job für tägliches Backup, `projektname restore --from /backups/2024-01-15.tar.gz`.
 
 ## Eigene Daten sichern
 
@@ -794,7 +1086,24 @@ TODO: Daten exportieren als zusätzliche Sicherung (CSV, JSON). Verweis auf [Imp
 
     ("user-guide/automation-rules.md", "Automatisierungsregeln", """
 !!! tip "Inhaltsrichtlinie"
-    Regelbasierte Automatisierung innerhalb der Anwendung: Trigger, Bedingungen, Aktionen.
+    **Zielgruppe:** Power-User, die wiederkehrende Aufgaben automatisieren wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Automations-Konzept (Trigger → Bedingung → Aktion)
+    - Verfügbare Trigger (Tabelle: Trigger, Beschreibung, Parameter)
+    - Verfügbare Aktionen (Tabelle: Aktion, Beschreibung, Parameter)
+    - Bedingungen und Filter (Syntax, Operatoren, Verschachtelung)
+    - Regel erstellen (Schritt-für-Schritt mit Beispiel)
+    - Regelausführung überwachen (Logs, Fehlerbehandlung)
+    - Praxisbeispiele (5–8 typische Automationsrezepte)
+    - Grenzen und Performance-Hinweise
+
+    **Inhaltliche Tiefe:** Vollständige Trigger- und Aktions-Referenz. Jedes Praxisbeispiel mit komplettem YAML/JSON. Fehlerbehandlungs-Strategien erklären.
+
+    **Abgrenzung:** Keine externen Workflow-Engines (→ integrations/). Kein Scripting/API (→ developer-guide/).
+
+    **Beispiel-Inhalte:** Regel „Bei neuem Eintrag → E-Mail senden", YAML-Definition, Log-Ausgabe einer ausgeführten Regel.
 
 ## Konzept
 
@@ -838,7 +1147,23 @@ TODO: Testmodus, Simulation, Protokoll
 
     ("user-guide/templates.md", "Vorlagen & Templates", """
 !!! tip "Inhaltsrichtlinie"
-    Vorlagen verwenden und erstellen: Projekt-Vorlagen, Dokument-Vorlagen, Vorlagen teilen.
+    **Zielgruppe:** Nutzer, die wiederverwendbare Vorlagen für Projekte, Dokumente oder Berichte erstellen und nutzen.
+
+    **Pflicht-Abschnitte:**
+
+    - Template-Typen (Projekt-Templates, Dokumentvorlagen, Berichtsvorlagen)
+    - Mitgelieferte Templates (Übersicht mit Beschreibung)
+    - Template verwenden (Auswahl, Anpassung, Anwendung)
+    - Eigenes Template erstellen (Schritt-für-Schritt)
+    - Template-Variablen und Platzhalter (Syntax, verfügbare Variablen)
+    - Templates teilen und importieren
+    - Template-Vererbung und Komposition
+
+    **Inhaltliche Tiefe:** Vollständige Variable-Referenz. Mindestens 2 komplette Template-Beispiele. Jinja2/Mustache-Syntax erklären (je nach Engine).
+
+    **Abgrenzung:** Keine Code-Templates für Entwickler (→ developer-guide/). Keine E-Mail-Templates (→ operations/notifications.md).
+
+    **Beispiel-Inhalte:** Template-Datei mit Platzhaltern `{{ projekt.name }}`, Kommando `projektname create --template=standard`, Template-Verzeichnisstruktur.
 
 ## Vorlagen verwenden
 
@@ -870,7 +1195,24 @@ Technisches Format: [Template-Formate](../formats/template-formats.md)
 
     ("user-guide/tags-categories.md", "Tags & Kategorien", """
 !!! tip "Inhaltsrichtlinie"
-    Daten organisieren mit Tags und Kategorien: Erstellen, Zuweisen, Filtern, Hierarchien.
+    **Zielgruppe:** Alle Nutzer, die Inhalte organisieren, gruppieren und wiederfinden wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Konzept: Tags vs. Kategorien (Unterschiede, wann was nutzen)
+    - Kategorien verwalten (erstellen, bearbeiten, verschachteln, löschen)
+    - Tags vergeben und entfernen (einzeln und per Batch)
+    - Hierarchische Kategorien (Baumstruktur, Vererbung)
+    - Filtern und Suchen nach Tags/Kategorien
+    - Automatisches Tagging (Regeln, KI-basiert falls vorhanden)
+    - Tag-Cloud und Statistiken
+    - Best Practices für Taxonomie-Design
+
+    **Inhaltliche Tiefe:** Schritt-für-Schritt für jede Verwaltungsaufgabe. Empfehlungen für Namenskonventionen. Performance-Hinweise bei vielen Tags.
+
+    **Abgrenzung:** Keine Volltextsuche (→ data-management.md). Keine Automationsregeln basierend auf Tags (→ automation-rules.md).
+
+    **Beispiel-Inhalte:** Kategorie-Baum Beispiel, `projektname tag add --name "wichtig" --item 42`, Filterbeispiel `projektname list --tag "dringend"`.
 
 ## Tags
 
@@ -909,7 +1251,22 @@ Verweis auf [Automatisierungsregeln](automation-rules.md)
     # ━━ Tutorials ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("tutorials/overview.md", "Tutorials — Überblick", """
 !!! tip "Inhaltsrichtlinie"
-    Übersicht der verfügbaren Tutorials nach Schwierigkeitsgrad.
+    **Zielgruppe:** Alle Nutzer, die ein passendes Tutorial nach Schwierigkeitsgrad und Thema suchen.
+
+    **Pflicht-Abschnitte:**
+
+    - Wie nutze ich die Tutorials? (Lesehinweise, Voraussetzungen)
+    - Anfänger-Tutorials (Karten-Grid: Titel, Dauer, Lernziel)
+    - Fortgeschrittene Tutorials (Karten-Grid: Titel, Dauer, Lernziel)
+    - Experten-Tutorials (Karten-Grid: Titel, Dauer, Lernziel)
+    - Empfohlene Lernpfade (nach Rolle: Endnutzer, Admin, Entwickler)
+    - Voraussetzungen-Matrix (Tutorial × benötigte Vorkenntnisse)
+
+    **Inhaltliche Tiefe:** Rein navigatorisch. Pro Tutorial: Titel, geschätzte Dauer, 1 Satz Beschreibung, Schwierigkeits-Badge. Keine eigenen Inhalte.
+
+    **Abgrenzung:** Keine eigenen Anleitungen (→ jeweiliges Tutorial). Keine Referenz-Dokumentation (→ user-guide/).
+
+    **Beispiel-Inhalte:** Grid mit 14 Tutorial-Karten, Lernpfad-Diagramm als Mermaid-Flowchart, Zeitschätzungen (30 Min, 1h, 2h).
 
 ## Einsteiger
 
@@ -945,7 +1302,25 @@ Jedes Tutorial folgt dem gleichen Aufbau:
 
     ("tutorials/beginner-first-project.md", "Tutorial: Erstes Projekt", """
 !!! tip "Inhaltsrichtlinie"
-    Einsteiger-Tutorial: Vom leeren Zustand zum ersten funktionierenden Projekt.
+    **Zielgruppe:** Absolute Anfänger, die ihr erstes Projekt von Grund auf erstellen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (was man nach dem Tutorial kann)
+    - Voraussetzungen (installiertes Produkt, Verweis → installation.md)
+    - Schritt 1: Projekt erstellen und benennen
+    - Schritt 2: Grundstruktur einrichten
+    - Schritt 3: Erste Daten hinzufügen
+    - Schritt 4: Daten anzeigen und navigieren
+    - Schritt 5: Projekt konfigurieren und anpassen
+    - Schritt 6: Ergebnisse exportieren
+    - Zusammenfassung und nächste Schritte
+
+    **Inhaltliche Tiefe:** Jeder Schritt mit Kommando/UI-Anleitung, erwarteter Ausgabe und Erklärung. Screenshots oder ASCII-Art für UI-Schritte. Fehlerboxen für häufige Probleme.
+
+    **Abgrenzung:** Keine fortgeschrittenen Features (→ tutorials/advanced-*). Keine Konfigurationsdetails (→ user-guide/configuration.md).
+
+    **Beispiel-Inhalte:** `projektname init "Mein erstes Projekt"`, Dateistruktur des erstellten Projekts, Export als PDF.
 
 ## Ziel
 
@@ -989,7 +1364,25 @@ TODO: Was wurde in diesem Tutorial gelernt?
 
     ("tutorials/beginner-configuration.md", "Tutorial: Grundkonfiguration", """
 !!! tip "Inhaltsrichtlinie"
-    Einsteiger-Tutorial: Die wichtigsten Konfigurationsoptionen verstehen und anpassen.
+    **Zielgruppe:** Anfänger, die die wichtigsten Konfigurationsoptionen kennenlernen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (Konfigurationsdatei verstehen und sicher bearbeiten)
+    - Voraussetzungen (laufendes Projekt aus beginner-first-project)
+    - Schritt 1: Konfigurationsdatei finden und öffnen
+    - Schritt 2: Grundeinstellungen ändern (Name, Sprache, Theme)
+    - Schritt 3: Änderungen anwenden und prüfen
+    - Schritt 4: Umgebungsvariablen nutzen
+    - Schritt 5: Konfiguration validieren
+    - Häufige Konfigurationsfehler und Lösungen
+    - Zusammenfassung
+
+    **Inhaltliche Tiefe:** Kommentierte Konfigurationsausschnitte (nicht die ganze Datei). Vorher/Nachher zeigen. Validierungs-Output erklären.
+
+    **Abgrenzung:** Keine vollständige Optionsreferenz (→ user-guide/configuration.md). Keine Produktionskonfiguration (→ tutorials/expert-production.md).
+
+    **Beispiel-Inhalte:** Ausschnitt config.yaml vorher/nachher, `projektname config validate` Ausgabe, Umgebungsvariable `PROJEKT_PORT=9090`.
 
 ## Ziel
 
@@ -1024,7 +1417,25 @@ TODO: Die wichtigsten Konfigurationsoptionen
 
     ("tutorials/advanced-automation.md", "Tutorial: Automatisierung", """
 !!! tip "Inhaltsrichtlinie"
-    Fortgeschrittenen-Tutorial: Aufgaben automatisieren, Skripte erstellen, CI/CD integrieren.
+    **Zielgruppe:** Fortgeschrittene Nutzer, die wiederkehrende Abläufe automatisieren wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (3 Automationsregeln erstellen und testen)
+    - Voraussetzungen (laufendes Projekt mit Daten)
+    - Schritt 1: Einfache Regel erstellen (Trigger → Aktion)
+    - Schritt 2: Bedingungen hinzufügen (Filter, Logik)
+    - Schritt 3: Mehrere Aktionen verketten
+    - Schritt 4: Zeitgesteuerte Automation einrichten
+    - Schritt 5: Regel testen und debuggen
+    - Schritt 6: Produktivschaltung und Monitoring
+    - Fehlerbehebung bei Automationsproblemen
+
+    **Inhaltliche Tiefe:** 3 vollständige Automationsbeispiele (einfach → mittel → komplex). YAML/JSON für jede Regel. Log-Ausgaben zeigen.
+
+    **Abgrenzung:** Keine Referenz aller Trigger/Aktionen (→ user-guide/automation-rules.md). Keine externe Orchestrierung (→ integrations/).
+
+    **Beispiel-Inhalte:** Regel „Neue Einträge automatisch taggen", Regel „Täglicher Report per E-Mail", Regel „Eskalation bei überfälligen Aufgaben".
 
 ## Ziel
 
@@ -1059,7 +1470,25 @@ TODO
 
     ("tutorials/advanced-extensions.md", "Tutorial: Eigene Erweiterungen", """
 !!! tip "Inhaltsrichtlinie"
-    Fortgeschrittenen-Tutorial: Das Plugin-/Erweiterungssystem nutzen.
+    **Zielgruppe:** Fortgeschrittene Nutzer, die Plugins und Erweiterungen installieren, konfigurieren und kombinieren.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (Plugin finden, installieren, konfigurieren, kombinieren)
+    - Voraussetzungen (laufendes Projekt)
+    - Schritt 1: Plugin-Verzeichnis durchsuchen
+    - Schritt 2: Plugin installieren und aktivieren
+    - Schritt 3: Plugin konfigurieren
+    - Schritt 4: Mehrere Plugins kombinieren (Reihenfolge, Konflikte)
+    - Schritt 5: Plugin-Updates verwalten
+    - Schritt 6: Plugin deaktivieren und deinstallieren
+    - Eigenes Mini-Plugin erstellen (Bonus-Abschnitt)
+
+    **Inhaltliche Tiefe:** Konkret mit 2–3 echten oder Beispiel-Plugins durchgespielt. Konfigurationsausschnitte. Konfliktlösung demonstrieren.
+
+    **Abgrenzung:** Keine vollständige Plugin-Entwicklung (→ developer-guide/plugin-development.md). Keine Plugin-Referenz (→ user-guide/plugins.md).
+
+    **Beispiel-Inhalte:** Installation von „analytics-plugin" und „export-plugin", Konfiguration, Zusammenspiel der beiden, Deinstallation.
 
 ## Ziel
 
@@ -1081,7 +1510,25 @@ TODO
 
     ("tutorials/expert-performance.md", "Tutorial: Performance-Optimierung", """
 !!! tip "Inhaltsrichtlinie"
-    Experten-Tutorial: Performance messen, Engpässe finden, optimieren.
+    **Zielgruppe:** Experten und Admins, die das System für hohe Last und große Datenmengen optimieren.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (Engpässe identifizieren und beheben)
+    - Voraussetzungen (laufendes Produktivsystem, Monitoring-Zugang)
+    - Schritt 1: Baseline-Metriken erfassen (Benchmarking-Tool)
+    - Schritt 2: Engpässe identifizieren (Profiling, Logs)
+    - Schritt 3: Datenbank-Optimierung (Indizes, Abfragen, Pooling)
+    - Schritt 4: Caching konfigurieren (Redis, In-Memory, CDN)
+    - Schritt 5: Ressourcen-Limits setzen (Worker, Threads, Memory)
+    - Schritt 6: Ergebnisse messen und vergleichen
+    - Performance-Checkliste für Produktion
+
+    **Inhaltliche Tiefe:** Konkrete Messwerte und Befehle. Vorher/Nachher-Vergleiche mit Zahlen. Konfigurationsänderungen mit Erklärung der Auswirkung.
+
+    **Abgrenzung:** Keine Infrastruktur-Skalierung (→ tutorials/expert-high-availability.md). Keine Code-Optimierung (→ developer-guide/).
+
+    **Beispiel-Inhalte:** Benchmark-Befehl, Datenbank-Index-Erstellung, Caching-Konfiguration in config.yaml, Vergleichstabelle vorher/nachher.
 
 ## Ziel
 
@@ -1112,7 +1559,26 @@ TODO
 
     ("tutorials/expert-production.md", "Tutorial: Produktions-Deployment", """
 !!! tip "Inhaltsrichtlinie"
-    Experten-Tutorial: Vom Entwicklungsmodus zum produktionsreifen System.
+    **Zielgruppe:** Admins und DevOps, die das System produktionsreif machen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (System absichern, härten, überwachen)
+    - Voraussetzungen (laufendes System, Grundkenntnisse Linux/Docker)
+    - Schritt 1: Sicherheits-Checkliste abarbeiten (→ security-hardening.md Kurzform)
+    - Schritt 2: HTTPS/TLS konfigurieren
+    - Schritt 3: Produktions-Datenbank einrichten (PostgreSQL statt SQLite)
+    - Schritt 4: Reverse-Proxy konfigurieren (nginx/Caddy)
+    - Schritt 5: Logging und Monitoring einrichten
+    - Schritt 6: Backup-Automation konfigurieren
+    - Schritt 7: Healthcheck und Alerting
+    - Go-Live-Checkliste
+
+    **Inhaltliche Tiefe:** Vollständige Konfigurationsdateien (nginx, systemd, docker-compose). Jeder Schritt mit Verifikationskommando. Sicherheitshinweise als Warnboxen.
+
+    **Abgrenzung:** Keine Hochverfügbarkeit (→ expert-high-availability.md). Keine Performance-Tuning-Details (→ expert-performance.md).
+
+    **Beispiel-Inhalte:** nginx-Konfiguration, systemd-Unit-File, docker-compose.prod.yaml, `projektname healthcheck` Ausgabe.
 
 ## Ziel
 
@@ -1149,7 +1615,25 @@ TODO
 
     ("tutorials/beginner-data-import.md", "Tutorial: Erster Datenimport", """
 !!! tip "Inhaltsrichtlinie"
-    Einsteiger-Tutorial: Daten aus einer externen Quelle importieren und verifizieren.
+    **Zielgruppe:** Anfänger, die bestehende Daten aus Dateien oder anderen Quellen importieren wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (CSV, JSON und Excel importieren können)
+    - Voraussetzungen (laufendes Projekt, Beispieldateien)
+    - Schritt 1: Importformate verstehen (CSV, JSON, XLSX — Anforderungen)
+    - Schritt 2: Beispieldaten herunterladen oder erstellen
+    - Schritt 3: CSV-Import durchführen (Mapping, Encoding, Trennzeichen)
+    - Schritt 4: JSON-Import durchführen
+    - Schritt 5: Import validieren und Fehler beheben
+    - Schritt 6: Daten nach Import prüfen und bereinigen
+    - Häufige Import-Probleme (Encoding, Datumsformate, Duplikate)
+
+    **Inhaltliche Tiefe:** Beispieldateien als Codeblöcke eingebettet. Jedes Format Schritt für Schritt. Fehlerausgaben und deren Lösung zeigen.
+
+    **Abgrenzung:** Keine API-basierte Datenintegration (→ tutorials/advanced-api-usage.md). Keine Batch-Verarbeitung (→ user-guide/advanced-features.md).
+
+    **Beispiel-Inhalte:** 5-Zeilen-CSV-Beispiel, `projektname import --format=csv daten.csv`, Fehlermeldung bei falschem Encoding und Lösung.
 
 ## Ziel
 
@@ -1194,7 +1678,25 @@ TODO: Ergebnis prüfen, Fehler-Log einsehen
 
     ("tutorials/advanced-api-usage.md", "Tutorial: API-Nutzung", """
 !!! tip "Inhaltsrichtlinie"
-    Fortgeschrittenen-Tutorial: Die REST-API programmatisch nutzen — Authentifizierung, CRUD, Pagination.
+    **Zielgruppe:** Fortgeschrittene Nutzer und Entwickler, die das System per API programmatisch nutzen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (API-Authentifizierung, CRUD-Operationen, Pagination)
+    - Voraussetzungen (laufendes System, API-Key, curl oder httpie installiert)
+    - Schritt 1: API-Key erstellen und testen
+    - Schritt 2: Daten per API lesen (GET, Filter, Pagination)
+    - Schritt 3: Daten erstellen und aktualisieren (POST, PUT/PATCH)
+    - Schritt 4: Daten löschen (DELETE, Soft-Delete)
+    - Schritt 5: Fehlerbehandlung (HTTP-Codes, Fehlerformat)
+    - Schritt 6: Python/JavaScript-Client-Bibliothek nutzen
+    - Rate-Limiting und Best Practices
+
+    **Inhaltliche Tiefe:** Jeder API-Call als curl-Beispiel UND als Python-Snippet. Response-Bodies vollständig zeigen. Pagination-Logik komplett erklären.
+
+    **Abgrenzung:** Keine API-Referenz (→ developer-guide/api-reference.md). Keine Webhooks (→ tutorials/advanced-webhooks.md).
+
+    **Beispiel-Inhalte:** `curl -H "Authorization: Bearer TOKEN" https://localhost/api/v1/items`, Python requests-Beispiel, Paginierungs-Schleife.
 
 ## Ziel
 
@@ -1241,7 +1743,25 @@ TODO: HTTP-Statuscodes auswerten, Retry-Logik
 
     ("tutorials/advanced-custom-reports.md", "Tutorial: Eigene Berichte", """
 !!! tip "Inhaltsrichtlinie"
-    Fortgeschrittenen-Tutorial: Benutzerdefinierte Berichte erstellen und automatisieren.
+    **Zielgruppe:** Fortgeschrittene Nutzer, die eigene Berichte und Dashboards erstellen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (3 verschiedene Berichtstypen erstellen)
+    - Voraussetzungen (laufendes Projekt mit Daten)
+    - Schritt 1: Eingebaute Berichte verstehen und anpassen
+    - Schritt 2: Einfachen tabellarischen Bericht erstellen
+    - Schritt 3: Bericht mit Diagrammen und Visualisierungen
+    - Schritt 4: Zeitgesteuerten Bericht einrichten (E-Mail, PDF-Export)
+    - Schritt 5: Dashboard mit mehreren Widgets zusammenstellen
+    - Schritt 6: Berichtsvorlage speichern und teilen
+    - Datenquellen und Aggregationsfunktionen
+
+    **Inhaltliche Tiefe:** Vollständige Berichtsdefinitionen als YAML/JSON. Screenshots oder Beschreibung der Ausgabe. Aggregationsfunktionen mit Beispielen.
+
+    **Abgrenzung:** Keine BI-Tool-Integration (→ integrations/). Keine Rohdaten-Abfragen (→ developer-guide/).
+
+    **Beispiel-Inhalte:** Berichtsdefinition YAML, Diagramm-Konfiguration, Cron-Job für wöchentlichen PDF-Versand.
 
 ## Ziel
 
@@ -1277,7 +1797,25 @@ TODO: PDF-Export, Zeitplan, E-Mail-Versand
 
     ("tutorials/expert-high-availability.md", "Tutorial: Hochverfügbarkeit", """
 !!! tip "Inhaltsrichtlinie"
-    Experten-Tutorial: System für Hochverfügbarkeit konfigurieren — Clustering, Failover, Monitoring.
+    **Zielgruppe:** Experten und Infrastruktur-Admins, die Ausfallsicherheit und Skalierung konfigurieren.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (redundantes Setup mit Failover aufbauen)
+    - Voraussetzungen (2+ Server, Load Balancer, gemeinsamer Speicher)
+    - Schritt 1: Architektur planen (Diagramm: LB → App-Nodes → DB)
+    - Schritt 2: Datenbank-Replikation einrichten (Primary/Replica)
+    - Schritt 3: Mehrere App-Instanzen konfigurieren (Shared Session, Shared Storage)
+    - Schritt 4: Load Balancer konfigurieren (Health Checks, Sticky Sessions)
+    - Schritt 5: Failover testen (Node abschalten, Verhalten beobachten)
+    - Schritt 6: Monitoring und Alerting für den Cluster
+    - Skalierungs-Strategien (horizontal vs. vertikal)
+
+    **Inhaltliche Tiefe:** Vollständige Konfigurationsdateien für jeden Schritt. Architektur-Diagramm als Mermaid. Failover-Testskript. Metriken und Schwellwerte.
+
+    **Abgrenzung:** Keine Einzelserver-Performance (→ expert-performance.md). Keine Kubernetes-Orchestrierung (→ operations/kubernetes.md).
+
+    **Beispiel-Inhalte:** docker-compose mit 2 App-Containern + 1 DB-Container + nginx-LB, Failover-Testskript, HAProxy-Konfiguration.
 
 ## Ziel
 
@@ -1324,7 +1862,25 @@ TODO: Cluster-Metriken, Failover-Alerts
 
     ("tutorials/beginner-ui-walkthrough.md", "Tutorial: UI-Rundgang", """
 !!! tip "Inhaltsrichtlinie"
-    Einsteiger-Tutorial: Geführter Rundgang durch die Benutzeroberfläche — jeder Bereich wird erklärt.
+    **Zielgruppe:** Anfänger, die die Benutzeroberfläche Schritt für Schritt kennenlernen wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (UI navigieren, Hauptfunktionen finden und nutzen)
+    - Voraussetzungen (laufendes System, Browser, Zugangsdaten)
+    - Schritt 1: Anmelden und Dashboard erkunden
+    - Schritt 2: Navigation und Menüstruktur verstehen
+    - Schritt 3: Hauptbereiche durchgehen (Projekte, Daten, Einstellungen)
+    - Schritt 4: Eintrag erstellen, bearbeiten, löschen über die UI
+    - Schritt 5: Suche und Filter nutzen
+    - Schritt 6: Persönliche Einstellungen anpassen (Theme, Sprache, Benachrichtigungen)
+    - Tastenkürzel und Produktivitätstipps
+
+    **Inhaltliche Tiefe:** Beschreibender Text mit Hinweisen wo welche Elemente zu finden sind (da keine echten Screenshots möglich). Jeder Schritt: was klicken, was erwarten.
+
+    **Abgrenzung:** Keine CLI-Nutzung (→ user-guide/cli-reference.md). Keine Admin-Oberfläche (→ user-guide/permissions.md).
+
+    **Beispiel-Inhalte:** Beschreibung des Dashboard-Layouts, Navigationsmenü-Struktur, Tastenkürzel-Tabelle (Ctrl+K=Suche, etc.).
 
 ## Ziel
 
@@ -1368,7 +1924,25 @@ TODO: Die wichtigsten UI-Bereiche in Kurzform
 
     ("tutorials/advanced-webhooks.md", "Tutorial: Webhooks einrichten", """
 !!! tip "Inhaltsrichtlinie"
-    Fortgeschrittenen-Tutorial: Webhooks konfigurieren, testen und in externe Dienste integrieren.
+    **Zielgruppe:** Fortgeschrittene Nutzer, die das System per Webhooks mit externen Diensten verbinden wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (Webhook einrichten, testen, absichern)
+    - Voraussetzungen (laufendes System, externer Endpunkt oder RequestBin zum Testen)
+    - Schritt 1: Webhook-Konzept verstehen (Event → HTTP POST → Empfänger)
+    - Schritt 2: Ersten Webhook registrieren (URL, Events, Format)
+    - Schritt 3: Webhook testen (manueller Trigger, Payload inspizieren)
+    - Schritt 4: Webhook absichern (HMAC-Signatur, Secret, HTTPS)
+    - Schritt 5: Fehlerbehandlung (Retry-Logik, Dead-Letter-Queue)
+    - Schritt 6: Praxisbeispiel — Slack/Teams-Benachrichtigung
+    - Webhook-Payload-Referenz (alle Event-Typen)
+
+    **Inhaltliche Tiefe:** Vollständige Payload-Beispiele als JSON. HMAC-Verifizierungscode in Python. Retry-Verhalten dokumentiert.
+
+    **Abgrenzung:** Keine API-Nutzung (→ tutorials/advanced-api-usage.md). Keine Automationsregeln (→ user-guide/automation-rules.md).
+
+    **Beispiel-Inhalte:** Webhook-Registration per CLI/UI, JSON-Payload eines „item.created" Events, Python-Skript zur HMAC-Verifikation.
 
 ## Ziel
 
@@ -1413,7 +1987,26 @@ TODO: Webhook kommt nicht an, falsche Payload, Timeout
 
     ("tutorials/advanced-backup-restore.md", "Tutorial: Backup & Restore", """
 !!! tip "Inhaltsrichtlinie"
-    Fortgeschrittenen-Tutorial: Vollständiges Backup erstellen, verifizieren und wiederherstellen.
+    **Zielgruppe:** Fortgeschrittene Nutzer und Admins, die eine vollständige Backup-Strategie implementieren wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (vollständige Backup-Strategie aufbauen und testen)
+    - Voraussetzungen (laufendes Produktivsystem mit Daten)
+    - Schritt 1: Backup-Strategie planen (RPO, RTO, 3-2-1-Regel)
+    - Schritt 2: Vollbackup erstellen und verifizieren
+    - Schritt 3: Inkrementelle Backups konfigurieren
+    - Schritt 4: Automatische Backup-Rotation einrichten
+    - Schritt 5: Remote-Backup konfigurieren (S3, NFS, rsync)
+    - Schritt 6: Disaster-Recovery-Test durchführen (komplette Wiederherstellung)
+    - Schritt 7: Monitoring und Alerting für Backup-Jobs
+    - Backup-Strategie-Dokumentation (Template)
+
+    **Inhaltliche Tiefe:** Vollständige Skripte und Cron-Jobs. Zeitschätzungen für verschiedene Datenmengen. DR-Test als Checkliste. RPO/RTO-Berechnung erklären.
+
+    **Abgrenzung:** Keine Grundlagen (→ user-guide/backup-restore.md). Keine HA-Konfiguration (→ tutorials/expert-high-availability.md).
+
+    **Beispiel-Inhalte:** Backup-Skript mit Rotation, S3-Upload-Kommando, DR-Test-Checkliste, Monitoring-Skript das bei Fehler alarmiert.
 
 ## Ziel
 
@@ -1456,7 +2049,26 @@ TODO: Cron-Job oder integrierter Scheduler
 
     ("tutorials/expert-security-hardening.md", "Tutorial: Sicherheitshärtung", """
 !!! tip "Inhaltsrichtlinie"
-    Experten-Tutorial: System für Produktion härten — alle Sicherheitsmaßnahmen Schritt für Schritt.
+    **Zielgruppe:** Security-bewusste Admins, die das System gegen Angriffe absichern wollen.
+
+    **Pflicht-Abschnitte:**
+
+    - Lernziele (System nach CIS-Benchmark-Vorbild härten)
+    - Voraussetzungen (laufendes Produktivsystem, Root/Admin-Zugang)
+    - Schritt 1: Sicherheits-Audit durchführen (eingebauter Security-Check)
+    - Schritt 2: Authentifizierung härten (Passwortrichtlinien, 2FA, Session-Timeout)
+    - Schritt 3: Netzwerk absichern (Firewall, TLS-Konfiguration, Header)
+    - Schritt 4: Dateisystem-Berechtigungen einschränken
+    - Schritt 5: Logging und Audit-Trail konfigurieren
+    - Schritt 6: Dependency-Scanning und Updates
+    - Schritt 7: Penetrationstest-Grundlagen (OWASP Top 10 prüfen)
+    - Security-Hardening-Checkliste (zum Abhaken)
+
+    **Inhaltliche Tiefe:** Konkrete Konfigurationsänderungen mit Vorher/Nachher. TLS-Cipher-Suites auflisten. Security-Header komplett. Checkliste als Tabelle mit Status-Spalte.
+
+    **Abgrenzung:** Keine Benutzerrechteverwaltung (→ user-guide/permissions.md). Keine Netzwerk-Infrastruktur (→ operations/networking.md).
+
+    **Beispiel-Inhalte:** nginx Security-Header-Konfiguration, TLS 1.3 Config, `projektname security audit` Ausgabe, OWASP-Checkliste.
 
 ## Ziel
 
@@ -1518,7 +2130,22 @@ TODO: Backup-Integrität regelmäßig testen
     # ━━ Bedienungsanleitung ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("manual/overview.md", "Bedienungsanleitung — Überblick", """
 !!! tip "Inhaltsrichtlinie"
-    Überblick für Endanwender über die Bedienung der Applikation.
+    **Zielgruppe:** Endanwender ohne technische Vorkenntnisse, die das Produkt erstmals nutzen
+
+    **Pflicht-Abschnitte:**
+
+    - Was ist dieses Produkt? (2-3 Sätze Elevator-Pitch)
+    - Kernfunktionen im Überblick (Bullet-Liste, max. 8 Punkte)
+    - Schnellstart: Vom Login bis zur ersten Aktion in 5 Schritten
+    - Systemvoraussetzungen (Browser, Betriebssystem, Bildschirmauflösung)
+    - Wo finde ich Hilfe? (Support-Kanäle, FAQ-Link)
+
+    **Inhaltliche Tiefe:** Nur Oberfläche — keine technischen Details, keine Admin-Themen. Verwende Screenshots mit nummerierten Callouts. Jeder Schritt maximal 2 Sätze.
+
+    **Abgrenzung:** Keine Installationsanleitung (→ getting-started/installation.md), keine API-Dokumentation (→ api/), keine Admin-Funktionen (→ manual/admin-panel.md)
+
+    **Beispiel-Inhalte:** Screenshot der Startseite mit Callouts auf Hauptnavigation, Suchfeld und Benutzerprofil; Tabelle «Funktion → Kurzbeschreibung → Seite»
+
 
 Richtet sich an **Endanwender** und beschreibt die praktische Nutzung.
 
@@ -1540,7 +2167,22 @@ Richtet sich an **Endanwender** und beschreibt die praktische Nutzung.
 
     ("manual/ui-overview.md", "Benutzeroberfläche", """
 !!! tip "Inhaltsrichtlinie"
-    Aufbau des Hauptbildschirms, Navigation, Menüs, Dialoge, Statusleiste.
+    **Zielgruppe:** Alle Endanwender, die sich im Interface orientieren wollen
+
+    **Pflicht-Abschnitte:**
+
+    - Aufbau des Hauptbildschirms (Header, Sidebar, Content-Bereich, Footer)
+    - Hauptnavigation und Menüstruktur (Hierarchie-Diagramm)
+    - Kontextmenüs und Rechtsklick-Aktionen
+    - Breadcrumb-Navigation und Seitenhistorie
+    - Responsive Verhalten bei verschiedenen Bildschirmgrößen
+
+    **Inhaltliche Tiefe:** Annotierte Screenshots für jeden Bildschirmbereich. Beschreibe jedes UI-Element mit Name, Position und Funktion. Nutze eine nummerierte Legende.
+
+    **Abgrenzung:** Keine Workflow-Beschreibungen (→ manual/workflows.md), keine mobilen Layouts (→ manual/mobile.md), keine Admin-UI (→ manual/admin-panel.md)
+
+    **Beispiel-Inhalte:** Annotierter Screenshot mit «1 = Hauptmenü, 2 = Suchleiste, 3 = Benachrichtigungsglocke»; Tabelle aller Menüpunkte mit Icon, Label und Zielseite
+
 
 ## Bildschirmaufbau
 
@@ -1601,7 +2243,22 @@ TODO: Wie zwischen Themes wechseln?
 
     ("manual/workflows.md", "Workflows & Abläufe", """
 !!! tip "Inhaltsrichtlinie"
-    Schritt-für-Schritt-Anleitungen für typische Aufgaben der Endanwender.
+    **Zielgruppe:** Endanwender, die konkrete Aufgaben erledigen wollen
+
+    **Pflicht-Abschnitte:**
+
+    - Übersicht der häufigsten Workflows (Tabelle: Workflow → Komplexität → Zeitbedarf)
+    - Schritt-für-Schritt-Anleitung pro Workflow (nummerierte Liste mit Screenshots)
+    - Entscheidungspunkte und Verzweigungen (Flussdiagramme)
+    - Häufige Fehler und deren Behebung pro Workflow
+    - Tipps zur Effizienzsteigerung
+
+    **Inhaltliche Tiefe:** Jeder Workflow als eigenständiger Abschnitt mit Vorbedingungen, Schritten und erwartetem Ergebnis. Maximal 10 Schritte pro Workflow. Verwende Admonitions (tip, warning) für Sonderfälle.
+
+    **Abgrenzung:** Keine UI-Erklärung (→ manual/ui-overview.md), keine Massen-Workflows (→ manual/bulk-operations.md), keine Admin-Workflows (→ manual/admin-panel.md)
+
+    **Beispiel-Inhalte:** Workflow «Neuen Datensatz anlegen»: 1. Klick auf ‹+Neu› 2. Formular ausfüllen 3. Speichern; Flussdiagramm mit Ja/Nein-Verzweigung bei Validierungsfehlern
+
 
 ## Neues Projekt erstellen
 
@@ -1646,7 +2303,23 @@ TODO: Automatische Backups, Wiederherstellung
 
     ("manual/search.md", "Suche & Filter", """
 !!! tip "Inhaltsrichtlinie"
-    Suchfunktionen, Filter, Sortierung, gespeicherte Suchen.
+    **Zielgruppe:** Alle Endanwender, die Daten schnell finden müssen
+
+    **Pflicht-Abschnitte:**
+
+    - Einfache Suche vs. erweiterte Suche (Vergleichstabelle)
+    - Suchsyntax und Operatoren (AND, OR, NOT, Wildcards, Phrasensuche)
+    - Filter setzen, kombinieren und speichern
+    - Sortieroptionen und deren Wirkung
+    - Gespeicherte Suchen und Suchvorlagen
+    - Suchergebnisse interpretieren (Relevanz, Hervorhebung)
+
+    **Inhaltliche Tiefe:** Jeder Operator mit Syntax-Beispiel und Ergebnis-Screenshot. Filterkombinationen als Entscheidungstabelle darstellen.
+
+    **Abgrenzung:** Keine Volltextindex-Konfiguration (→ architecture/caching.md), keine API-Suchendpunkte (→ formats/api-formats.md)
+
+    **Beispiel-Inhalte:** Tabelle «Operator → Beispiel → Ergebnis»: z.B. `name:"Müller" AND status:aktiv`; Screenshot der Filter-Sidebar mit drei aktiven Filtern
+
 
 ## Einfache Suche
 
@@ -1682,7 +2355,22 @@ TODO: Globale Suche, `Strg+Shift+F`
 
     ("manual/notifications.md", "Benachrichtigungen", """
 !!! tip "Inhaltsrichtlinie"
-    System-Benachrichtigungen, E-Mail-Alerts, Push-Notifications, Konfiguration.
+    **Zielgruppe:** Endanwender, die über Ereignisse informiert bleiben wollen
+
+    **Pflicht-Abschnitte:**
+
+    - Arten von Benachrichtigungen (In-App, E-Mail, Push, SMS)
+    - Benachrichtigungszentrale: Aufbau und Bedienung
+    - Benachrichtigungen konfigurieren (Kanäle, Häufigkeit, Stummschaltung)
+    - Abonnements verwalten (Themen, Objekte, Personen)
+    - Benachrichtigungshistorie und Archiv
+
+    **Inhaltliche Tiefe:** Pro Benachrichtigungstyp: Auslöser, Inhalt, Kanal, Beispiel. Konfigurationsoptionen als Tabelle mit Standardwerten.
+
+    **Abgrenzung:** Keine Systembenachrichtigungen für Admins (→ manual/admin-panel.md), kein Event-System-Internals (→ architecture/event-system.md)
+
+    **Beispiel-Inhalte:** Screenshot der Benachrichtigungsglocke mit Badge-Zähler; Tabelle «Ereignis → Standard-Kanal → Anpassbar?»: z.B. «Neuer Kommentar → In-App + E-Mail → Ja»
+
 
 ## Benachrichtigungstypen
 
@@ -1716,7 +2404,22 @@ TODO: Benachrichtigungen zeitweise unterdrücken
 
     ("manual/shortcuts.md", "Tastenkürzel & Shortcuts", """
 !!! tip "Inhaltsrichtlinie"
-    Vollständige Tastenkürzel-Referenz.
+    **Zielgruppe:** Power-User, die effizient mit Tastatur arbeiten wollen
+
+    **Pflicht-Abschnitte:**
+
+    - Globale Tastenkürzel (Navigation, Suche öffnen, Hilfe)
+    - Kontextbezogene Kürzel (Editor, Tabelle, Formular)
+    - Tastenkürzel anpassen und eigene erstellen
+    - Übersicht als druckbare Referenzkarte
+    - Konflikte mit Browser-/Betriebssystem-Kürzeln
+
+    **Inhaltliche Tiefe:** Vollständige Referenztabelle mit Spalten: Aktion, Windows/Linux, macOS. Gruppiert nach Kontext. Maximal 50 Kürzel.
+
+    **Abgrenzung:** Keine Workflow-Beschreibungen (→ manual/workflows.md), keine Accessibility-Tastatursteuerung (→ manual/accessibility.md)
+
+    **Beispiel-Inhalte:** Tabelle: «Strg+K → Suche öffnen | Cmd+K»; «Strg+S → Speichern | Cmd+S»; druckbare PDF-Karte als Download-Link
+
 
 ## Allgemein
 
@@ -1764,7 +2467,23 @@ TODO: Können Tastenkürzel angepasst werden?
 
     ("manual/import-export.md", "Import & Export", """
 !!! tip "Inhaltsrichtlinie"
-    Daten importieren und exportieren: unterstützte Formate, Optionen, Mapping, Beispiele.
+    **Zielgruppe:** Endanwender, die Daten zwischen Systemen bewegen
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Import-Formate (CSV, Excel, JSON, XML — Vergleichstabelle)
+    - Schritt-für-Schritt-Anleitung Import (Datei wählen, Mapping, Validierung, Ausführung)
+    - Unterstützte Export-Formate und Optionen
+    - Schritt-für-Schritt-Anleitung Export
+    - Fehlerbehandlung bei Import (Validierungsfehler, Duplikate, fehlende Pflichtfelder)
+    - Zeitgesteuerte Importe/Exporte einrichten
+
+    **Inhaltliche Tiefe:** Je Format eine Beispieldatei (3-5 Zeilen) zeigen. Mapping-Tabelle: Quellspalte → Zielspalte. Fehlermeldungen mit Lösung auflisten.
+
+    **Abgrenzung:** Keine Format-Spezifikationen (→ formats/input-formats.md, formats/output-formats.md), keine API-basierte Integration (→ formats/api-formats.md), keine Datenmigration (→ formats/migration-formats.md)
+
+    **Beispiel-Inhalte:** CSV-Beispiel mit Kopfzeile und 3 Datenzeilen; Screenshot des Mapping-Dialogs; Fehlermeldung «Zeile 42: Pflichtfeld ‹E-Mail› fehlt»
+
 
 ## Daten importieren
 
@@ -1805,7 +2524,23 @@ TODO: Mehrere Dateien auf einmal verarbeiten
 
     ("manual/reports.md", "Drucken & Berichte", """
 !!! tip "Inhaltsrichtlinie"
-    Berichte erstellen, Druckvorschau, PDF-Export, Berichts-Vorlagen.
+    **Zielgruppe:** Endanwender und Teamleiter, die Berichte erstellen und teilen
+
+    **Pflicht-Abschnitte:**
+
+    - Verfügbare Berichtstypen (Tabelle: Name → Datenquelle → Aktualisierung)
+    - Bericht erstellen: Parameter, Filter, Zeitraum wählen
+    - Bericht anpassen: Spalten, Gruppierung, Diagrammtyp
+    - Export als PDF, Excel, CSV
+    - Berichte zeitgesteuert versenden (Scheduling)
+    - Berichte teilen und Berechtigungen
+
+    **Inhaltliche Tiefe:** Jeden Berichtstyp mit Screenshot des fertigen Berichts zeigen. Export-Optionen als Vergleichstabelle (Format → Vor-/Nachteile).
+
+    **Abgrenzung:** Keine Berichts-Dateiformate (→ formats/report-formats.md), keine Dashboard-Widgets (→ manual/dashboard.md), keine API-Endpunkte (→ formats/api-formats.md)
+
+    **Beispiel-Inhalte:** Screenshot eines Monatsberichts mit Balkendiagramm; Tabelle «Berichtstyp → Verfügbare Filter → Standard-Zeitraum»
+
 
 ## Berichte erstellen
 
@@ -1830,7 +2565,23 @@ TODO: Automatische Erstellung nach Zeitplan, E-Mail-Versand
 
     ("manual/settings.md", "Einstellungen", """
 !!! tip "Inhaltsrichtlinie"
-    Alle benutzerspezifischen Einstellungsmöglichkeiten.
+    **Zielgruppe:** Endanwender, die ihr persönliches Nutzungserlebnis anpassen möchten
+
+    **Pflicht-Abschnitte:**
+
+    - Profil bearbeiten (Name, Avatar, Kontaktdaten)
+    - Sicherheitseinstellungen (Passwort ändern, 2FA einrichten)
+    - Darstellung (Sprache, Theme, Schriftgröße, Datumsformat)
+    - Benachrichtigungseinstellungen (Kurzlink zu manual/notifications.md)
+    - Datenschutz-Einstellungen (Sichtbarkeit, Tracking)
+    - Einstellungen exportieren und zurücksetzen
+
+    **Inhaltliche Tiefe:** Jede Einstellung mit Pfad im Menü, Standardwert und Screenshot. Sicherheitsrelevante Optionen mit Admonition ‹warning› hervorheben.
+
+    **Abgrenzung:** Keine systemweiten Einstellungen (→ manual/admin-panel.md), keine Konfigurationsdateien (→ formats/config-files.md)
+
+    **Beispiel-Inhalte:** Pfad «Einstellungen → Darstellung → Theme → Dunkel»; Screenshot der 2FA-Einrichtung mit QR-Code (Platzhalter); Tabelle aller Einstellungen mit Standardwerten
+
 
 ## Einstellungen öffnen
 
@@ -1868,7 +2619,22 @@ TODO: Auf Standardwerte zurücksetzen
 
     ("manual/multi-user.md", "Mehrbenutzerbetrieb", """
 !!! tip "Inhaltsrichtlinie"
-    Zusammenarbeit mehrerer Benutzer: gleichzeitiger Zugriff, Konflikte, Berechtigungen.
+    **Zielgruppe:** Teams, die gemeinsam auf dem System arbeiten
+
+    **Pflicht-Abschnitte:**
+
+    - Benutzerrollen und Berechtigungsstufen (Tabelle: Rolle → Rechte)
+    - Benutzer einladen und verwalten
+    - Gruppen und Teams anlegen
+    - Gemeinsame Ressourcen teilen (Ordner, Berichte, Vorlagen)
+    - Aktivitätenprotokoll und Audit-Trail
+
+    **Inhaltliche Tiefe:** Rollen-Rechte-Matrix als vollständige Tabelle. Einladungs-Workflow Schritt für Schritt. Teilen-Dialog mit Screenshot.
+
+    **Abgrenzung:** Keine Echtzeit-Zusammenarbeit (→ manual/collaboration.md), keine Admin-Benutzerverwaltung (→ manual/admin-panel.md), keine Sicherheitsarchitektur (→ architecture/security-architecture.md)
+
+    **Beispiel-Inhalte:** Tabelle «Betrachter: lesen=Ja, bearbeiten=Nein, löschen=Nein | Bearbeiter: lesen=Ja, bearbeiten=Ja, löschen=Nein»; Screenshot der Einladungs-E-Mail
+
 
 ## Übersicht
 
@@ -1901,7 +2667,23 @@ TODO: Wer hat wann was geändert?
 
     ("manual/accessibility.md", "Barrierefreiheit", """
 !!! tip "Inhaltsrichtlinie"
-    Bedienungshilfen: Tastaturnavigation, Screenreader, visuelle Anpassungen, Sprachunterstützung.
+    **Zielgruppe:** Nutzer mit Einschränkungen, Barrierefreiheits-Beauftragte
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Screenreader und Kompatibilität
+    - Tastaturnavigation (vollständige Tab-Reihenfolge)
+    - Kontrast-Modi und Schriftgrößenanpassung
+    - ARIA-Landmarks und Seitenstruktur
+    - Bekannte Einschränkungen und Workarounds
+    - Konformität (WCAG-Level, BITV)
+
+    **Inhaltliche Tiefe:** Konformitätstabelle nach WCAG 2.1 AA-Kriterien. Pro Screenreader (NVDA, JAWS, VoiceOver) getestete Funktionen auflisten.
+
+    **Abgrenzung:** Keine allgemeinen Tastenkürzel (→ manual/shortcuts.md), keine mobilen Gesten (→ manual/mobile.md)
+
+    **Beispiel-Inhalte:** Tabelle «WCAG-Kriterium → Status → Anmerkung»; Anleitung zur Nutzung mit NVDA: «Tab → Hauptnavigation → Pfeil-unten → Menüpunkt wählen»
+
 
 ## Standards
 
@@ -1940,7 +2722,22 @@ TODO: Accessibility-Probleme melden
 
     ("manual/dashboard.md", "Dashboard & Startseite", """
 !!! tip "Inhaltsrichtlinie"
-    Dashboard-Aufbau: Widgets, Kennzahlen, Anpassung, Aktualisierung.
+    **Zielgruppe:** Endanwender, die ihren Arbeitsbereich personalisieren möchten
+
+    **Pflicht-Abschnitte:**
+
+    - Dashboard-Aufbau und Standard-Widgets
+    - Widgets hinzufügen, entfernen und anordnen (Drag & Drop)
+    - Widget-Konfiguration (Datenquelle, Zeitraum, Darstellungstyp)
+    - Dashboard-Layouts speichern und teilen
+    - Datenaktualisierung und Auto-Refresh
+
+    **Inhaltliche Tiefe:** Pro Standard-Widget: Name, Screenshot, konfigurierbare Parameter. Layout-Raster erklären (Spalten, Zeilen). Aktualisierungsintervalle als Tabelle.
+
+    **Abgrenzung:** Keine Berichterstellung (→ manual/reports.md), keine Datenansichten außerhalb des Dashboards (→ manual/data-views.md)
+
+    **Beispiel-Inhalte:** Screenshot Standard-Dashboard mit 4 Widgets; Widget «Letzte Aktivitäten»: zeigt die letzten 10 Aktionen mit Zeitstempel und Benutzer
+
 
 ## Standard-Dashboard
 
@@ -1971,7 +2768,22 @@ TODO: Können Benutzer mehrere Dashboards anlegen? Teilen?
 
     ("manual/data-views.md", "Datenansichten", """
 !!! tip "Inhaltsrichtlinie"
-    Verschiedene Darstellungsformen für Daten: Tabelle, Karten, Liste, Kalender, Diagramm.
+    **Zielgruppe:** Endanwender, die Daten in verschiedenen Formaten betrachten wollen
+
+    **Pflicht-Abschnitte:**
+
+    - Tabellenansicht: Spalten konfigurieren, sortieren, filtern
+    - Kartenansicht (Kanban): Spalten definieren, Karten verschieben
+    - Listenansicht: kompakte Darstellung
+    - Kalenderansicht: Termine und Fristen
+    - Ansichten wechseln, speichern und teilen
+
+    **Inhaltliche Tiefe:** Pro Ansicht: Screenshot, Konfigurationsoptionen, Vor-/Nachteile. Vergleichstabelle aller Ansichten (Ansicht → Stärke → Einsatzzweck).
+
+    **Abgrenzung:** Keine Dashboard-Widgets (→ manual/dashboard.md), keine Berichtsansichten (→ manual/reports.md), keine Such-/Filtermechanik (→ manual/search.md)
+
+    **Beispiel-Inhalte:** Tabellenansicht mit sortierbaren Spalten «Name, Status, Datum»; Kanban-Board mit Spalten «Offen → In Bearbeitung → Erledigt»
+
 
 ## Verfügbare Ansichten
 
@@ -2006,7 +2818,22 @@ TODO: Welche Felder anzeigen, Reihenfolge, Breite
 
     ("manual/collaboration.md", "Zusammenarbeit", """
 !!! tip "Inhaltsrichtlinie"
-    Echtzeit-Zusammenarbeit, Kommentare, Freigaben, Benachrichtigungen im Team-Kontext.
+    **Zielgruppe:** Teams, die gleichzeitig an Inhalten arbeiten
+
+    **Pflicht-Abschnitte:**
+
+    - Echtzeit-Bearbeitung: Cursor anderer Benutzer, Änderungsindikatoren
+    - Kommentare und Diskussionen (inline, am Objekt)
+    - @-Erwähnungen und Zuweisung
+    - Konflikterkennung und -lösung bei gleichzeitiger Bearbeitung
+    - Präsenz-Anzeige (wer ist gerade online/aktiv)
+
+    **Inhaltliche Tiefe:** Konfliktszenarien mit Vorher/Nachher-Screenshots. Kommentar-Workflow als Flussdiagramm (Erstellen → Antworten → Lösen → Archivieren).
+
+    **Abgrenzung:** Keine Benutzerverwaltung (→ manual/multi-user.md), keine Versionierung (→ manual/history-versioning.md), keine Benachrichtigungen (→ manual/notifications.md)
+
+    **Beispiel-Inhalte:** Screenshot mit zwei Benutzern im gleichen Dokument (farbige Cursor); Beispiel-Kommentar: «@Max bitte den Absatz prüfen» mit Antwort und Erledigt-Haken
+
 
 ## Echtzeit-Zusammenarbeit
 
@@ -2036,7 +2863,22 @@ Verweis auf [Mehrbenutzerbetrieb](multi-user.md)
 
     ("manual/offline-mode.md", "Offline-Modus", """
 !!! tip "Inhaltsrichtlinie"
-    Arbeiten ohne Netzwerkverbindung: Funktionsumfang, Synchronisation, Konfliktlösung.
+    **Zielgruppe:** Nutzer, die ohne stabile Internetverbindung arbeiten müssen
+
+    **Pflicht-Abschnitte:**
+
+    - Welche Funktionen offline verfügbar sind (Ja/Nein-Tabelle)
+    - Offline-Modus aktivieren und Daten vorab synchronisieren
+    - Arbeiten im Offline-Modus (Einschränkungen, Hinweise)
+    - Synchronisation beim Wiederherstellen der Verbindung
+    - Konfliktauflösung nach Offline-Bearbeitung
+
+    **Inhaltliche Tiefe:** Vollständige Funktions-Tabelle mit Offline-Status. Sync-Prozess als Sequenzdiagramm. Speicherplatzbedarf für Offline-Daten angeben.
+
+    **Abgrenzung:** Keine mobile-spezifische Offline-Funktion (→ manual/mobile.md), keine Backup-Strategien (→ formats/backup-formats.md), keine Architektur der Sync-Engine (→ architecture/data-flow.md)
+
+    **Beispiel-Inhalte:** Tabelle «Datensätze anzeigen → offline: Ja | Neuen Datensatz anlegen → offline: Ja (wird bei Sync übertragen) | Berichte generieren → offline: Nein»
+
 
 ## Verfügbare Funktionen offline
 
@@ -2067,7 +2909,23 @@ TODO: Wie viel lokaler Speicher wird benötigt?
 
     ("manual/mobile.md", "Mobile Nutzung", """
 !!! tip "Inhaltsrichtlinie"
-    Mobile App oder responsive Web-Oberfläche: Funktionsumfang, Installation, Unterschiede zur Desktop-Version.
+    **Zielgruppe:** Nutzer, die auf Smartphone oder Tablet arbeiten
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Plattformen (iOS ab Version X, Android ab Version Y)
+    - App installieren und einrichten
+    - Unterschiede zur Desktop-Version (Feature-Matrix)
+    - Gesten und Touch-Bedienung
+    - Push-Benachrichtigungen konfigurieren
+    - Offline-Modus auf mobilen Geräten
+
+    **Inhaltliche Tiefe:** Feature-Vergleichstabelle Desktop vs. Mobile. Gesten-Referenz (Swipe, Pinch, Long-Press) mit Beschreibung. Screenshots vom mobilen UI.
+
+    **Abgrenzung:** Keine Desktop-UI-Beschreibung (→ manual/ui-overview.md), keine allgemeine Offline-Funktion (→ manual/offline-mode.md)
+
+    **Beispiel-Inhalte:** Screenshot der mobilen Listenansicht; Gesten-Tabelle: «Swipe links → Löschen | Swipe rechts → Archivieren | Long-Press → Kontextmenü»
+
 
 ## Mobile App
 
@@ -2102,7 +2960,23 @@ TODO: Konfiguration auf Mobilgeräten
 
     ("manual/file-management.md", "Dateiverwaltung", """
 !!! tip "Inhaltsrichtlinie"
-    Dateien in der Anwendung verwalten: Hochladen, Organisieren, Vorschau, Herunterladen, Löschen.
+    **Zielgruppe:** Endanwender, die Dateien hochladen, organisieren und teilen
+
+    **Pflicht-Abschnitte:**
+
+    - Dateien hochladen (Einzel, Mehrfach, Drag & Drop)
+    - Ordnerstruktur anlegen und verwalten
+    - Dateien verschieben, kopieren, umbenennen
+    - Dateivorschau und unterstützte Formate
+    - Freigabe und Zugriffsrechte pro Datei/Ordner
+    - Speicherplatz und Kontingente
+
+    **Inhaltliche Tiefe:** Upload-Limits (Dateigröße, Dateitypen) als Tabelle. Vorschau-Kompatibilität pro Format. Freigabe-Dialog mit Screenshot.
+
+    **Abgrenzung:** Keine Backup-Formate (→ formats/backup-formats.md), keine Medienformat-Details (→ formats/image-formats.md), keine Versionierung (→ manual/history-versioning.md)
+
+    **Beispiel-Inhalte:** Tabelle «Format → Max. Größe → Vorschau verfügbar»: «PDF → 50 MB → Ja | MP4 → 500 MB → Ja (Streaming) | ZIP → 200 MB → Nein»
+
 
 ## Dateien hochladen
 
@@ -2136,7 +3010,22 @@ TODO: Gelöschte Dateien wiederherstellen, automatisches Leeren
 
     ("manual/templates-usage.md", "Vorlagen verwenden", """
 !!! tip "Inhaltsrichtlinie"
-    Endanwender-Anleitung: Vorlagen auswählen und anwenden — NICHT Vorlagen erstellen (das ist in [Vorlagen & Templates](../user-guide/templates.md)).
+    **Zielgruppe:** Endanwender, die wiederkehrende Strukturen effizient nutzen wollen
+
+    **Pflicht-Abschnitte:**
+
+    - Verfügbare Vorlagen durchsuchen und vorschauen
+    - Vorlage auf neuen Datensatz anwenden
+    - Eigene Vorlagen erstellen und speichern
+    - Vorlagen teilen und als Standard festlegen
+    - Platzhalter und dynamische Felder in Vorlagen
+
+    **Inhaltliche Tiefe:** Platzhalter-Syntax mit Beispielen (z.B. `{{datum}}`, `{{benutzer}}`). Vorlagen-Galerie als Screenshot. Erstellungs-Workflow Schritt für Schritt.
+
+    **Abgrenzung:** Keine Template-Dateiformate (→ formats/template-formats.md), keine Berichtsvorlagen (→ manual/reports.md)
+
+    **Beispiel-Inhalte:** Vorlage «Wochenbericht»: Platzhalter {{kw}}, {{autor}}, {{zusammenfassung}}; Screenshot des Vorlagen-Auswahldialogs mit Kategoriefilter
+
 
 ## Vorlage auswählen
 
@@ -2162,7 +3051,22 @@ TODO: Häufig genutzte Vorlagen als Favoriten markieren
 
     ("manual/history-versioning.md", "Verlauf & Versionierung", """
 !!! tip "Inhaltsrichtlinie"
-    Änderungsverlauf einsehen, Versionen vergleichen, frühere Version wiederherstellen.
+    **Zielgruppe:** Endanwender, die Änderungen nachverfolgen und rückgängig machen wollen
+
+    **Pflicht-Abschnitte:**
+
+    - Änderungsverlauf anzeigen (Timeline, Diff-Ansicht)
+    - Versionen vergleichen (Side-by-Side, Inline-Diff)
+    - Frühere Version wiederherstellen
+    - Automatische vs. manuelle Versionierung
+    - Aufbewahrungsfristen und Speicherlimits
+
+    **Inhaltliche Tiefe:** Diff-Darstellung mit farblicher Markierung (grün = hinzugefügt, rot = entfernt) als Screenshot. Wiederherstellungsprozess in 3 Schritten.
+
+    **Abgrenzung:** Keine Echtzeit-Zusammenarbeit (→ manual/collaboration.md), keine Audit-Logs (→ manual/multi-user.md), keine Datenbank-Migrationen (→ formats/migration-formats.md)
+
+    **Beispiel-Inhalte:** Screenshot der Versionsliste: «v3 — Max, 14:30 — ‹Absatz 2 geändert› | v2 — Lisa, 10:15 — ‹Tabelle hinzugefügt›»; Diff-Ansicht mit Hervorhebungen
+
 
 ## Verlauf anzeigen
 
@@ -2191,7 +3095,22 @@ TODO: Wie viele Versionen werden aufbewahrt? Verweis auf [Datenaufbewahrung](../
 
     ("manual/bulk-operations.md", "Massenoperationen", """
 !!! tip "Inhaltsrichtlinie"
-    Mehrere Datensätze gleichzeitig bearbeiten: Auswahl, Aktionen, Fortschritt, Rückgängig.
+    **Zielgruppe:** Power-User, die viele Datensätze gleichzeitig bearbeiten
+
+    **Pflicht-Abschnitte:**
+
+    - Mehrfachauswahl (Checkboxen, Bereich-Auswahl, Alle auswählen)
+    - Verfügbare Massenaktionen (Bearbeiten, Löschen, Verschieben, Exportieren, Status ändern)
+    - Massenbearbeitung: Felder für alle gewählten Datensätze ändern
+    - Fortschrittsanzeige und Abbruchmöglichkeit
+    - Fehlerprotokoll nach Massenoperation
+
+    **Inhaltliche Tiefe:** Jede Massenaktion mit maximal zulässiger Anzahl, geschätzter Dauer und Rückgängig-Option. Fehlerprotokoll-Format erklären.
+
+    **Abgrenzung:** Keine Einzel-Workflows (→ manual/workflows.md), keine Import-/Export-Massendaten (→ manual/import-export.md)
+
+    **Beispiel-Inhalte:** Screenshot: 25 ausgewählte Datensätze, Aktionsleiste «Status ändern → Erledigt»; Fehlerprotokoll: «3 von 25 fehlgeschlagen — Zeile 7: gesperrt, Zeile 12: Berechtigung fehlt»
+
 
 ## Datensätze auswählen
 
@@ -2224,7 +3143,23 @@ TODO: Maximale Anzahl Datensätze pro Massenaktion
 
     ("manual/admin-panel.md", "Administrations-Bereich", """
 !!! tip "Inhaltsrichtlinie"
-    Admin-Panel für Systemadministratoren: Benutzer, Einstellungen, System-Info, Wartung.
+    **Zielgruppe:** System-Administratoren und Team-Leads mit Admin-Rechten
+
+    **Pflicht-Abschnitte:**
+
+    - Admin-Panel aufrufen und Übersicht
+    - Benutzerverwaltung (Anlegen, Sperren, Rollen zuweisen)
+    - Systemeinstellungen (E-Mail, Speicher, Sicherheit)
+    - Audit-Log und Aktivitätsprotokoll
+    - Systemstatus und Monitoring (Health-Check, Speicherverbrauch)
+    - Wartung (Cache leeren, Indizes neu aufbauen, Backups)
+
+    **Inhaltliche Tiefe:** Jede Admin-Funktion mit Menüpfad, erforderlicher Rolle und Screenshot. Kritische Aktionen (Benutzer löschen, System zurücksetzen) mit ‹danger›-Admonition markieren.
+
+    **Abgrenzung:** Keine Endanwender-Einstellungen (→ manual/settings.md), keine Architektur-Details (→ architecture/overview.md), keine Deployment-Konfiguration (→ architecture/deployment-architecture.md)
+
+    **Beispiel-Inhalte:** Screenshot Admin-Dashboard mit KPIs (aktive Nutzer, Speicherverbrauch, offene Tickets); Tabelle «Systemeinstellung → Standardwert → Empfehlung»
+
 
 ## Zugang
 
@@ -2259,7 +3194,21 @@ TODO: Health-Check, Log-Viewer, System-Diagnose aus dem Admin-Panel
     # ━━ Dateiformate ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("formats/overview.md", "Dateiformate — Überblick", """
 !!! tip "Inhaltsrichtlinie"
-    Übersicht aller Dateiformate die von der Anwendung verarbeitet oder erzeugt werden.
+    **Zielgruppe:** Entwickler und Integratoren, die wissen müssen, welche Formate das System verarbeitet
+
+    **Pflicht-Abschnitte:**
+
+    - Gesamtübersicht aller Dateiformate (Tabelle: Format → Zweck → Richtung → Seite)
+    - Kategorisierung: Eingabe, Ausgabe, Konfiguration, Austausch
+    - Gemeinsame Konventionen (Zeichencodierung, Zeilenenden, Mime-Types)
+    - Versionierung von Formaten (Kompatibilitätsmatrix)
+
+    **Inhaltliche Tiefe:** Navigations-Tabelle als zentrales Element. Jedes Format in einer Zeile mit Link zur Detailseite. Konventionen (UTF-8, LF) einmalig hier definieren und in Unterseiten referenzieren.
+
+    **Abgrenzung:** Keine Detail-Spezifikationen (→ jeweilige Unterseiten), keine API-Dokumentation (→ formats/api-formats.md)
+
+    **Beispiel-Inhalte:** Tabelle: «CSV → Datenimport → Eingabe → formats/input-formats.md | JSON → API-Response → Ausgabe → formats/api-formats.md»
+
 
 ## Format-Kategorien
 
@@ -2290,7 +3239,23 @@ TODO: Wie wird Abwärtskompatibilität sichergestellt?
 
     ("formats/input-formats.md", "Eingabeformate", """
 !!! tip "Inhaltsrichtlinie"
-    Alle Dateiformate die importiert/gelesen werden können, mit Schema und Beispielen.
+    **Zielgruppe:** Entwickler und Datenlieferanten, die Daten ins System einspeisen
+
+    **Pflicht-Abschnitte:**
+
+    - CSV-Format: Trennzeichen, Quoting, Header-Zeile, Encoding
+    - Excel-Format: unterstützte Versionen (.xlsx, .xls), Blattauswahl, Datentypen
+    - JSON-Format: Schema, verschachtelte Strukturen, Arrays
+    - XML-Format: Schema/DTD, Namespaces
+    - Validierungsregeln pro Format
+    - Fehlercodes bei ungültigem Input
+
+    **Inhaltliche Tiefe:** Pro Format: vollständiges Minimalbeispiel (5-10 Zeilen), JSON-Schema oder DTD, Validierungsregeln als Tabelle. Fehlercodes mit Bedeutung und Lösung.
+
+    **Abgrenzung:** Keine Benutzer-Anleitung zum Import (→ manual/import-export.md), keine Ausgabeformate (→ formats/output-formats.md)
+
+    **Beispiel-Inhalte:** CSV: `name;email;rolle\n"Müller";"m@x.de";"admin"`; JSON-Schema-Auszug mit required-Feldern; Fehler E1001: «Ungültiges Datumsformat in Spalte 3»
+
 
 ## Unterstützte Formate
 
@@ -2309,7 +3274,22 @@ Für jedes Format: Schema, Validierung, Beispiel, Encoding-Hinweise, Größenlim
 
     ("formats/output-formats.md", "Ausgabeformate", """
 !!! tip "Inhaltsrichtlinie"
-    Alle Dateiformate die exportiert/geschrieben werden, mit Schema und Beispielen.
+    **Zielgruppe:** Entwickler und nachgelagerte Systeme, die exportierte Daten weiterverarbeiten
+
+    **Pflicht-Abschnitte:**
+
+    - CSV-Export: Spaltenreihenfolge, Trennzeichen, Kopfzeile
+    - JSON-Export: Struktur, Paginierung, Metadaten
+    - Excel-Export: Formatierungen, Blattstruktur
+    - PDF-Export: Layout, Schriftarten, Wasserzeichen
+    - Konfigurierbare Ausgabeoptionen (Felder, Filter, Sortierung)
+
+    **Inhaltliche Tiefe:** Pro Format: vollständiges Beispiel der Ausgabe. JSON-Export mit Metadaten-Envelope (`{meta: {}, data: []}`). PDF-Optionen als Konfigurationstabelle.
+
+    **Abgrenzung:** Keine Benutzer-Anleitung zum Export (→ manual/import-export.md), keine Eingabeformate (→ formats/input-formats.md), keine Berichtsformate (→ formats/report-formats.md)
+
+    **Beispiel-Inhalte:** JSON-Ausgabe: `{"meta": {"total": 42, "page": 1}, "data": [{...}]}`; CSV-Header: `id;name;erstellt_am;status`
+
 
 ## Unterstützte Formate
 
@@ -2333,7 +3313,23 @@ TODO: Projektspezifische Formate ergänzen
 
     ("formats/config-files.md", "Konfigurationsdateien", """
 !!! tip "Inhaltsrichtlinie"
-    Alle internen Konfigurationsdateien mit vollständiger Feldreferenz.
+    **Zielgruppe:** Admins und DevOps-Ingenieure, die das System konfigurieren
+
+    **Pflicht-Abschnitte:**
+
+    - Konfigurationsdatei-Hierarchie (System → Umgebung → Benutzer)
+    - YAML-Konfigurationsdatei: Struktur, Schlüssel, Datentypen
+    - Umgebungsvariablen: Namenskonventionen, Priorität gegenüber Dateien
+    - .env-Dateien: Format und Ladereihenfolge
+    - Geheimnis-Management (Secrets, Tokens — nicht im Klartext)
+    - Vollständige Referenztabelle aller Konfigurationsschlüssel
+
+    **Inhaltliche Tiefe:** Jeder Schlüssel mit Typ, Standardwert, Beschreibung und Beispiel. Hierarchie als Diagramm. Umgebungsvariablen-Mapping-Tabelle.
+
+    **Abgrenzung:** Keine Benutzer-Einstellungen (→ manual/settings.md), keine Deployment-Topologie (→ architecture/deployment-architecture.md)
+
+    **Beispiel-Inhalte:** YAML: `database:\n  host: localhost\n  port: 5432\n  name: app_db`; Env-Mapping: `DATABASE_HOST=localhost` überschreibt `database.host`
+
 
 ## Übersicht
 
@@ -2366,7 +3362,22 @@ TODO: Werden Konfigurationsdateien beim Start validiert?
 
     ("formats/database-schema.md", "Datenbank-Schema", """
 !!! tip "Inhaltsrichtlinie"
-    Datenbank-Schema mit ER-Diagramm, Tabellendefinitionen, Indizes, Migrationen.
+    **Zielgruppe:** Backend-Entwickler und Datenbankadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - ER-Diagramm (Entity-Relationship) als Mermaid-Diagramm
+    - Tabellenliste mit Beschreibung und Kardinalitäten
+    - Spaltendefinitionen pro Tabelle (Name, Typ, Nullable, Default, Beschreibung)
+    - Indizes und Constraints (Primary Key, Foreign Key, Unique)
+    - Datenmigrations-Konventionen
+
+    **Inhaltliche Tiefe:** Jede Tabelle vollständig dokumentiert. ER-Diagramm als Mermaid-Code eingebettet. Beziehungen mit Kardinalität (1:n, m:n).
+
+    **Abgrenzung:** Keine Migrationsskripte (→ formats/migration-formats.md), keine DB-Architektur-Entscheidungen (→ architecture/database-architecture.md)
+
+    **Beispiel-Inhalte:** Mermaid-ER-Diagramm mit 3 Tabellen; Tabelle `users`: `id SERIAL PK | email VARCHAR(255) UNIQUE NOT NULL | created_at TIMESTAMP DEFAULT NOW()`
+
 
 ## ER-Diagramm
 
@@ -2394,7 +3405,22 @@ TODO: Alembic, Flyway, Django Migrations — Befehle für Up/Down
 
     ("formats/migration-formats.md", "Migrationsformate", """
 !!! tip "Inhaltsrichtlinie"
-    Formate für Datenbank-Migrationen und Daten-Migration zwischen Versionen.
+    **Zielgruppe:** Entwickler, die Datenbank-Migrationen erstellen und ausführen
+
+    **Pflicht-Abschnitte:**
+
+    - Migrations-Framework (Alembic/Flyway/eigenes) und Konventionen
+    - Dateinamens-Konvention (z.B. `V001__beschreibung.sql`)
+    - Up- und Down-Migration: Struktur und Pflichtinhalte
+    - Daten-Migrationen vs. Schema-Migrationen
+    - Rollback-Strategien und Sicherheitshinweise
+
+    **Inhaltliche Tiefe:** Vollständiges Beispiel einer Up/Down-Migration. Checkliste vor dem Einspielen einer Migration. Namensschema als Regex.
+
+    **Abgrenzung:** Keine Schema-Dokumentation (→ formats/database-schema.md), keine Deployment-Pipeline (→ architecture/deployment-architecture.md)
+
+    **Beispiel-Inhalte:** Up: `ALTER TABLE users ADD COLUMN phone VARCHAR(20);` Down: `ALTER TABLE users DROP COLUMN phone;` Dateiname: `V003__add_phone_to_users.sql`
+
 
 ## Migrations-Dateien
 
@@ -2415,7 +3441,22 @@ TODO: Konvertierung zwischen Format-Versionen
 
     ("formats/log-formats.md", "Protokolle & Log-Formate", """
 !!! tip "Inhaltsrichtlinie"
-    Formate von Log-Dateien, Audit-Logs, Access-Logs.
+    **Zielgruppe:** DevOps-Ingenieure und Entwickler, die Logs auswerten
+
+    **Pflicht-Abschnitte:**
+
+    - Strukturiertes Log-Format (JSON-Lines, Feldnamen, Datentypen)
+    - Log-Level-Definitionen (DEBUG, INFO, WARN, ERROR, FATAL — wann welches?)
+    - Pflichtfelder pro Log-Eintrag (Timestamp, Level, Message, Correlation-ID)
+    - Kontextfelder (User-ID, Request-ID, Service-Name)
+    - Rotation und Retention
+
+    **Inhaltliche Tiefe:** Vollständiger JSON-Lines-Beispieleintrag. Log-Level-Entscheidungsbaum als Tabelle. Felder mit Typ und Beispielwert.
+
+    **Abgrenzung:** Keine Logging-Architektur (→ architecture/logging-architecture.md), keine Monitoring-Dashboards (→ architecture/deployment-architecture.md)
+
+    **Beispiel-Inhalte:** `{"ts":"2025-01-15T10:30:00Z","level":"ERROR","msg":"DB timeout","correlation_id":"abc-123","service":"api","duration_ms":5000}`
+
 
 ## Application-Log
 
@@ -2467,7 +3508,23 @@ TODO: Wie werden Logs rotiert? Aufbewahrungsdauer?
 
     ("formats/api-formats.md", "API-Formate", """
 !!! tip "Inhaltsrichtlinie"
-    Request/Response-Formate, Content-Types, Pagination, Filtering in der API.
+    **Zielgruppe:** Frontend- und Backend-Entwickler, die API-Integrationen bauen
+
+    **Pflicht-Abschnitte:**
+
+    - Request-Format: HTTP-Methoden, Header, Body-Struktur
+    - Response-Format: Envelope-Struktur, Statusfelder, Paginierung
+    - Fehler-Response: Fehlercode-Schema, Fehlerobjekt-Struktur
+    - Authentifizierung: Token-Format, Header-Name
+    - Versionierung der API (URL-Pfad, Header)
+    - Rate-Limiting-Header und Retry-Logik
+
+    **Inhaltliche Tiefe:** Vollständige Beispiele für Request und Response pro Endpunkt-Typ (CRUD). Fehlercode-Tabelle mit HTTP-Status, Code und Beschreibung.
+
+    **Abgrenzung:** Keine Endpunkt-Liste (→ separate API-Referenz), keine Benutzer-Importanleitung (→ manual/import-export.md)
+
+    **Beispiel-Inhalte:** Request: `POST /api/v1/items` mit JSON-Body; Response: `{"status":"ok","data":{...},"meta":{"request_id":"xyz"}}`; Fehler: `{"status":"error","code":"VALIDATION_FAILED","details":[...]}`
+
 
 ## Content-Types
 
@@ -2511,7 +3568,22 @@ TODO: `?fields=id,name,status`
 
     ("formats/template-formats.md", "Template-Formate", """
 !!! tip "Inhaltsrichtlinie"
-    Formate von Templates und Vorlagen: Syntax, Variablen, Vererbung, Beispiele.
+    **Zielgruppe:** Entwickler und Template-Designer, die Vorlagen erstellen
+
+    **Pflicht-Abschnitte:**
+
+    - Template-Engine und Syntax (z.B. Jinja2, Mustache)
+    - Verfügbare Variablen und Kontextobjekte
+    - Kontrollstrukturen (Schleifen, Bedingungen, Filter)
+    - Template-Vererbung und Includes
+    - Dateistruktur und Namenskonvention für Templates
+
+    **Inhaltliche Tiefe:** Syntax-Referenz mit Beispielen für jeden Konstrukt-Typ. Variablen-Tabelle (Name → Typ → Beschreibung → Beispielwert). Vererbungs-Diagramm für Template-Hierarchie.
+
+    **Abgrenzung:** Keine Endanwender-Vorlagen (→ manual/templates-usage.md), keine Berichtsvorlagen (→ formats/report-formats.md)
+
+    **Beispiel-Inhalte:** `{% extends "base.html" %}{% block content %}{{ titel }}{% endblock %}`; Variable: `benutzer.name` (String) → «Max Mustermann»
+
 
 ## Template-Engine
 
@@ -2550,7 +3622,22 @@ TODO: Vollständiges Beispiel eines Custom-Templates
 
     ("formats/plugin-formats.md", "Plugin-Formate", """
 !!! tip "Inhaltsrichtlinie"
-    Plugin-Manifest, Plugin-Verzeichnisstruktur, Schnittstellen-Definition, Lifecycle-Hooks.
+    **Zielgruppe:** Plugin-Entwickler, die Erweiterungen für das System bauen
+
+    **Pflicht-Abschnitte:**
+
+    - Plugin-Manifest-Datei: Struktur, Pflichtfelder, Versionierung
+    - Verzeichnisstruktur eines Plugins
+    - Hook-Definitionen und Event-Bindings
+    - Abhängigkeits-Deklaration
+    - Paketierung und Verteilung (ZIP, Registry)
+
+    **Inhaltliche Tiefe:** Vollständiges Manifest-Beispiel (JSON/YAML). Verzeichnisbaum als ASCII-Diagramm. Hook-Tabelle (Name → Parameter → Rückgabe → Zeitpunkt).
+
+    **Abgrenzung:** Keine Plugin-Architektur (→ architecture/plugin-architecture.md), keine API-Formate (→ formats/api-formats.md)
+
+    **Beispiel-Inhalte:** Manifest: `{"name":"my-plugin","version":"1.0.0","hooks":["before_save","after_delete"],"min_app_version":"3.0"}`; Verzeichnis: `my-plugin/├── manifest.json├── src/└── tests/`
+
 
 ## Plugin-Manifest
 
@@ -2593,7 +3680,22 @@ TODO: Verfügbare APIs und Methoden für Plugin-Entwickler
 
     ("formats/backup-formats.md", "Backup-Formate", """
 !!! tip "Inhaltsrichtlinie"
-    Struktur und Format von Backup-Dateien: Inhalt, Komprimierung, Verschlüsselung, Wiederherstellung.
+    **Zielgruppe:** Admins und DevOps, die Backups erstellen und wiederherstellen
+
+    **Pflicht-Abschnitte:**
+
+    - Backup-Dateiformat: Struktur des Archivs (TAR/ZIP + Metadaten)
+    - Enthaltene Daten: Datenbank-Dump, Dateien, Konfiguration
+    - Metadaten-Datei im Backup (Version, Zeitstempel, Prüfsumme)
+    - Inkrementelle vs. vollständige Backups
+    - Wiederherstellungs-Prozess und Kompatibilitätsprüfung
+
+    **Inhaltliche Tiefe:** Archivstruktur als Verzeichnisbaum. Metadaten-JSON vollständig dokumentiert. Kompatibilitätsmatrix (Backup-Version → App-Version).
+
+    **Abgrenzung:** Keine Backup-Strategie (→ architecture/deployment-architecture.md), keine Datenmigration (→ formats/migration-formats.md)
+
+    **Beispiel-Inhalte:** Archiv: `backup-2025-01-15.tar.gz` enthält `meta.json, db_dump.sql, files/, config/`; meta.json: `{"version":"2.1","created":"2025-01-15T02:00:00Z","checksum":"sha256:abc..."}`
+
 
 ## Backup-Format
 
@@ -2632,7 +3734,22 @@ TODO: Verweis auf [Backup & Recovery](../operations/backup.md)
 
     ("formats/exchange-formats.md", "Austauschformate", """
 !!! tip "Inhaltsrichtlinie"
-    Formate für den Datenaustausch zwischen Systemen: Bulk-Export, Migration, Synchronisation.
+    **Zielgruppe:** Integratoren und Entwickler, die Daten mit Drittsystemen austauschen
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Austauschformate (JSON, XML, CSV, Parquet, protobuf)
+    - Daten-Envelope: Kopfdaten, Nutzdaten, Signaturen
+    - Zeichencodierung, Escape-Regeln, Sonderzeichen
+    - Schema-Validierung (JSON Schema, XSD)
+    - Versionierung und Abwärtskompatibilität
+
+    **Inhaltliche Tiefe:** Pro Format: vollständiges Austauschbeispiel mit Envelope. Schema-Dateien als Referenz verlinkt. Kompatibilitätsregeln als Checkliste.
+
+    **Abgrenzung:** Keine API-Kommunikation (→ formats/api-formats.md), keine Import-Anleitung (→ manual/import-export.md)
+
+    **Beispiel-Inhalte:** JSON-Envelope: `{"header":{"version":"1.0","sender":"erp","timestamp":"..."}, "payload":[...]}`; XSD-Auszug für Validierung
+
 
 ## Standard-Austauschformat
 
@@ -2667,7 +3784,22 @@ TODO: Wie werden verschiedene Versionen des Austauschformats unterschieden?
 
     ("formats/image-formats.md", "Bild- und Medienformate", """
 !!! tip "Inhaltsrichtlinie"
-    Unterstützte Bildformate, Medienformate, Komprimierung, Thumbnails, Konvertierung.
+    **Zielgruppe:** Entwickler und Content-Manager, die Medien verarbeiten
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Bildformate (JPEG, PNG, WebP, SVG, GIF)
+    - Maximale Abmessungen und Dateigrößen
+    - Thumbnail-Generierung: Größen, Qualitätsstufen, Namenskonvention
+    - Metadaten-Behandlung (EXIF, IPTC — Beibehaltung vs. Entfernung)
+    - Video- und Audio-Formate (sofern unterstützt)
+
+    **Inhaltliche Tiefe:** Format-Vergleichstabelle (Format → Transparenz → Animation → Kompression → Einsatzzweck). Thumbnail-Größen als Konfigurationstabelle.
+
+    **Abgrenzung:** Keine Dateiverwaltung (→ manual/file-management.md), keine Ausgabeformat-Spezifikation (→ formats/output-formats.md)
+
+    **Beispiel-Inhalte:** Tabelle: «JPEG → Nein → Nein → Verlustbehaftet → Fotos | PNG → Ja → Nein → Verlustfrei → Screenshots | SVG → Ja → Ja (SMIL) → Vektor → Icons»
+
 
 ## Unterstützte Bildformate
 
@@ -2703,7 +3835,22 @@ TODO: Falls unterstützt — MP4, WebM, MP3, WAV etc.
 
     ("formats/report-formats.md", "Berichtsformate", """
 !!! tip "Inhaltsrichtlinie"
-    Formate für generierte Berichte: PDF-Layout, Excel-Export, HTML-Berichte, Druckoptimierung.
+    **Zielgruppe:** Entwickler und Report-Designer, die Berichtsvorlagen erstellen
+
+    **Pflicht-Abschnitte:**
+
+    - Berichts-Definitionsdatei: Struktur und Felder
+    - Datenquellen-Konfiguration (Abfrage, Parameter, Filter)
+    - Layout-Definition: Kopfzeile, Tabellen, Diagramme, Fußzeile
+    - Ausgabeformate pro Bericht (PDF, Excel, HTML)
+    - Platzhalter und Berechnungsfelder
+
+    **Inhaltliche Tiefe:** Vollständige Berichts-Definitionsdatei als Beispiel. Platzhalter-Syntax und verfügbare Aggregationsfunktionen (SUM, AVG, COUNT).
+
+    **Abgrenzung:** Keine Berichterstellung durch Endanwender (→ manual/reports.md), keine Template-Engine-Syntax (→ formats/template-formats.md)
+
+    **Beispiel-Inhalte:** Definition: `{"title":"Monatsbericht","query":"SELECT ... WHERE monat={{param.monat}}","columns":[{"field":"name","label":"Name"},{"field":"summe","label":"Umsatz","format":"currency"}]}`
+
 
 ## PDF-Berichte
 
@@ -2744,7 +3891,23 @@ TODO: Verweis auf [Template-Formate](template-formats.md)
 
     ("formats/i18n-formats.md", "Internationalisierungs-Formate", """
 !!! tip "Inhaltsrichtlinie"
-    Formate für Übersetzungen und Lokalisierung: Sprachdateien, Formate, Tools.
+    **Zielgruppe:** Entwickler und Übersetzer, die Lokalisierung pflegen
+
+    **Pflicht-Abschnitte:**
+
+    - Übersetzungsdatei-Format (JSON, PO/POT, XLIFF)
+    - Schlüssel-Namenskonvention (hierarchisch, z.B. `module.component.label`)
+    - Pluralisierung und Geschlechterformen
+    - Interpolation und Variablen in Übersetzungen
+    - Fallback-Kette (z.B. de-AT → de → en)
+    - Workflow: Neue Strings hinzufügen, übersetzen, prüfen
+
+    **Inhaltliche Tiefe:** Pro Format: Beispieldatei mit 5 Einträgen inkl. Pluralisierung. Konventionen als strenge Regeln formulieren. Fallback-Kette als Diagramm.
+
+    **Abgrenzung:** Keine UI-Spracheinstellungen (→ manual/settings.md), keine Template-Syntax (→ formats/template-formats.md)
+
+    **Beispiel-Inhalte:** JSON: `{"user.greeting":"Hallo {{name}}","item.count_one":"{{count}} Element","item.count_other":"{{count}} Elemente"}`; PO: `msgid "Save" msgstr "Speichern"`
+
 
 ## Sprachdatei-Format
 
@@ -2798,7 +3961,22 @@ TODO: Disambiguierung gleicher Strings in verschiedenen Kontexten
     # ━━ Architektur ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("architecture/overview.md", "Systemübersicht", """
 !!! tip "Inhaltsrichtlinie"
-    High-Level-Architektur des Gesamtsystems.
+    **Zielgruppe:** Neue Entwickler, Architekten, technische Entscheider
+
+    **Pflicht-Abschnitte:**
+
+    - High-Level-Architekturdiagramm (C4 Level 1: System-Kontext)
+    - Architekturstil (Monolith, Microservices, Modular Monolith)
+    - Zentrale Designprinzipien (max. 5)
+    - Externe Systeme und Abhängigkeiten
+    - Querschnittsthemen (Sicherheit, Logging, Fehlerbehandlung — mit Verweisen)
+
+    **Inhaltliche Tiefe:** Mermaid-Diagramm auf C4-Level 1. Jedes Designprinzip mit Begründung und Konsequenz. Externe Systeme als Tabelle (System → Schnittstelle → Datenrichtung).
+
+    **Abgrenzung:** Keine Komponenten-Details (→ architecture/components.md), keine Technologie-Entscheidungen (→ architecture/tech-stack.md, architecture/decisions.md)
+
+    **Beispiel-Inhalte:** C4-Kontextdiagramm mit Benutzer, System, E-Mail-Server, Dritt-API; Prinzip: «Separation of Concerns — Jede Schicht hat genau eine Verantwortung»
+
 
 ## Systemarchitektur
 
@@ -2845,7 +4023,22 @@ TODO: MVC, Clean Architecture, Hexagonal, Event-driven, CQRS etc.
 
     ("architecture/components.md", "Komponenten", """
 !!! tip "Inhaltsrichtlinie"
-    Detailbeschreibung jeder Hauptkomponente: Verantwortlichkeit, Schnittstellen, Abhängigkeiten.
+    **Zielgruppe:** Entwickler, die die Systemstruktur verstehen müssen
+
+    **Pflicht-Abschnitte:**
+
+    - Komponentendiagramm (C4 Level 2: Container-Diagramm)
+    - Komponentenliste (Name → Verantwortung → Technologie → Repository/Pfad)
+    - Abhängigkeiten zwischen Komponenten (Dependency-Graph)
+    - Schnittstellen der Komponenten (bereitgestellte und benötigte)
+    - Eigentumsmodell (welches Team besitzt welche Komponente)
+
+    **Inhaltliche Tiefe:** Mermaid-Diagramm auf C4-Level 2. Pro Komponente: 2-3 Sätze Beschreibung, Technologie-Stack, Schnittstellen. Abhängigkeitsmatrix als Tabelle.
+
+    **Abgrenzung:** Kein High-Level-Überblick (→ architecture/overview.md), keine Code-Level-Details, keine Deployment-Sicht (→ architecture/deployment-architecture.md)
+
+    **Beispiel-Inhalte:** Container-Diagramm: Web-App → API-Gateway → Backend-Service → Datenbank; Tabelle: «Auth-Service → Authentifizierung und Autorisierung → Go → /services/auth»
+
 
 ## Komponentendiagramm
 
@@ -2878,7 +4071,22 @@ TODO: ...
 
     ("architecture/data-flow.md", "Datenfluss", """
 !!! tip "Inhaltsrichtlinie"
-    Wie fließen Daten durch das System? Sequenzdiagramme typischer Abläufe.
+    **Zielgruppe:** Entwickler und Architekten, die den Datenfluss nachvollziehen müssen
+
+    **Pflicht-Abschnitte:**
+
+    - Datenflussdiagramm (Sequenz- oder Flussdiagramm)
+    - Haupt-Datenströme: Benutzer-Request, Batch-Verarbeitung, Event-Verarbeitung
+    - Datentransformation an jeder Station (Eingabe → Verarbeitung → Ausgabe)
+    - Datenvalidierung und -anreicherung
+    - Datensenken und -quellen (extern und intern)
+
+    **Inhaltliche Tiefe:** Mindestens 3 Hauptflüsse als Sequenzdiagramme (Mermaid). Pro Fluss: beteiligte Komponenten, Datenformat an jeder Schnittstelle, Fehlerfluss.
+
+    **Abgrenzung:** Keine Komponentenbeschreibung (→ architecture/components.md), keine DB-Schema-Details (→ formats/database-schema.md), keine Caching-Details (→ architecture/caching.md)
+
+    **Beispiel-Inhalte:** Sequenzdiagramm: Browser → API-Gateway → Auth → Service → DB → Response; Annotation: «Validierung in Service-Layer, Enrichment mit User-Kontext»
+
 
 ## Datenfluss-Übersicht
 
@@ -2916,7 +4124,21 @@ TODO: Falls Event-driven: Welche Events, Queues, Topics?
 
     ("architecture/decisions.md", "Entscheidungslog (ADR)", """
 !!! tip "Inhaltsrichtlinie"
-    Architecture Decision Records: Wichtige Designentscheidungen mit Kontext und Begründung.
+    **Zielgruppe:** Architekten und Tech-Leads, die Entscheidungen nachvollziehen wollen
+
+    **Pflicht-Abschnitte:**
+
+    - ADR-Format-Erklärung (Architecture Decision Records)
+    - ADR-Index (Tabelle: Nummer → Titel → Status → Datum)
+    - Pro ADR: Kontext, Entscheidung, Konsequenzen, Status
+    - Abgelöste/veraltete Entscheidungen kennzeichnen
+
+    **Inhaltliche Tiefe:** ADR-Template mit allen Feldern. Mindestens 3 Beispiel-ADRs (z.B. Datenbankwahl, API-Stil, Auth-Strategie). Status-Werte: Vorgeschlagen, Akzeptiert, Veraltet, Abgelöst.
+
+    **Abgrenzung:** Keine Implementierungsdetails (→ architecture/components.md), keine Tech-Stack-Auflistung (→ architecture/tech-stack.md)
+
+    **Beispiel-Inhalte:** ADR-001: «PostgreSQL als primäre Datenbank — Kontext: Bedarf an JSONB-Unterstützung und starke Konsistenz — Entscheidung: PostgreSQL 15 — Konsequenz: Kein nativer Volltext-Suchindex → ElasticSearch ergänzen»
+
 
 ## Format
 
@@ -2942,7 +4164,22 @@ Jede Entscheidung im ADR-Format:
 
     ("architecture/tech-stack.md", "Technologie-Stack", """
 !!! tip "Inhaltsrichtlinie"
-    Alle verwendeten Technologien mit Version, Zweck und Begründung.
+    **Zielgruppe:** Neue Entwickler, Architekten, Management
+
+    **Pflicht-Abschnitte:**
+
+    - Technologie-Stack-Übersicht als Schichtdiagramm (Frontend → Backend → Datenbank → Infrastruktur)
+    - Pro Technologie: Name, Version, Einsatzzweck, Lizenz
+    - Programmiersprachen und Frameworks
+    - Externe Services und SaaS-Abhängigkeiten
+    - Entwicklungs-Tooling (IDE, Linter, Formatter, CI/CD)
+
+    **Inhaltliche Tiefe:** Vollständige Tabelle aller Technologien mit Versionspinning. Begründung für jede Haupttechnologie (Kurzform, Verweis auf ADR für Details).
+
+    **Abgrenzung:** Keine Architekturbegründungen (→ architecture/decisions.md), keine Deployment-Konfiguration (→ architecture/deployment-architecture.md)
+
+    **Beispiel-Inhalte:** Tabelle: «Python 3.11 → Backend-Logik → MIT | React 18 → Frontend-UI → MIT | PostgreSQL 15 → Datenbank → PostgreSQL License»; Schichtdiagramm als Mermaid-Block
+
 
 ## Übersicht
 
@@ -2992,7 +4229,24 @@ TODO: Welche Technologien werden evaluiert, eingeführt, beibehalten oder abgel�
 
     ("architecture/security-architecture.md", "Sicherheitsarchitektur", """
 !!! tip "Inhaltsrichtlinie"
-    Sicherheitsaspekte der Architektur: Authentifizierung, Autorisierung, Verschlüsselung, Trust Boundaries.
+    **Zielgruppe:** Security-Engineers, Architekten, Auditoren
+
+    **Pflicht-Abschnitte:**
+
+    - Sicherheitsmodell im Überblick (Defense in Depth, Zero Trust)
+    - Authentifizierung: Verfahren, Token-Handling, Session-Management
+    - Autorisierung: RBAC/ABAC-Modell, Berechtigungsregeln
+    - Datenverschlüsselung: at rest, in transit, Schlüsselmanagement
+    - Eingabevalidierung und Output-Encoding (XSS, SQLi, CSRF)
+    - Sicherheitsrelevante Header und CORS-Konfiguration
+    - Schwachstellen-Management und Dependency-Scanning
+
+    **Inhaltliche Tiefe:** RBAC-Matrix vollständig abbilden. Verschlüsselungsalgorithmen mit Schlüssellänge angeben. OWASP Top 10 als Checkliste mit Maßnahmen.
+
+    **Abgrenzung:** Keine Benutzerrollen-Verwaltung (→ manual/multi-user.md), keine Config-Secrets (→ formats/config-files.md)
+
+    **Beispiel-Inhalte:** Auth-Flow als Sequenzdiagramm (Login → Token → Refresh); RBAC-Matrix: «Rolle admin → /api/users: CRUD | Rolle viewer → /api/users: R»; Encryption: AES-256-GCM at rest, TLS 1.3 in transit
+
 
 ## Trust Boundaries
 
@@ -3041,7 +4295,23 @@ TODO: Sicherheitsrelevante Events, Verweis auf [Audit](../compliance/audit.md)
 
     ("architecture/scalability.md", "Skalierung & Performance", """
 !!! tip "Inhaltsrichtlinie"
-    Skalierungsstrategien, Engpässe, Caching, horizontale/vertikale Skalierung.
+    **Zielgruppe:** Architekten, DevOps-Ingenieure, technische Entscheider
+
+    **Pflicht-Abschnitte:**
+
+    - Skalierungsstrategie (horizontal vs. vertikal)
+    - Stateless-Design und Session-Management
+    - Datenbank-Skalierung (Read-Replicas, Sharding, Connection-Pooling)
+    - Lastverteilung (Load Balancer, Health Checks)
+    - Performance-Kennzahlen und SLOs (Latenz, Throughput)
+    - Bottleneck-Analyse und Kapazitätsplanung
+
+    **Inhaltliche Tiefe:** Skalierungsdiagramm für 10x/100x Last. SLO-Tabelle (Metrik → Zielwert → Messmethode). Bottleneck-Analyse als Flowchart.
+
+    **Abgrenzung:** Keine Caching-Details (→ architecture/caching.md), keine Queue-Architektur (→ architecture/queue-architecture.md), keine Deployment-Topologie (→ architecture/deployment-architecture.md)
+
+    **Beispiel-Inhalte:** Diagramm: 1 Server → 3 Server + LB → DB-Replikat; SLO: «P95 Latenz < 200ms bei 1000 req/s»; Bottleneck: «DB-Verbindungslimit bei >500 concurrent»
+
 
 ## Aktuelle Kapazitäten
 
@@ -3086,7 +4356,23 @@ TODO: Wo sind die Grenzen? Was ist der Flaschenhals?
 
     ("architecture/error-handling.md", "Fehlerbehandlungsstrategie", """
 !!! tip "Inhaltsrichtlinie"
-    Systemweite Fehlerbehandlung: Exception-Hierarchie, Error Boundaries, Retry, Circuit Breaker.
+    **Zielgruppe:** Backend-Entwickler, die einheitliche Fehlerbehandlung implementieren
+
+    **Pflicht-Abschnitte:**
+
+    - Fehlerbehandlungs-Strategie und Grundsätze
+    - Fehler-Hierarchie (Exception-Klassen, Fehlertypen)
+    - Fehler-Propagation durch die Schichten (Service → Controller → Client)
+    - Fehler-Response-Format (→ Verweis auf formats/api-formats.md)
+    - Retry-Strategien und Circuit-Breaker
+    - Fehler-Logging und -Monitoring (Korrelation mit Request-ID)
+
+    **Inhaltliche Tiefe:** Exception-Hierarchie als Baumdiagramm. Pro Fehlertyp: HTTP-Status, interner Code, Logging-Level, Benutzer-Nachricht. Retry-Konfiguration als Tabelle (Fehlertyp → Max-Retries → Backoff).
+
+    **Abgrenzung:** Keine Log-Formate (→ formats/log-formats.md), keine API-Fehlerresponse-Spezifikation (→ formats/api-formats.md)
+
+    **Beispiel-Inhalte:** Hierarchie: `AppError → ValidationError, NotFoundError, AuthError`; Mapping: `NotFoundError → 404 → ERR_NOT_FOUND → ERROR-Level → ‹Ressource nicht gefunden›`
+
 
 ## Exception-Hierarchie
 
@@ -3132,7 +4418,23 @@ TODO: Mapping von technischen Fehlern auf verständliche Meldungen
 
     ("architecture/caching.md", "Caching-Architektur", """
 !!! tip "Inhaltsrichtlinie"
-    Caching-Strategien: Ebenen, Invalidierung, Cache-Aside, Write-Through, TTL.
+    **Zielgruppe:** Backend-Entwickler und Performance-Engineers
+
+    **Pflicht-Abschnitte:**
+
+    - Caching-Strategie: Welche Daten werden gecacht (und welche nicht)
+    - Cache-Schichten (Browser-Cache, CDN, Application-Cache, DB-Cache)
+    - Cache-Invalidierung: Strategien (TTL, Event-basiert, manuell)
+    - Cache-Schlüssel-Design und Namenskonventionen
+    - Technologie (Redis, Memcached, In-Memory) und Konfiguration
+    - Monitoring: Cache-Hit-Rate, Speicherverbrauch
+
+    **Inhaltliche Tiefe:** Cache-Schichten als Diagramm. Entscheidungstabelle: Datentyp → Cachebar? → TTL → Invalidierungs-Trigger. Schlüssel-Beispiele: `user:{id}:profile`, `query:{hash}`.
+
+    **Abgrenzung:** Keine Performance-Skalierung (→ architecture/scalability.md), keine Datenfluss-Details (→ architecture/data-flow.md)
+
+    **Beispiel-Inhalte:** Schichten: Browser (Cache-Control) → CDN (Varnish) → Redis → PostgreSQL; Entscheidung: «Benutzerprofil → Ja → TTL 5min → Invalidierung bei PUT /users/{id}»
+
 
 ## Cache-Ebenen
 
@@ -3173,7 +4475,23 @@ TODO: Cache-Backend (Redis, Memcached, In-Memory), TTL-Defaults
 
     ("architecture/event-system.md", "Event-System", """
 !!! tip "Inhaltsrichtlinie"
-    Event-Architektur: Event-Typen, Bus/Queue, Publisher/Subscriber, Ordering, Idempotenz.
+    **Zielgruppe:** Backend-Entwickler, die Events publizieren oder konsumieren
+
+    **Pflicht-Abschnitte:**
+
+    - Event-Driven-Architektur: Grundprinzipien und Einsatzzweck
+    - Event-Typen und Namenskonventionen (Domain-Events, Integration-Events)
+    - Event-Schema: Pflichtfelder (event_type, timestamp, source, payload)
+    - Event-Bus/Broker: Technologie und Konfiguration
+    - Event-Handler: Registrierung, Reihenfolge, Fehlerbehandlung
+    - Idempotenz und Exactly-Once-Semantik
+
+    **Inhaltliche Tiefe:** Event-Katalog als Tabelle (Event → Auslöser → Payload-Felder → Konsumenten). Vollständiges Event-JSON-Beispiel. Idempotenz-Strategien erklären.
+
+    **Abgrenzung:** Keine Queue-Infrastruktur (→ architecture/queue-architecture.md), keine Benachrichtigungen (→ manual/notifications.md)
+
+    **Beispiel-Inhalte:** Event: `{"type":"user.created","ts":"...","source":"auth-service","payload":{"user_id":123,"email":"..."}}`; Katalog: «user.created → Registrierung → E-Mail-Service, Analytics-Service»
+
 
 ## Architektur
 
@@ -3224,7 +4542,23 @@ TODO: Was passiert mit Events die nicht verarbeitet werden können?
 
     ("architecture/deployment-architecture.md", "Deployment-Architektur", """
 !!! tip "Inhaltsrichtlinie"
-    Deployment-Topologie: Zielplattformen, Container-Orchestrierung, Netzwerk-Layout, Umgebungen.
+    **Zielgruppe:** DevOps-Ingenieure und Systemadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - Deployment-Topologie (Diagramm: Server, Container, Netzwerk-Zonen)
+    - Umgebungen: Entwicklung, Staging, Produktion (Vergleichstabelle)
+    - Container-Orchestrierung (Docker Compose, Kubernetes)
+    - CI/CD-Pipeline: Stufen, Gates, Rollback
+    - Netzwerk-Architektur (VPC, Subnetze, Firewalls, Reverse-Proxy)
+    - Monitoring und Alerting (Prometheus, Grafana, PagerDuty)
+
+    **Inhaltliche Tiefe:** Deployment-Diagramm als Mermaid. CI/CD-Pipeline als Stufendiagramm (Build → Test → Deploy → Smoke-Test). Umgebungs-Matrix (Umgebung → Server → Replicas → Ressourcen).
+
+    **Abgrenzung:** Keine Anwendungs-Architektur (→ architecture/overview.md), keine Konfigurationsdateien (→ formats/config-files.md)
+
+    **Beispiel-Inhalte:** Topologie: Internet → Load Balancer → 3x App-Container → DB-Primary + Read-Replica; Pipeline: «GitHub Push → Lint → Unit-Tests → Build Image → Deploy Staging → Integration-Tests → Deploy Prod»
+
 
 ## Deployment-Diagramm
 
@@ -3280,7 +4614,23 @@ TODO: Kubernetes Manifeste, Helm Charts, Docker Compose Files
 
     ("architecture/testing-architecture.md", "Test-Architektur", """
 !!! tip "Inhaltsrichtlinie"
-    Test-Strategie auf Architektur-Ebene: Testpyramide, Testbarkeit, Dependency Injection, Mocking.
+    **Zielgruppe:** Entwickler und QA-Engineers, die Tests schreiben und pflegen
+
+    **Pflicht-Abschnitte:**
+
+    - Teststrategie und Testpyramide (Unit → Integration → E2E)
+    - Test-Frameworks und -Tools pro Schicht
+    - Testdaten-Management (Fixtures, Factories, Faker)
+    - Mocking-Strategie (externe Services, Datenbank)
+    - Code-Coverage-Ziele und -Messung
+    - CI-Integration: Wann welche Tests laufen
+
+    **Inhaltliche Tiefe:** Testpyramide als Diagramm mit prozentualer Verteilung. Pro Test-Schicht: Framework, Ausführungszeit, Beispiel. Coverage-Tabelle (Modul → Ist → Soll).
+
+    **Abgrenzung:** Keine Deployment-Pipeline (→ architecture/deployment-architecture.md), keine Fehlerbehandlungs-Tests (→ architecture/error-handling.md)
+
+    **Beispiel-Inhalte:** Pyramide: «Unit 70% (pytest, <1s) | Integration 20% (testcontainers, <30s) | E2E 10% (Playwright, <2min)»; Fixture: `@pytest.fixture def sample_user(): return User(name="Test")`
+
 
 ## Test-Pyramide
 
@@ -3321,7 +4671,23 @@ TODO: Verweis auf [CI/CD](../development/ci-cd.md)
 
     ("architecture/logging-architecture.md", "Logging-Architektur", """
 !!! tip "Inhaltsrichtlinie"
-    Logging-Architektur: Logger-Hierarchie, Sink-Konfiguration, Korrelation, Performance.
+    **Zielgruppe:** Entwickler und DevOps, die das Logging-System implementieren oder nutzen
+
+    **Pflicht-Abschnitte:**
+
+    - Logging-Architektur: Übersicht (Applikation → Aggregator → Speicher → Dashboard)
+    - Strukturiertes Logging: Warum und wie
+    - Correlation-ID-Propagation über Service-Grenzen
+    - Log-Aggregation (ELK, Loki, CloudWatch)
+    - Log-Retention und -Rotation
+    - Sensitive Daten in Logs vermeiden (PII-Filterung)
+
+    **Inhaltliche Tiefe:** Architektur-Diagramm der Log-Pipeline. Correlation-ID-Propagation als Sequenzdiagramm. PII-Filter-Regeln als Tabelle.
+
+    **Abgrenzung:** Keine Log-Format-Spezifikation (→ formats/log-formats.md), keine Monitoring-Infrastruktur (→ architecture/deployment-architecture.md)
+
+    **Beispiel-Inhalte:** Pipeline: App → Filebeat → Elasticsearch → Kibana; Correlation: «Request-Header X-Correlation-ID → in jedem Log-Eintrag → bis zum DB-Query»; PII-Filter: «Feld ‹email› → maskiert als ‹m***@x.de›»
+
 
 ## Logger-Hierarchie
 
@@ -3370,7 +4736,23 @@ TODO: Async-Logging, Buffering, Sampling bei hohem Volumen
 
     ("architecture/plugin-architecture.md", "Plugin-Architektur", """
 !!! tip "Inhaltsrichtlinie"
-    Technische Architektur des Plugin-Systems: Lade-Mechanismus, Isolation, API, Lifecycle.
+    **Zielgruppe:** Plugin-Entwickler und Core-Architekten
+
+    **Pflicht-Abschnitte:**
+
+    - Plugin-System-Architektur: Host-App, Plugin-API, Sandbox
+    - Lifecycle: Laden, Initialisieren, Aktivieren, Deaktivieren, Entfernen
+    - Extension Points: Wo können Plugins einhaken (Hook-Katalog)
+    - Sicherheitsmodell: Berechtigungen, Sandbox-Grenzen
+    - Versioning und Kompatibilität (SemVer, Min/Max-App-Version)
+    - Plugin-Registry und Verteilung
+
+    **Inhaltliche Tiefe:** Lifecycle als Zustandsdiagramm (Mermaid). Hook-Katalog als vollständige Tabelle. Sandbox-Regeln als Checkliste.
+
+    **Abgrenzung:** Keine Plugin-Manifest-Formate (→ formats/plugin-formats.md), keine Event-Architektur (→ architecture/event-system.md)
+
+    **Beispiel-Inhalte:** Lifecycle: `Discovered → Loaded → Initialized → Active → Disabled → Unloaded`; Hook: «before_save(entity) → kann Validierung hinzufügen oder abbrechen»; Sandbox: «Kein Zugriff auf Dateisystem, nur zugewiesene API-Endpunkte»
+
 
 ## Architektur-Übersicht
 
@@ -3420,7 +4802,23 @@ TODO: Welche APIs stehen Plugins zur Verfügung?
 
     ("architecture/queue-architecture.md", "Queue- & Async-Architektur", """
 !!! tip "Inhaltsrichtlinie"
-    Asynchrone Verarbeitung: Worker, Queues, Job-Scheduling, Retry, Dead-Letter.
+    **Zielgruppe:** Backend-Entwickler, die asynchrone Verarbeitung implementieren
+
+    **Pflicht-Abschnitte:**
+
+    - Einsatzzweck asynchroner Verarbeitung (Wann Queue statt synchron?)
+    - Queue-Technologie (RabbitMQ, Redis Streams, Celery, SQS)
+    - Queue-Topologie: Exchanges, Queues, Routing-Keys
+    - Worker-Architektur: Concurrency, Prefetch, Acknowledge
+    - Dead-Letter-Queue und Fehlerbehandlung
+    - Monitoring: Queue-Länge, Consumer-Lag, Verarbeitungszeit
+
+    **Inhaltliche Tiefe:** Topologie-Diagramm (Mermaid). Pro Queue: Name, Routing-Key, Consumer, Retry-Policy, DLQ. Worker-Konfiguration als Code-Beispiel.
+
+    **Abgrenzung:** Keine Event-Architektur (→ architecture/event-system.md), keine Skalierung (→ architecture/scalability.md)
+
+    **Beispiel-Inhalte:** Topologie: Producer → Exchange (topic) → Queue «email-send» → Worker; DLQ: «Nach 3 Retries mit exponentiellem Backoff → dead-letter-email-send»; Worker: `@celery.task(max_retries=3, default_retry_delay=60)`
+
 
 ## Architektur
 
@@ -3470,7 +4868,23 @@ TODO: Queue-Länge, Durchsatz, Fehlerrate, Worker-Status
 
     ("architecture/database-architecture.md", "Datenbank-Architektur", """
 !!! tip "Inhaltsrichtlinie"
-    Datenbank-Designentscheidungen: Normalisierung, Indizierung, Partitionierung, Replikation.
+    **Zielgruppe:** Backend-Entwickler und Datenbankadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - Datenbank-Technologien im Einsatz (relational, NoSQL, Suchindex)
+    - Datenbank-Topologie (Primary, Replicas, Shards)
+    - Connection-Management (Pooling, Connection-Limits)
+    - ORM/Query-Builder-Strategie und Konventionen
+    - Backup- und Recovery-Strategie
+    - Performance-Optimierung (Indizes, Query-Analyse, EXPLAIN)
+
+    **Inhaltliche Tiefe:** Topologie-Diagramm (Primary → Replicas → Failover). Connection-Pool-Konfiguration als Tabelle. Index-Strategie: Wann welcher Index-Typ (B-Tree, GIN, GiST).
+
+    **Abgrenzung:** Kein DB-Schema (→ formats/database-schema.md), keine Migrationen (→ formats/migration-formats.md), keine Skalierung (→ architecture/scalability.md)
+
+    **Beispiel-Inhalte:** Topologie: «PostgreSQL Primary (Write) → 2 Read-Replicas (async) → Redis (Session-Cache) → Elasticsearch (Volltextsuche)»; Pool: «min=5, max=20, idle_timeout=300s, max_lifetime=1800s»; Index: «B-Tree auf FK-Spalten, GIN auf JSONB-Felder»
+
 
 ## Design-Prinzipien
 
@@ -3508,7 +4922,22 @@ TODO: Verweis auf [Migrationsformate](../formats/migration-formats.md)
     # ━━ API-Referenz ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("api/overview.md", "API-Referenz — Übersicht", """
 !!! tip "Inhaltsrichtlinie"
-    Einstieg in die API-Dokumentation: Base URL, Versioning, Konventionen.
+    **Zielgruppe:** Backend-Entwickler, Frontend-Entwickler, externe API-Konsumenten
+
+    **Pflicht-Abschnitte:**
+
+    - Base-URL und Umgebungen (Production, Staging, Development)
+    - Versionierungsschema (URL-Pfad vs. Header)
+    - Allgemeine Konventionen (JSON, UTC-Zeitstempel, Pagination, Sortierung)
+    - Content-Type und Accept-Header
+    - Authentifizierungs-Kurzübersicht mit Verweis auf Detailseite
+    - Schnellstart-Beispiel (ein vollständiger Request/Response-Zyklus)
+
+    **Inhaltliche Tiefe:** Kompakte Übersicht, die in 5 Minuten lesbar ist. Jede Konvention mit kurzem Code-Beispiel belegen. Tabelle für Umgebungs-URLs.
+
+    **Abgrenzung:** Keine vollständigen Endpunkt-Beschreibungen (→ api/endpoints.md), keine Auth-Details (→ api/authentication.md), kein Changelog (→ api/api-changelog.md).
+
+    **Beispiel-Inhalte:** Tabelle mit Base-URLs pro Umgebung, cURL-Beispiel für einen GET-Request mit API-Key-Header, JSON-Response-Beispiel mit Pagination-Metadaten.
 
 ## Übersicht
 
@@ -3540,7 +4969,22 @@ TODO: https://api.example.com/v1
 
     ("api/endpoints.md", "API-Endpunkte", """
 !!! tip "Inhaltsrichtlinie"
-    Alle Endpunkte mit Methode, Pfad, Parametern, Request/Response-Beispielen.
+    **Zielgruppe:** Entwickler, die konkrete API-Aufrufe implementieren
+
+    **Pflicht-Abschnitte:**
+
+    - Endpunkt-Übersichtstabelle (Method, Path, Kurzbeschreibung)
+    - Detailbeschreibung pro Endpunkt: HTTP-Methode, Pfad, Path-/Query-/Body-Parameter
+    - Request-Beispiel (cURL oder HTTP-Raw)
+    - Response-Beispiel (JSON mit Statuscodes)
+    - Fehler-Responses pro Endpunkt
+    - Paginierung und Filter-Optionen
+
+    **Inhaltliche Tiefe:** Vollständige Referenz. Jeder Parameter mit Typ, Required-Flag, Default-Wert und Beschreibung. Mindestens ein Request/Response-Paar pro Endpunkt.
+
+    **Abgrenzung:** Keine Erklärung der Datenmodelle (→ api/models.md), keine Fehlercode-Gesamtliste (→ api/errors.md), keine Auth-Flows (→ api/authentication.md).
+
+    **Beispiel-Inhalte:** `GET /api/v1/users?page=1&limit=20` mit vollständiger Parametertabelle, cURL-Beispiel, JSON-Response mit 200 und 404-Fehlerfall.
 
 ## Endpunkt-Übersicht
 
@@ -3562,7 +5006,21 @@ Für jeden Endpunkt:
 
     ("api/models.md", "Datenmodelle", """
 !!! tip "Inhaltsrichtlinie"
-    Alle API-Datenmodelle/Schemas mit Feldern, Typen, Validierung und Beispielen.
+    **Zielgruppe:** Entwickler, die Request-/Response-Objekte parsen oder generieren
+
+    **Pflicht-Abschnitte:**
+
+    - Übersicht aller Datenmodelle (Tabelle: Name, Beschreibung, verwendet in)
+    - Detailschema pro Modell: Feldname, Typ, Required, Beschreibung, Constraints
+    - Verschachtelte Objekte und Referenzen zwischen Modellen
+    - Enumerations und erlaubte Werte
+    - Nullable-Felder und Defaults
+
+    **Inhaltliche Tiefe:** Vollständige Schema-Dokumentation. JSON-Schema-Notation oder Tabellen mit allen Feldern. Beispiel-JSON pro Modell.
+
+    **Abgrenzung:** Keine Endpunkt-Logik (→ api/endpoints.md), keine Datenbank-Schemas (→ development/database-guide.md).
+
+    **Beispiel-Inhalte:** Modell `User` mit Feldern id (integer, required), email (string, required, format: email), role (enum: admin|user|viewer), created_at (string, ISO 8601). Dazu ein vollständiges JSON-Beispiel.
 
 ## Modelle
 
@@ -3582,7 +5040,22 @@ TODO: Alle Enum-Typen mit möglichen Werten
 
     ("api/authentication.md", "Authentifizierung", """
 !!! tip "Inhaltsrichtlinie"
-    Authentifizierungsmethoden, Token-Management, Rollen und Berechtigungen.
+    **Zielgruppe:** Entwickler, die API-Zugriff absichern oder konsumieren
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Auth-Methoden (API-Key, Bearer Token, OAuth2)
+    - Token-Erstellung und -Erneuerung (Schritt-für-Schritt)
+    - Token-Lebensdauer und Refresh-Flow
+    - Header-Format und Beispiele
+    - Berechtigungen und Scopes
+    - Fehler bei ungültiger Authentifizierung (401, 403)
+
+    **Inhaltliche Tiefe:** Vollständige Anleitung mit Sequenzdiagramm für OAuth2-Flow. Jede Auth-Methode mit konkretem cURL-Beispiel. Tabelle der Scopes.
+
+    **Abgrenzung:** Keine SSO-Konfiguration (→ integrations/sso.md), keine Endpunkt-Details (→ api/endpoints.md).
+
+    **Beispiel-Inhalte:** cURL mit Bearer-Token-Header, OAuth2 Authorization-Code-Flow-Diagramm, Tabelle: Scope `read:users` → erlaubt GET /users.
 
 ## Authentifizierungsmethode
 
@@ -3613,7 +5086,21 @@ TODO: Wie lange gültig? Refresh-Token?
 
     ("api/errors.md", "Fehlerbehandlung", """
 !!! tip "Inhaltsrichtlinie"
-    HTTP-Statuscodes, Fehlercodes, Retry-Strategien, Client-Beispiele.
+    **Zielgruppe:** Entwickler, die Fehlerbehandlung implementieren
+
+    **Pflicht-Abschnitte:**
+
+    - HTTP-Statuscodes und ihre Bedeutung im API-Kontext
+    - Fehler-Response-Format (JSON-Struktur)
+    - Anwendungsspezifische Fehlercodes (Tabelle: Code, Bedeutung, Lösung)
+    - Validierungsfehler-Format (Feld-Level-Fehler)
+    - Retry-Strategien pro Fehlertyp
+
+    **Inhaltliche Tiefe:** Jeder Fehlercode mit Beschreibung, möglicher Ursache und empfohlener Lösung. JSON-Beispiel pro Fehlerkategorie.
+
+    **Abgrenzung:** Keine Endpunkt-spezifischen Fehler (→ api/endpoints.md), keine Rate-Limit-Details (→ api/rate-limiting.md).
+
+    **Beispiel-Inhalte:** JSON `{"error": {"code": "VALIDATION_ERROR", "message": "...", "details": [{"field": "email", "reason": "invalid_format"}]}}`, Tabelle mit 400/401/403/404/409/422/429/500 und jeweiliger Handlungsempfehlung.
 
 ## Fehlerformat
 
@@ -3650,7 +5137,21 @@ TODO: Welche Fehler mit Retry? Exponentielles Backoff?
 
     ("api/rate-limiting.md", "Rate Limiting", """
 !!! tip "Inhaltsrichtlinie"
-    Anfragelimits, Quotas, Header, Strategien bei Limit-Überschreitung.
+    **Zielgruppe:** Entwickler und Ops-Teams, die API-Nutzung planen
+
+    **Pflicht-Abschnitte:**
+
+    - Rate-Limit-Regeln (Requests pro Zeitfenster, pro Endpunkt/global)
+    - Response-Header (X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset)
+    - Verhalten bei Überschreitung (429-Response, Retry-After)
+    - Quotas für verschiedene API-Tiers/Pläne
+    - Best Practices: Backoff-Strategien, Request-Bündelung
+
+    **Inhaltliche Tiefe:** Konkrete Zahlen pro Tier. Code-Beispiel für exponentiellen Backoff. Tabelle mit allen Rate-Limit-Headern.
+
+    **Abgrenzung:** Keine allgemeine Fehlerbehandlung (→ api/errors.md), keine Batch-Optimierung (→ api/batch-operations.md).
+
+    **Beispiel-Inhalte:** Tabelle: Free-Tier 100 req/min, Pro 1000 req/min. Python-Beispiel mit `time.sleep()` und Retry-Logik. Header-Beispiel: `X-RateLimit-Remaining: 42`.
 
 ## Limits
 
@@ -3690,7 +5191,22 @@ TODO: Welche Fehler mit Retry? Exponentielles Backoff?
 
     ("api/webhooks.md", "Webhooks & Events", """
 !!! tip "Inhaltsrichtlinie"
-    Event-basierte Benachrichtigungen: Webhook-Konfiguration, Events, Payload, Retry, Sicherheit.
+    **Zielgruppe:** Entwickler, die auf API-Events reagieren möchten
+
+    **Pflicht-Abschnitte:**
+
+    - Verfügbare Event-Typen (Tabelle: Event, Beschreibung, Payload)
+    - Webhook-Registrierung (API-Endpunkt oder UI)
+    - Payload-Format und Signatur-Verifizierung (HMAC)
+    - Retry-Verhalten bei fehlgeschlagener Zustellung
+    - Best Practices: Idempotenz, Timeout-Handling
+    - Webhook-Debugging und Logs
+
+    **Inhaltliche Tiefe:** Vollständiges Payload-Beispiel pro Event-Typ. Code-Beispiel für HMAC-Verifizierung in Python und Node.js.
+
+    **Abgrenzung:** Keine Integration in externe Systeme (→ integrations/webhooks.md), keine WebSocket-Echtzeit-Events (→ api/websockets.md).
+
+    **Beispiel-Inhalte:** Event `user.created` mit JSON-Payload, Python-Code für `hmac.compare_digest()`, Sequenzdiagramm: API → Webhook-Endpoint → Bestätigung.
 
 ## Übersicht
 
@@ -3734,7 +5250,21 @@ TODO: Wie oft wird bei Fehler wiederholt? Zeitabstände? Dead-Letter?
 
     ("api/versioning.md", "API-Versionierung", """
 !!! tip "Inhaltsrichtlinie"
-    Versionierungsstrategie, Deprecation-Policy, Migration zwischen Versionen.
+    **Zielgruppe:** API-Konsumenten und API-Maintainer
+
+    **Pflicht-Abschnitte:**
+
+    - Versionierungsstrategie (URL-Pfad, Header, Query-Parameter)
+    - Semantic Versioning und Breaking-Change-Definition
+    - Deprecation-Policy (Zeiträume, Kommunikation)
+    - Migration zwischen Versionen (Leitfaden)
+    - Sunset-Header und -Prozess
+
+    **Inhaltliche Tiefe:** Klare Regeln, was als Breaking Change gilt. Timeline-Beispiel für Deprecation. Konkrete Migrations-Checkliste.
+
+    **Abgrenzung:** Kein Changelog (→ api/api-changelog.md), keine Endpunkt-Details (→ api/endpoints.md).
+
+    **Beispiel-Inhalte:** Tabelle: v1 (stable), v2 (current), v3 (beta). Beispiel: `Accept: application/vnd.api.v2+json`. Deprecation-Timeline: Ankündigung → 6 Monate → Sunset.
 
 ## Strategie
 
@@ -3766,7 +5296,22 @@ TODO: Anleitungen für Migration von v(n) auf v(n+1)
 
     ("api/sdks.md", "SDKs & Client-Bibliotheken", """
 !!! tip "Inhaltsrichtlinie"
-    Offizielle und Community-Client-Bibliotheken für verschiedene Sprachen.
+    **Zielgruppe:** Entwickler, die offizielle Client-Bibliotheken nutzen
+
+    **Pflicht-Abschnitte:**
+
+    - Verfügbare SDKs (Sprache, Version, Repository-Link)
+    - Installation pro SDK (pip, npm, gem etc.)
+    - Schnellstart-Beispiel pro SDK
+    - Konfiguration (Base-URL, Auth, Timeouts)
+    - Fehlerbehandlung im SDK
+    - Community-SDKs (nicht offiziell unterstützt)
+
+    **Inhaltliche Tiefe:** Mindestens ein vollständiges Beispiel pro SDK (Initialisierung, API-Aufruf, Fehlerbehandlung). Versionskompatibilitäts-Matrix.
+
+    **Abgrenzung:** Keine rohen HTTP-Beispiele (→ api/examples.md), keine API-Referenz (→ api/endpoints.md).
+
+    **Beispiel-Inhalte:** Python: `pip install myapi-sdk`, `client = MyAPI(api_key='...')`, `users = client.users.list()`. Tabelle: Python 3.8+, Node.js 16+, Go 1.19+.
 
 ## Offizielle SDKs
 
@@ -3807,7 +5352,22 @@ TODO: Wie hängen SDK-Versionen mit API-Versionen zusammen?
 
     ("api/examples.md", "API-Beispiele", """
 !!! tip "Inhaltsrichtlinie"
-    Praxisnahe Beispiele: cURL, Python, JavaScript für typische API-Workflows.
+    **Zielgruppe:** Entwickler aller Erfahrungsstufen, die schnell starten wollen
+
+    **Pflicht-Abschnitte:**
+
+    - cURL-Beispiele (CRUD-Operationen)
+    - Python-Beispiele (requests-Bibliothek)
+    - JavaScript-Beispiele (fetch/axios)
+    - Häufige Workflows (z. B. Datei hochladen, Pagination durchlaufen)
+    - Fehlerbehandlungs-Beispiele
+    - Copy-Paste-fähige Code-Blöcke
+
+    **Inhaltliche Tiefe:** Jedes Beispiel vollständig lauffähig. Kommentare im Code erklären jeden Schritt. Mindestens 3 Sprachen.
+
+    **Abgrenzung:** Keine SDK-spezifischen Beispiele (→ api/sdks.md), keine Endpunkt-Referenz (→ api/endpoints.md).
+
+    **Beispiel-Inhalte:** cURL: `curl -H 'Authorization: Bearer TOKEN' https://api.example.com/v1/users`, Python: vollständiges Skript mit Error-Handling, JS: async/await fetch-Beispiel.
 
 ## Schnellstart
 
@@ -3867,8 +5427,24 @@ curl "https://api.example.com/v1/resources?page=2&per_page=20"
 
     ("api/graphql.md", "GraphQL API", """
 !!! tip "Inhaltsrichtlinie"
-    GraphQL-Endpunkt: Schema, Queries, Mutations, Subscriptions, Playground.
-    Nur relevant falls die Anwendung eine GraphQL-API anbietet.
+    **Zielgruppe:** Entwickler, die den GraphQL-Endpunkt nutzen
+
+    **Pflicht-Abschnitte:**
+
+    - GraphQL-Endpunkt-URL und Playground/Explorer
+    - Schema-Übersicht (Types, Queries, Mutations, Subscriptions)
+    - Authentifizierung für GraphQL-Requests
+    - Query-Beispiele mit Variablen
+    - Mutation-Beispiele
+    - Fehlerbehandlung im GraphQL-Kontext
+    - Pagination (Cursor-basiert, Relay-Style)
+    - Rate-Limiting und Query-Komplexität
+
+    **Inhaltliche Tiefe:** Vollständige Type-Definitionen. Mindestens 5 Query-Beispiele mit Variablen und Response.
+
+    **Abgrenzung:** Keine REST-Endpunkte (→ api/endpoints.md), keine allgemeine Auth-Doku (→ api/authentication.md).
+
+    **Beispiel-Inhalte:** Query `{ users(first: 10) { edges { node { id name } } } }`, Mutation `createUser(input: {...})`, Fehler-Response mit `errors`-Array und `extensions`.
 
 ## Endpunkt
 
@@ -3931,8 +5507,22 @@ TODO: Bearer Token im Header, wie bei REST-API
 
     ("api/websockets.md", "WebSocket API", """
 !!! tip "Inhaltsrichtlinie"
-    WebSocket-Endpunkte: Verbindungsaufbau, Nachrichtenformate, Events, Reconnection.
-    Nur relevant falls die Anwendung WebSockets nutzt.
+    **Zielgruppe:** Entwickler, die Echtzeit-Kommunikation implementieren
+
+    **Pflicht-Abschnitte:**
+
+    - WebSocket-Endpunkt-URL und Verbindungsaufbau
+    - Authentifizierung (Token im Query-String oder erste Nachricht)
+    - Nachrichtenformate (JSON-Struktur pro Event-Typ)
+    - Verfügbare Channels/Topics und Subscription-Mechanismus
+    - Heartbeat/Ping-Pong und Reconnect-Strategien
+    - Beispiel-Implementierungen (Python, JS)
+
+    **Inhaltliche Tiefe:** Vollständiger Connection-Lifecycle mit Sequenzdiagramm. Code-Beispiel für Verbindung, Subscription und Nachrichtenverarbeitung.
+
+    **Abgrenzung:** Keine Webhook-Konfiguration (→ api/webhooks.md), keine REST-Endpunkte (→ api/endpoints.md).
+
+    **Beispiel-Inhalte:** JS: `new WebSocket('wss://api.example.com/ws?token=...')`, Nachrichtenformat `{"type": "subscribe", "channel": "updates"}`, Reconnect-Code mit exponential Backoff.
 
 ## Verbindungsaufbau
 
@@ -3977,7 +5567,22 @@ TODO: Ping/Pong Intervall, Timeout-Erkennung
 
     ("api/batch-operations.md", "Batch-Operationen", """
 !!! tip "Inhaltsrichtlinie"
-    Bulk/Batch-API: Mehrere Operationen in einem Request, Transaktionsverhalten, Limits.
+    **Zielgruppe:** Entwickler, die Massen-Operationen effizient durchführen
+
+    **Pflicht-Abschnitte:**
+
+    - Batch-Endpunkt und Request-Format
+    - Maximale Batch-Größe und Limits
+    - Atomarität (alles-oder-nichts vs. partial success)
+    - Response-Format (Status pro Operation)
+    - Asynchrone Batch-Jobs (Job-ID, Polling, Callback)
+    - Fehlerbehandlung bei Teil-Fehlschlägen
+
+    **Inhaltliche Tiefe:** Vollständiges Request/Response-Beispiel. Entscheidungsbaum: wann Batch vs. Einzel-Requests.
+
+    **Abgrenzung:** Keine Einzelendpunkte (→ api/endpoints.md), keine Rate-Limits (→ api/rate-limiting.md).
+
+    **Beispiel-Inhalte:** POST `/api/v1/batch` mit Body `{"operations": [{"method": "POST", "path": "/users", "body": {...}}, ...]}`, Response mit `results`-Array und Status pro Operation.
 
 ## Batch-Endpunkt
 
@@ -4028,7 +5633,21 @@ TODO: Was passiert wenn eine Operation fehlschlägt?
 
     ("api/api-changelog.md", "API-Changelog", """
 !!! tip "Inhaltsrichtlinie"
-    Änderungshistorie der API: Neue Endpunkte, Breaking Changes, Deprecations pro Version.
+    **Zielgruppe:** Alle API-Konsumenten, Release-Manager
+
+    **Pflicht-Abschnitte:**
+
+    - Änderungshistorie (chronologisch, neueste zuerst)
+    - Pro Eintrag: Datum, Version, Art der Änderung, betroffene Endpunkte
+    - Breaking Changes hervorgehoben (Warnung/Admonition)
+    - Deprecation-Hinweise mit Sunset-Datum
+    - Migrationstipps für Breaking Changes
+
+    **Inhaltliche Tiefe:** Jeder Eintrag klar kategorisiert (Added, Changed, Deprecated, Removed, Fixed). Kurzbeschreibung plus Link zur Detaildoku.
+
+    **Abgrenzung:** Keine Versionierungs-Strategie (→ api/versioning.md), keine vollständigen Endpunkt-Beschreibungen (→ api/endpoints.md).
+
+    **Beispiel-Inhalte:** `## 2024-03-15 — v2.3.0`, `### Added`, `- POST /api/v1/exports — Neuer Export-Endpunkt`, `### Breaking`, `- ⚠️ Field 'name' in User-Modell umbenannt zu 'display_name'`.
 
 ## Aktuell
 
@@ -4065,7 +5684,23 @@ TODO: Welche Endpunkte/Felder sind deprecated? Bis wann verfügbar?
 
     ("api/file-upload.md", "Datei-Upload API", """
 !!! tip "Inhaltsrichtlinie"
-    Datei-Upload via API: Multipart, Chunked Upload, Presigned URLs, Limits.
+    **Zielgruppe:** Entwickler, die Datei-Uploads implementieren
+
+    **Pflicht-Abschnitte:**
+
+    - Upload-Endpunkt und HTTP-Methode
+    - Multipart/form-data-Format
+    - Erlaubte Dateitypen und Größenlimits
+    - Chunked Upload für große Dateien
+    - Upload-Fortschritt und Resumable Uploads
+    - Datei-Metadaten und Response-Format
+    - Virenscanning und Validierung
+
+    **Inhaltliche Tiefe:** Vollständige cURL- und Python-Beispiele. Sequenzdiagramm für Chunked Upload.
+
+    **Abgrenzung:** Keine Speicher-Konfiguration (→ integrations/storage.md), keine allgemeine Endpunkt-Referenz (→ api/endpoints.md).
+
+    **Beispiel-Inhalte:** cURL: `curl -F 'file=@report.pdf' -F 'folder_id=123' ...`, Tabelle: max 100 MB, erlaubt: pdf/png/jpg/xlsx, Chunked-Upload-Sequenz: initiate → upload parts → complete.
 
 ## Einfacher Upload
 
@@ -4112,7 +5747,23 @@ TODO: Direkt-Upload zu S3/Storage ohne Umweg über API-Server
 
     ("api/search-api.md", "Such-API", """
 !!! tip "Inhaltsrichtlinie"
-    Such-Endpunkt: Volltextsuche, Filter, Facetten, Highlighting, Autocomplete.
+    **Zielgruppe:** Entwickler, die Suchfunktionalität integrieren
+
+    **Pflicht-Abschnitte:**
+
+    - Such-Endpunkt und Query-Syntax
+    - Suchbare Felder und Filter-Optionen
+    - Volltextsuche vs. strukturierte Suche
+    - Sortierung und Relevanz-Scoring
+    - Facetten und Aggregationen
+    - Pagination der Suchergebnisse
+    - Suchvorschläge (Autocomplete)
+
+    **Inhaltliche Tiefe:** Query-Syntax vollständig dokumentiert. Mindestens 5 Suchbeispiele mit Filtern. Response-Format mit Score.
+
+    **Abgrenzung:** Keine Suchmaschinen-Konfiguration (→ integrations/search-engine.md), keine allgemeine API-Referenz (→ api/endpoints.md).
+
+    **Beispiel-Inhalte:** `GET /api/v1/search?q=report&type=document&date_from=2024-01-01`, Response mit `hits`, `total_count`, `facets`. Autocomplete: `GET /api/v1/search/suggest?q=rep`.
 
 ## Endpunkt
 
@@ -4166,8 +5817,22 @@ TODO: Boolesche Operatoren, Phrasensuche, Wildcards, Fuzzy
 
     ("api/admin-api.md", "Admin-API", """
 !!! tip "Inhaltsrichtlinie"
-    API-Endpunkte für Administration: Benutzerverwaltung, Systemstatus, Konfiguration.
-    Nur mit Admin-Berechtigung zugänglich.
+    **Zielgruppe:** Systemadministratoren und DevOps-Ingenieure
+
+    **Pflicht-Abschnitte:**
+
+    - Admin-Endpunkte-Übersicht (nur mit Admin-Rechten zugänglich)
+    - Benutzerverwaltung (CRUD, Rollen zuweisen)
+    - Systemkonfiguration über API
+    - Audit-Log-Abfragen
+    - Lizenz- und Quota-Verwaltung
+    - Sicherheitshinweise für Admin-Endpoints
+
+    **Inhaltliche Tiefe:** Jeder Admin-Endpunkt mit Berechtigungsanforderungen. Warnung bei destruktiven Operationen. Vollständige Request/Response-Beispiele.
+
+    **Abgrenzung:** Keine Standard-API-Endpunkte (→ api/endpoints.md), keine operative Sicherheit (→ operations/security.md).
+
+    **Beispiel-Inhalte:** `DELETE /api/v1/admin/users/42` mit Bestätigungsheader, `GET /api/v1/admin/audit-log?action=login&from=2024-01-01`, Tabelle der Admin-Scopes.
 
 ## Authentifizierung
 
@@ -4229,7 +5894,21 @@ GET /api/v1/admin/audit?from=2024-01-01&to=2024-01-31
 
     ("api/health-api.md", "Health & Status API", """
 !!! tip "Inhaltsrichtlinie"
-    Health-Check-Endpunkte für Monitoring, Load Balancer, Kubernetes Probes.
+    **Zielgruppe:** Ops-Teams, Monitoring-Systeme, Load Balancer
+
+    **Pflicht-Abschnitte:**
+
+    - Health-Check-Endpunkte (Liveness, Readiness, Startup)
+    - Response-Format und Statuscodes (200 vs. 503)
+    - Detaillierter Health-Status (Datenbank, Cache, externe Dienste)
+    - Konfiguration für Kubernetes-Probes
+    - Metriken-Endpunkt (Prometheus-kompatibel)
+
+    **Inhaltliche Tiefe:** Vollständige Response-Beispiele für healthy und unhealthy. Kubernetes-YAML-Snippet für Probe-Konfiguration.
+
+    **Abgrenzung:** Keine Monitoring-Einrichtung (→ operations/monitoring.md), keine allgemeine API-Referenz (→ api/endpoints.md).
+
+    **Beispiel-Inhalte:** `GET /health` → `{"status": "ok", "checks": {"db": "ok", "cache": "ok"}}`, `GET /health/ready` → 503 bei DB-Ausfall, Kubernetes: `livenessProbe: httpGet: path: /health port: 8080`.
 
 ## Endpunkte
 
@@ -4309,7 +5988,21 @@ readinessProbe:
     # ━━ Integrationen ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("integrations/overview.md", "Integrationen — Überblick", """
 !!! tip "Inhaltsrichtlinie"
-    Übersicht aller verfügbaren Integrationen mit Drittanbieter-Systemen.
+    **Zielgruppe:** Architekten, Entwickler, Ops-Teams
+
+    **Pflicht-Abschnitte:**
+
+    - Übersicht aller verfügbaren Integrationen (Tabelle mit Status)
+    - Kategorisierung (Authentifizierung, CI/CD, Speicher, Messaging etc.)
+    - Allgemeine Integrations-Architektur (Diagramm)
+    - Voraussetzungen und Kompatibilitätsmatrix
+    - Schnellstart-Links zu den Einzelseiten
+
+    **Inhaltliche Tiefe:** Navigationsseite mit kurzem Absatz pro Integration. Architekturdiagramm zeigt Datenflüsse zwischen Systemen.
+
+    **Abgrenzung:** Keine Detail-Konfiguration (→ jeweilige Unterseiten), keine API-Endpunkte (→ api/endpoints.md).
+
+    **Beispiel-Inhalte:** Tabelle: Integration | Typ | Status (✓/Beta/Planned), Mermaid-Diagramm mit System → Integration → Externer Dienst, Links: 'SSO einrichten → integrations/sso.md'.
 
 ## Verfügbare Integrationen
 
@@ -4327,7 +6020,22 @@ TODO: Wie werden Integrationen technisch angebunden? (API, Plugins, Webhooks, Me
 
     ("integrations/sso.md", "SSO / LDAP / OAuth", """
 !!! tip "Inhaltsrichtlinie"
-    Single Sign-On Anbindung: LDAP, SAML, OAuth2, OpenID Connect.
+    **Zielgruppe:** IT-Admins, Security-Ingenieure
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Protokolle: LDAP, SAML 2.0, OAuth2, OpenID Connect
+    - Konfiguration pro Protokoll (Schritt-für-Schritt)
+    - Identity Provider Setup (Keycloak, Azure AD, Okta etc.)
+    - Attribut-Mapping (User-Felder, Gruppen, Rollen)
+    - Fallback-Authentifizierung und lokale Konten
+    - Troubleshooting häufiger SSO-Probleme
+
+    **Inhaltliche Tiefe:** Vollständige Konfigurationsbeispiele pro Protokoll. Screenshots oder YAML-Snippets für IdP-Setup. Debug-Checkliste.
+
+    **Abgrenzung:** Keine API-Token-Auth (→ api/authentication.md), keine Netzwerk-Konfiguration (→ operations/network.md).
+
+    **Beispiel-Inhalte:** SAML-Config: `sso.saml.entity_id`, `sso.saml.metadata_url`, LDAP: `ldap.base_dn: 'dc=example,dc=com'`, Troubleshooting: 'SAML-Response ungültig → Zertifikat prüfen'.
 
 ## Unterstützte Protokolle
 
@@ -4353,7 +6061,22 @@ TODO: Häufige SSO-Probleme und Lösungen
 
     ("integrations/ci-cd.md", "CI/CD-Integration", """
 !!! tip "Inhaltsrichtlinie"
-    Integration in CI/CD-Pipelines: GitHub Actions, GitLab CI, Jenkins.
+    **Zielgruppe:** DevOps-Ingenieure, Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte CI/CD-Systeme (Jenkins, GitLab CI, GitHub Actions, etc.)
+    - Pipeline-Integration (API-Trigger, Webhooks, CLI)
+    - Konfigurations-Beispiele pro CI/CD-System
+    - Umgebungsvariablen und Secrets-Management
+    - Artefakt-Handling (Upload, Download, Versionierung)
+    - Status-Reporting (Commit-Status, PR-Checks)
+
+    **Inhaltliche Tiefe:** Mindestens ein vollständiges Pipeline-Beispiel pro System. YAML-Snippets für GitHub Actions und GitLab CI.
+
+    **Abgrenzung:** Keine interne CI/CD-Pipeline-Doku (→ development/ci-cd.md), keine Deployment-Strategien (→ operations/deployment.md).
+
+    **Beispiel-Inhalte:** GitHub Actions Workflow mit API-Aufruf, GitLab CI `.gitlab-ci.yml`-Stage, Jenkins Pipeline-Script mit `httpRequest`-Step.
 
 ## GitHub Actions
 
@@ -4397,7 +6120,22 @@ TODO: Jenkinsfile-Beispiel
 
     ("integrations/webhooks.md", "Webhook-Integrationen", """
 !!! tip "Inhaltsrichtlinie"
-    Webhook-Anbindung an externe Dienste: Slack, Teams, Jira, E-Mail.
+    **Zielgruppe:** Entwickler und Integrations-Architekten
+
+    **Pflicht-Abschnitte:**
+
+    - Webhook-Anbindung an externe Systeme (Slack, Teams, Jira etc.)
+    - Konfiguration der Webhook-Ziel-URLs
+    - Payload-Transformation und Mapping
+    - Sicherheit: Secret-Verifizierung, IP-Whitelisting
+    - Monitoring und Fehlerbehandlung bei Zustellung
+    - Vorgefertigte Integrations-Templates
+
+    **Inhaltliche Tiefe:** Schritt-für-Schritt-Anleitung pro Zielsystem. Mapping-Tabelle: internes Event → externes Format.
+
+    **Abgrenzung:** Keine API-Webhook-Definition (→ api/webhooks.md), keine Message-Queue-Integration (→ integrations/messaging.md).
+
+    **Beispiel-Inhalte:** Slack-Webhook: URL eintragen, Payload-Format für Slack-Blocks, Jira-Webhook: Issue erstellen bei Event `ticket.created`, Test-Funktion: `POST /api/v1/webhooks/test`.
 
 ## Slack
 
@@ -4422,7 +6160,22 @@ TODO: Verweis auf [API-Webhooks](../api/webhooks.md)
 
     ("integrations/third-party.md", "Drittanbieter-Integrationen", """
 !!! tip "Inhaltsrichtlinie"
-    Integration mit häufig genutzten externen Diensten und Tools.
+    **Zielgruppe:** Entwickler, Architekten, Projektleiter
+
+    **Pflicht-Abschnitte:**
+
+    - Übersicht unterstützter Drittanbieter-Dienste
+    - Konfiguration pro Dienst (API-Keys, Endpoints, Optionen)
+    - Datenfluss und Synchronisierung
+    - Authentifizierung gegenüber Drittanbietern (OAuth2, API-Keys)
+    - Fehlerbehandlung bei Drittanbieter-Ausfällen
+    - Datenschutz und Compliance-Hinweise
+
+    **Inhaltliche Tiefe:** Pro Dienst: Zweck, Konfiguration, Datenfluss-Diagramm. Fallback-Verhalten bei Ausfall dokumentieren.
+
+    **Abgrenzung:** Keine SSO-Details (→ integrations/sso.md), keine Monitoring-Tools (→ integrations/monitoring.md).
+
+    **Beispiel-Inhalte:** Stripe-Integration: API-Key konfigurieren, Webhook für Payment-Events, Datenfluss-Diagramm, Fehler: 'Stripe nicht erreichbar → Retry-Queue aktiviert'.
 
 ## Cloud-Dienste
 
@@ -4450,7 +6203,22 @@ TODO: PagerDuty, Opsgenie, etc.
 
     ("integrations/monitoring.md", "Monitoring-Integration", """
 !!! tip "Inhaltsrichtlinie"
-    Integration mit Monitoring-Systemen: Prometheus, Grafana, Datadog, CloudWatch.
+    **Zielgruppe:** Ops-Teams, SREs, DevOps-Ingenieure
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Monitoring-Systeme (Prometheus, Grafana, Datadog, etc.)
+    - Metriken-Export-Konfiguration
+    - Verfügbare Metriken (Tabelle: Name, Typ, Beschreibung)
+    - Dashboard-Vorlagen und Import-Anleitung
+    - Alert-Integration (PagerDuty, OpsGenie, E-Mail)
+    - Tracing-Integration (Jaeger, Zipkin, OpenTelemetry)
+
+    **Inhaltliche Tiefe:** Vollständige Konfigurationsbeispiele. Grafana-Dashboard-JSON zum Import. Prometheus-Scrape-Config.
+
+    **Abgrenzung:** Keine Alert-Regeln-Definition (→ operations/monitoring-alerts.md), keine interne Monitoring-Strategie (→ operations/monitoring.md).
+
+    **Beispiel-Inhalte:** Prometheus: `scrape_configs: - job_name: 'myapp' static_configs: - targets: ['localhost:8080']`, Grafana-Dashboard-Screenshot-Beschreibung, Metriken-Tabelle: `http_requests_total` (counter), `request_duration_seconds` (histogram).
 
 ## Prometheus
 
@@ -4498,7 +6266,22 @@ TODO: Dashboard-Import, vorgefertigte Dashboards
 
     ("integrations/storage.md", "Externe Speicherdienste", """
 !!! tip "Inhaltsrichtlinie"
-    Anbindung externer Speicherdienste: S3, GCS, Azure Blob, MinIO, lokales Dateisystem.
+    **Zielgruppe:** Ops-Teams, Backend-Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Speicherdienste (S3, MinIO, Azure Blob, GCS)
+    - Konfiguration pro Anbieter (Credentials, Bucket, Region)
+    - Datei-Management (Upload, Download, Löschen)
+    - Verschlüsselung (at-rest, in-transit)
+    - Lifecycle-Policies (Archivierung, automatisches Löschen)
+    - Lokaler Speicher als Fallback
+
+    **Inhaltliche Tiefe:** Vollständige Konfigurationsbeispiele pro Anbieter. Entscheidungshilfe: welcher Anbieter wann.
+
+    **Abgrenzung:** Keine Backup-Strategie (→ integrations/backup-services.md, operations/backup.md), keine Datei-Upload-API (→ api/file-upload.md).
+
+    **Beispiel-Inhalte:** S3-Config: `storage.type: s3`, `storage.bucket: my-bucket`, `storage.region: eu-central-1`, MinIO: `storage.endpoint: https://minio.local:9000`.
 
 ## Unterstützte Backends
 
@@ -4540,7 +6323,22 @@ TODO: Daten von einem Backend zum anderen verschieben
 
     ("integrations/messaging.md", "Message Queue Integration", """
 !!! tip "Inhaltsrichtlinie"
-    Integration mit Message-Queue-Systemen: RabbitMQ, Redis Pub/Sub, Kafka, SQS.
+    **Zielgruppe:** Backend-Entwickler, Architekten
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Message-Broker (RabbitMQ, Kafka, Redis Pub/Sub, NATS)
+    - Konfiguration pro Broker (Connection-String, Credentials)
+    - Queue-/Topic-Konfiguration
+    - Nachrichtenformat und Serialisierung
+    - Dead-Letter-Queues und Fehlerbehandlung
+    - Skalierung und Partitionierung
+
+    **Inhaltliche Tiefe:** Vollständige Konfiguration pro Broker. Architekturdiagramm mit Producer/Consumer-Muster.
+
+    **Abgrenzung:** Keine Webhook-Konfiguration (→ integrations/webhooks.md), keine E-Mail-Versand (→ integrations/email.md).
+
+    **Beispiel-Inhalte:** RabbitMQ: `messaging.broker: amqp://user:pass@localhost:5672`, Kafka: `messaging.bootstrap_servers: ['kafka:9092']`, Nachrichtenformat: `{"event": "user.created", "data": {...}, "timestamp": "..."}`.
 
 ## Unterstützte Systeme
 
@@ -4577,7 +6375,22 @@ TODO: Queue-Länge, Consumer-Lag, Dead-Letter-Queue
 
     ("integrations/database.md", "Externe Datenbanken", """
 !!! tip "Inhaltsrichtlinie"
-    Anbindung verschiedener Datenbank-Systeme: PostgreSQL, MySQL, SQLite, MongoDB.
+    **Zielgruppe:** Backend-Entwickler, DBAs, Ops-Teams
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Datenbanken (PostgreSQL, MySQL, MongoDB, Redis)
+    - Connection-String-Format und Konfiguration
+    - Connection-Pooling-Einstellungen
+    - SSL/TLS-Verbindung konfigurieren
+    - Read-Replicas und Failover
+    - Migrationstool-Konfiguration
+
+    **Inhaltliche Tiefe:** Vollständige Connection-Beispiele pro Datenbank. Performance-Tuning-Tipps für Connection-Pools.
+
+    **Abgrenzung:** Keine Schema-Design-Richtlinien (→ development/database-guide.md), keine Migrations-Anleitung (→ development/migration-writing.md), keine Backup-Strategien (→ operations/backup.md).
+
+    **Beispiel-Inhalte:** PostgreSQL: `database.url: postgresql://user:pass@host:5432/dbname`, Pool: `database.pool_size: 20, database.max_overflow: 10`, SSL: `database.ssl_mode: verify-full, database.ssl_ca: /path/to/ca.pem`.
 
 ## Unterstützte Datenbanken
 
@@ -4612,7 +6425,22 @@ TODO: Read-Replicas konfigurieren, Routing (Schreiben → Primary, Lesen → Rep
 
     ("integrations/email.md", "E-Mail-Integration", """
 !!! tip "Inhaltsrichtlinie"
-    E-Mail-Versand: SMTP-Konfiguration, Templates, Transaktions-E-Mails, Newsletter.
+    **Zielgruppe:** Backend-Entwickler, Ops-Teams
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte E-Mail-Dienste (SMTP, SendGrid, SES, Mailgun)
+    - SMTP-Konfiguration (Host, Port, TLS, Credentials)
+    - API-basierter Versand (Konfiguration pro Anbieter)
+    - E-Mail-Templates und Variablen
+    - Bounce-Handling und Zustellüberwachung
+    - Rate-Limits und Queuing
+
+    **Inhaltliche Tiefe:** Vollständige SMTP-Konfiguration. Beispiel-Template mit Variablen-Platzhaltern. Test-Anleitung.
+
+    **Abgrenzung:** Keine Benachrichtigungs-Logik (→ api/webhooks.md), keine Message-Queue-Details (→ integrations/messaging.md).
+
+    **Beispiel-Inhalte:** SMTP: `email.host: smtp.gmail.com`, `email.port: 587`, `email.tls: true`, SES: `email.provider: ses, email.region: eu-west-1`, Template: `Hallo {{user.name}}, Ihr Passwort wurde geändert.`
 
 ## SMTP-Konfiguration
 
@@ -4655,7 +6483,22 @@ TODO: Max. E-Mails pro Stunde/Tag, Queue
 
     ("integrations/search-engine.md", "Suchmaschinen-Integration", """
 !!! tip "Inhaltsrichtlinie"
-    Integration mit dedizierten Suchmaschinen: Elasticsearch, Meilisearch, Typesense, Solr.
+    **Zielgruppe:** Backend-Entwickler, Ops-Teams
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Suchmaschinen (Elasticsearch, OpenSearch, MeiliSearch, Typesense)
+    - Verbindungs-Konfiguration (Host, Port, Credentials, Index-Prefix)
+    - Index-Management (Erstellung, Mapping, Reindexierung)
+    - Synchronisierung: Datenbank → Suchindex
+    - Analyzer- und Tokenizer-Konfiguration (Sprachen, Stemming)
+    - Performance-Tuning (Shards, Replicas, Caching)
+
+    **Inhaltliche Tiefe:** Vollständige Index-Mapping-Beispiele. Synchronisierungs-Strategien (Echtzeit vs. Batch).
+
+    **Abgrenzung:** Keine Such-API-Endpunkte (→ api/search-api.md), keine CDN-Konfiguration (→ integrations/cdn.md).
+
+    **Beispiel-Inhalte:** Elasticsearch: `search.hosts: ['https://es:9200']`, Index-Mapping: `{"properties": {"title": {"type": "text", "analyzer": "german"}}}`, Reindex-Befehl: `POST /api/v1/admin/reindex`.
 
 ## Unterstützte Engines
 
@@ -4695,7 +6538,22 @@ TODO: Feld-Mapping, Analyser, Synonyme, Stoppwörter
 
     ("integrations/cdn.md", "CDN-Integration", """
 !!! tip "Inhaltsrichtlinie"
-    Content Delivery Network: Konfiguration, Cache-Regeln, Invalidierung, Kosten.
+    **Zielgruppe:** Ops-Teams, Frontend-Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte CDN-Anbieter (CloudFront, Cloudflare, Fastly, Bunny)
+    - CDN-Konfiguration (Origin, Cache-Regeln, TTL)
+    - Cache-Invalidierung (API, CLI, automatisch bei Deploy)
+    - Custom-Domain und SSL-Zertifikate
+    - Asset-Optimierung (Kompression, Bildformate)
+    - Geo-Routing und Failover
+
+    **Inhaltliche Tiefe:** Konfigurationsbeispiel pro Anbieter. Cache-Strategie-Entscheidungsbaum.
+
+    **Abgrenzung:** Keine Netzwerk-Konfiguration (→ operations/network.md), keine Speicher-Konfiguration (→ integrations/storage.md).
+
+    **Beispiel-Inhalte:** CloudFront: Distribution-Config mit Origin-Settings, Cache-Behavior: `*.js → max-age=31536000`, `*.html → max-age=300`, Invalidierung: `aws cloudfront create-invalidation --paths '/*'`.
 
 ## Unterstützte CDNs
 
@@ -4732,7 +6590,22 @@ TODO: Kostenfaktoren, Monitoring, Optimierung
 
     ("integrations/backup-services.md", "Backup-Dienste", """
 !!! tip "Inhaltsrichtlinie"
-    Integration mit Backup-Diensten: automatische Backups zu S3, GCS, Restic, Borg.
+    **Zielgruppe:** Ops-Teams, Systemadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Backup-Dienste (AWS Backup, Restic, Velero, BorgBackup)
+    - Konfiguration pro Dienst (Ziel-Speicher, Credentials, Zeitplan)
+    - Backup-Umfang (Datenbank, Dateien, Konfiguration)
+    - Verschlüsselung und Aufbewahrungsrichtlinien
+    - Restore-Test-Anleitung
+    - Monitoring und Alerting bei Backup-Fehlern
+
+    **Inhaltliche Tiefe:** Vollständige Konfiguration pro Dienst. Cron-Ausdruck-Beispiele. Restore-Checkliste.
+
+    **Abgrenzung:** Keine Backup-Strategie-Entscheidung (→ operations/backup.md), keine Speicher-Konfiguration (→ integrations/storage.md).
+
+    **Beispiel-Inhalte:** Restic: `backup.type: restic`, `backup.repo: s3:s3.amazonaws.com/backup-bucket`, Zeitplan: `backup.schedule: '0 2 * * *'` (täglich 02:00), Aufbewahrung: `backup.retention: {daily: 7, weekly: 4, monthly: 12}`.
 
 ## Unterstützte Dienste
 
@@ -4769,7 +6642,22 @@ TODO: Backup auswählen, Restore-Befehl, Verifizierung
     # ━━ Developer Guide (auto-generiert) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("generated/developer/index.md", "Developer Guide", """
 !!! tip "Inhaltsrichtlinie"
-    Auto-generierte technische Dokumentation: Klassen, Module, Diagramme.
+    **Zielgruppe:** Entwickler, Architekten, neue Teammitglieder (technisch)
+
+    **Pflicht-Abschnitte:**
+
+    - Überblick der automatisch generierten Developer-Dokumentation
+    - Verzeichnis aller Unterbereiche (Klassen, Module, Diagramme) mit Kurzbeschreibung
+    - Generierungsprozess: welches Tool, wann wird aktualisiert, Trigger (CI/manuell)
+    - Hinweis auf manuelle Ergänzungen vs. generierte Inhalte
+    - Quick-Links zu den wichtigsten Klassen und Modulen
+    - Versionsinformation: aus welchem Code-Stand generiert
+
+    **Inhaltliche Tiefe:** Navigationsseite mit klarer Struktur; kurze Beschreibung je Unterbereich; Verlinkung zu Quellcode-Repository; Generierungszeitstempel
+
+    **Abgrenzung:** Keine vollständige Klassen-Doku → `generated/developer/classes/`; keine Architekturentscheidungen → `architecture/decisions/`
+
+    **Beispiel-Inhalte:** Struktur: Klassen (42 dokumentiert) | Module (12 dokumentiert) | Diagramme (8 generiert); Generiert am: 2025-01-15 aus Commit abc1234
 
 ## Abschnitte
 
@@ -4782,23 +6670,83 @@ Dieser Bereich wird automatisch aus dem Quellcode generiert.
 
     ("generated/developer/classes/index.md", "Klassen", """
 !!! tip "Inhaltsrichtlinie"
-    Auto-generierte Dokumentation aller Klassen: Konstruktor, Methoden, Vererbung, Verwendungsbeispiele.
+    **Zielgruppe:** Entwickler, Code-Reviewer, Architekten
+
+    **Pflicht-Abschnitte:**
+
+    - Alphabetische Liste aller dokumentierten Klassen
+    - Gruppierung nach Modul/Package (z.B. auth, core, api, models)
+    - Je Klasse: Kurzname, vollständiger Pfad, Ein-Satz-Beschreibung
+    - Vererbungshierarchie (Basisklassen und abgeleitete Klassen)
+    - Filtermöglichkeit nach Modul oder Funktionsbereich
+    - Verlinkung zur Detail-Seite jeder Klasse
+
+    **Inhaltliche Tiefe:** Index-Ebene: keine vollständige API-Doku, sondern Übersicht und Navigation; Klassen-Anzahl und Abdeckungsgrad; Hinweis auf undokumentierte Klassen
+
+    **Abgrenzung:** Keine vollständige Methoden-Dokumentation → Klassen-Detailseiten; keine Module-Übersicht → `generated/developer/modules/index.md`
+
+    **Beispiel-Inhalte:** Tabelle: Klasse | Modul | Beschreibung; z.B. `UserService` | `auth` | „Verwaltung von Benutzerkonten und Authentifizierung"
 """),
 
     ("generated/developer/modules/index.md", "Module", """
 !!! tip "Inhaltsrichtlinie"
-    Auto-generierte Dokumentation aller Module: Zweck, Schnittstelle, Abhängigkeiten, Konfiguration.
+    **Zielgruppe:** Entwickler, Architekten, neue Teammitglieder (technisch)
+
+    **Pflicht-Abschnitte:**
+
+    - Liste aller Module/Packages mit Kurzbeschreibung
+    - Abhängigkeitsgraph zwischen Modulen (textuell oder als Diagramm-Verweis)
+    - Je Modul: Name, Zweck, öffentliche API-Oberfläche, Anzahl Klassen/Funktionen
+    - Schichtung: welche Module auf welcher Ebene liegen (Presentation, Business, Data)
+    - Verlinkung zur Detail-Seite jedes Moduls
+
+    **Inhaltliche Tiefe:** Architektonische Einordnung je Modul; Import-Richtlinien (welches Modul darf welches importieren); Abhängigkeitsrichtung (nur nach unten)
+
+    **Abgrenzung:** Keine Klassen-Details → `generated/developer/classes/index.md`; keine Architekturdiagramme → `generated/developer/diagrams/index.md`
+
+    **Beispiel-Inhalte:** Tabelle: Modul | Schicht | Abhängigkeiten | Klassen | Beschreibung; z.B. `auth` | Business | `core`, `db` | 8 Klassen | „Authentifizierung und Autorisierung"
 """),
 
     ("generated/developer/diagrams/index.md", "Diagramme", """
 !!! tip "Inhaltsrichtlinie"
-    Auto-generierte Mermaid-Diagramme: Klassen-, Sequenz-, Komponenten-, Zustandsdiagramme.
+    **Zielgruppe:** Architekten, Entwickler, technische Projektleitung
+
+    **Pflicht-Abschnitte:**
+
+    - Katalog aller generierten Diagramme mit Vorschaubild und Beschreibung
+    - Diagrammtypen: Klassendiagramme, Sequenzdiagramme, Komponentendiagramme, ER-Diagramme
+    - Generierungswerkzeug (PlantUML, Mermaid, Draw.io) und Quellformat
+    - Aktualisierungshinweise: wann zuletzt generiert, aus welchem Code-Stand
+    - Anleitung zur Regenerierung und manuellen Anpassung
+    - Verlinkung zur Vollansicht jedes Diagramms
+
+    **Inhaltliche Tiefe:** Vorschaubilder mit Klickvergrößerung; Beschreibung was jedes Diagramm zeigt; Hinweis auf Einschränkungen der automatischen Generierung
+
+    **Abgrenzung:** Keine Architekturentscheidungen → `architecture/decisions/`; keine handgezeichneten Architekturbilder → `architecture/`
+
+    **Beispiel-Inhalte:** Katalog: Klassendiagramm-auth | Sequenz-Login-Flow | ER-Diagramm-Datenbank | Komponentenübersicht; Generiert mit PlantUML aus Docstrings
 """),
 
     # ━━ Entwicklung ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("development/contributing.md", "Contributing", """
 !!! tip "Inhaltsrichtlinie"
-    Beitragsrichtlinien: Issues, Pull Requests, Code-Konventionen, Review-Prozess, Code of Conduct.
+    **Zielgruppe:** Neue und bestehende Entwickler, Open-Source-Beitragende
+
+    **Pflicht-Abschnitte:**
+
+    - Willkommensnachricht und Projekt-Überblick
+    - Voraussetzungen (Tools, Versionen, Accounts)
+    - Schritt-für-Schritt: Ersten Beitrag erstellen
+    - Issue-Typen und Labels (Bug, Feature, Good First Issue)
+    - Pull-Request-Richtlinien (Titel, Beschreibung, Größe)
+    - Code of Conduct und Kommunikationskanäle
+    - Lizenz-Hinweis für Beiträge
+
+    **Inhaltliche Tiefe:** Einsteigerfreundlich. Jeder Schritt mit Befehl. Entscheidungsbaum: 'Was möchtest du beitragen?'
+
+    **Abgrenzung:** Keine Entwicklungsumgebung-Details (→ development/setup.md), keine Code-Stil-Regeln (→ development/code-style.md).
+
+    **Beispiel-Inhalte:** `git clone ...`, `git checkout -b feature/mein-beitrag`, PR-Template: Titel: 'feat: Kurzbeschreibung', Labels: `good-first-issue`, `help-wanted`, `bug`.
 
 ## Wie kann ich beitragen?
 
@@ -4836,7 +6784,23 @@ TODO: Verhaltensregeln für die Community
 
     ("development/setup.md", "Entwicklungsumgebung", """
 !!! tip "Inhaltsrichtlinie"
-    Einrichtung der lokalen Entwicklungsumgebung: Klonen, venv, Abhängigkeiten, IDE, Docker.
+    **Zielgruppe:** Neue Entwickler im Team
+
+    **Pflicht-Abschnitte:**
+
+    - System-Voraussetzungen (OS, Sprachen, Laufzeiten, Versionen)
+    - Repository klonen und Dependencies installieren
+    - Umgebungsvariablen und Konfigurationsdateien (.env)
+    - Datenbank und externe Dienste lokal aufsetzen (Docker-Compose)
+    - Applikation starten und verifizieren
+    - IDE-Setup und empfohlene Plugins
+    - Häufige Setup-Probleme und Lösungen
+
+    **Inhaltliche Tiefe:** Copy-Paste-fertige Befehle. Erwartete Ausgabe nach jedem Schritt. Troubleshooting-Tabelle.
+
+    **Abgrenzung:** Keine Beitragsrichtlinien (→ development/contributing.md), keine CI/CD-Konfiguration (→ development/ci-cd.md).
+
+    **Beispiel-Inhalte:** `python -m venv .venv && source .venv/bin/activate`, `docker-compose up -d postgres redis`, `cp .env.example .env`, `python manage.py migrate`, Troubleshooting: 'Port 5432 belegt → `lsof -i :5432`'.
 
 ## Repository klonen
 
@@ -4886,7 +6850,22 @@ flake8 src/
 
     ("development/code-style.md", "Code-Richtlinien", """
 !!! tip "Inhaltsrichtlinie"
-    Code-Stil: Formatierung, Namenskonventionen, Docstrings, Logging, Error-Handling, Type Hints.
+    **Zielgruppe:** Alle Entwickler im Projekt
+
+    **Pflicht-Abschnitte:**
+
+    - Allgemeine Prinzipien (Clean Code, SOLID, DRY)
+    - Sprach-spezifische Regeln (Linter-Konfiguration, Formatter)
+    - Naming-Konventionen (Variablen, Funktionen, Klassen, Dateien)
+    - Import-Ordnung und Modul-Struktur
+    - Kommentar- und Docstring-Richtlinien
+    - Automatische Formatierung (Pre-Commit-Hooks)
+
+    **Inhaltliche Tiefe:** Jede Regel mit positivem und negativem Beispiel. Linter-Konfigurationsdatei vollständig abgedruckt.
+
+    **Abgrenzung:** Keine Architektur-Entscheidungen (→ development/api-design.md), keine Test-Richtlinien (→ development/testing.md).
+
+    **Beispiel-Inhalte:** Gut: `def calculate_total_price(items: list[Item]) -> Decimal`, Schlecht: `def calc(x)`, `.flake8`: `max-line-length = 120`, Pre-Commit: `repos: - repo: https://github.com/psf/black`.
 
 ## Formatierung
 
@@ -4923,7 +6902,23 @@ TODO: Logger-Konventionen, Level-Verwendung
 
     ("development/testing.md", "Tests", """
 !!! tip "Inhaltsrichtlinie"
-    Test-Strategie: Unit/Integration/E2E, Framework, Fixtures, Mocking, Coverage, CI.
+    **Zielgruppe:** Alle Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Test-Pyramide (Unit, Integration, E2E) und Zielquoten
+    - Test-Framework und -Tools (pytest, Jest, Cypress etc.)
+    - Testdaten-Management (Fixtures, Factories, Faker)
+    - Mocking-Strategien (externe Dienste, Datenbank)
+    - Test-Organisation (Verzeichnisstruktur, Namenskonventionen)
+    - Coverage-Anforderungen und -Berichte
+    - Tests lokal und in CI ausführen
+
+    **Inhaltliche Tiefe:** Konkretes Beispiel pro Testtyp. Minimale Coverage-Schwelle definiert. Mocking-Beispiel mit Code.
+
+    **Abgrenzung:** Keine Sicherheitstests (→ development/security-testing.md), keine Performance-Tests (→ development/performance-testing.md).
+
+    **Beispiel-Inhalte:** pytest: `def test_user_creation():`, Factory: `UserFactory(role='admin')`, Mock: `@patch('app.services.email.send')`, Coverage: `pytest --cov=src --cov-fail-under=80`.
 
 ## Tests ausführen
 
@@ -4963,7 +6958,23 @@ Jeder Pull Request muss:
 
     ("development/release.md", "Release-Prozess", """
 !!! tip "Inhaltsrichtlinie"
-    Versionierung (SemVer), Release-Checkliste, Artefakte, Hotfix, Automatisierung.
+    **Zielgruppe:** Release-Manager, Senior-Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Release-Zyklus und Versionierungsschema (SemVer)
+    - Release-Checkliste (Tests, Changelog, Tag, Build)
+    - Branching-Strategie für Releases (Release-Branch, Hotfix)
+    - Changelog-Generierung (automatisch/manuell)
+    - Artefakt-Erstellung und -Publikation
+    - Rollback-Verfahren
+    - Kommunikation (intern, extern, Changelog veröffentlichen)
+
+    **Inhaltliche Tiefe:** Vollständige Checkliste mit Befehlen. Entscheidungsbaum für Versionserhöhung.
+
+    **Abgrenzung:** Keine Deployment-Strategien (→ operations/deployment.md), keine Git-Workflow-Details (→ development/git-workflow.md).
+
+    **Beispiel-Inhalte:** Checkliste: 1. `git checkout -b release/1.2.0`, 2. `bumpversion minor`, 3. Changelog aktualisieren, 4. `git tag v1.2.0`, 5. CI baut Artefakte, 6. Merge in main und develop.
 
 ## Versionierung
 
@@ -4995,7 +7006,22 @@ TODO: Branch von Release-Tag, Fix, PATCH-Version, Merge zurück
 
     ("development/debugging.md", "Debugging", """
 !!! tip "Inhaltsrichtlinie"
-    Debug-Strategien, Werkzeuge, Logging, Profiling, häufige Fehlerquellen.
+    **Zielgruppe:** Alle Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Debug-Tools und -Konfiguration (Debugger, IDE-Integration)
+    - Logging für Debugging (Log-Level temporär erhöhen)
+    - Remote-Debugging (Docker, Kubernetes)
+    - Debugging von Datenbank-Queries (Query-Log, EXPLAIN)
+    - Profiling (CPU, Memory, I/O)
+    - Häufige Fehlerbilder und systematische Analyse
+
+    **Inhaltliche Tiefe:** Konkrete Befehle und Konfigurationen pro Tool. Schritt-für-Schritt-Anleitung für typische Debug-Szenarien.
+
+    **Abgrenzung:** Keine Error-Handling-Patterns (→ development/error-handling-guide.md), keine Logging-Strategie (→ development/logging-guide.md).
+
+    **Beispiel-Inhalte:** Python: `import pdb; pdb.set_trace()`, VS Code `launch.json` für Remote-Attach, PostgreSQL: `SET log_statement = 'all';`, Memory-Profiling: `python -m memory_profiler script.py`.
 
 ## Debug-Modus aktivieren
 
@@ -5046,7 +7072,23 @@ TODO: Debugging in Docker/Kubernetes/Remote-Servern
 
     ("development/ci-cd.md", "CI/CD-Pipeline", """
 !!! tip "Inhaltsrichtlinie"
-    Aufbau der CI/CD-Pipeline: Stages, Jobs, Secrets, Deployment, Notifications.
+    **Zielgruppe:** DevOps-Ingenieure, alle Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Pipeline-Übersicht (Stages: Lint, Test, Build, Deploy)
+    - Pipeline-Konfigurationsdatei erklärt (Zeile für Zeile)
+    - Trigger-Regeln (Push, PR, Tag, Schedule)
+    - Umgebungsvariablen und Secrets in der Pipeline
+    - Caching-Strategie (Dependencies, Build-Artefakte)
+    - Pipeline-Debugging und Log-Analyse
+    - Pipeline lokal ausführen (act, gitlab-runner exec)
+
+    **Inhaltliche Tiefe:** Vollständige Pipeline-Datei mit Kommentaren. Troubleshooting-Tabelle für häufige Pipeline-Fehler.
+
+    **Abgrenzung:** Keine externen CI/CD-Integrationen (→ integrations/ci-cd.md), keine Deployment-Strategie (→ operations/deployment.md).
+
+    **Beispiel-Inhalte:** GitHub Actions: `on: [push, pull_request]`, Jobs: lint → test → build → deploy, Cache: `actions/cache@v3 with path: ~/.cache/pip`, Secret: `${{ secrets.API_KEY }}`.
 
 ## Pipeline-Übersicht
 
@@ -5094,7 +7136,23 @@ TODO: Verweis auf `.github/workflows/`, `.gitlab-ci.yml` o.ä.
 
     ("development/dependencies.md", "Abhängigkeiten", """
 !!! tip "Inhaltsrichtlinie"
-    Abhängigkeitsmanagement: Pakete, Versionen, Updates, Sicherheits-Audits, Lock-Files.
+    **Zielgruppe:** Alle Entwickler, Security-Team
+
+    **Pflicht-Abschnitte:**
+
+    - Dependency-Management-Tool (pip, npm, cargo etc.)
+    - Lockfile-Strategie und Versionspinning
+    - Neue Abhängigkeiten hinzufügen (Evaluationskriterien)
+    - Sicherheits-Scanning (Dependabot, Snyk, Safety)
+    - Update-Strategie (automatisch, manuell, Zeitplan)
+    - Private Registries und interne Pakete
+    - Lizenz-Compliance-Prüfung
+
+    **Inhaltliche Tiefe:** Evaluations-Checkliste für neue Dependencies. Automatisierungs-Konfiguration vollständig.
+
+    **Abgrenzung:** Keine Setup-Anleitung (→ development/setup.md), keine Release-Prozess-Details (→ development/release.md).
+
+    **Beispiel-Inhalte:** Checkliste: Aktive Maintenance? Lizenz kompatibel? Sicherheits-Historie? Download-Zahlen?, Dependabot: `.github/dependabot.yml` mit wöchentlichem Schedule, `pip-audit` oder `npm audit` in CI-Pipeline.
 
 ## Direkte Abhängigkeiten
 
@@ -5136,7 +7194,23 @@ TODO: Versionen die nicht zusammen funktionieren
 
     ("development/documentation.md", "Dokumentation schreiben", """
 !!! tip "Inhaltsrichtlinie"
-    Richtlinien für die Dokumentation: Stil, Format, Struktur, Tools, Build.
+    **Zielgruppe:** Alle Entwickler, technische Redakteure
+
+    **Pflicht-Abschnitte:**
+
+    - Dokumentations-Typen (API-Docs, Guides, ADRs, Inline-Kommentare)
+    - Wann was dokumentieren (Entscheidungsmatrix)
+    - Markdown-Konventionen und Templates
+    - Docs-as-Code-Workflow (neben dem Code pflegen)
+    - Diagramme (Mermaid, PlantUML, draw.io)
+    - Review-Prozess für Dokumentation
+    - Lokale Vorschau (MkDocs serve, Docusaurus)
+
+    **Inhaltliche Tiefe:** Template pro Dokumentationstyp. Beispiel-ADR vollständig ausgeschrieben.
+
+    **Abgrenzung:** Keine API-Endpunkt-Doku (→ api/endpoints.md), keine Code-Kommentar-Regeln (→ development/code-style.md).
+
+    **Beispiel-Inhalte:** ADR-Template: Titel, Status, Kontext, Entscheidung, Konsequenzen. Mermaid-Beispiel: `graph LR; A-->B;`, Vorschau: `mkdocs serve --dev-addr 0.0.0.0:8001`.
 
 ## Dokumentations-Stack
 
@@ -5191,7 +7265,23 @@ graph LR
 
     ("development/git-workflow.md", "Git-Workflow", """
 !!! tip "Inhaltsrichtlinie"
-    Branching-Strategie, Merge-Konventionen, Tagging, Release-Branches, Hotfix-Prozess.
+    **Zielgruppe:** Alle Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Branching-Modell (Git Flow, GitHub Flow, Trunk-Based)
+    - Branch-Namenskonventionen (feature/, bugfix/, hotfix/)
+    - Commit-Message-Format (Conventional Commits)
+    - Merge-Strategie (Merge-Commit, Squash, Rebase)
+    - Konflikt-Lösung (Schritt-für-Schritt)
+    - Protected Branches und Branch-Regeln
+    - Git-Hooks (Pre-Commit, Commit-Msg)
+
+    **Inhaltliche Tiefe:** Visuelles Branching-Diagramm. Jede Konvention mit Beispiel-Befehl.
+
+    **Abgrenzung:** Keine Release-Strategie (→ development/release.md), keine Code-Review-Details (→ development/code-review.md).
+
+    **Beispiel-Inhalte:** Branch: `feature/TICKET-123-add-user-export`, Commit: `feat(users): add CSV export endpoint`, Merge: `git merge --no-ff feature/...`, Pre-Commit: `pre-commit install`.
 
 ## Branching-Modell
 
@@ -5242,7 +7332,23 @@ TODO: Semantic Versioning Tags, wann wird getaggt?
 
     ("development/code-review.md", "Code-Review-Richtlinien", """
 !!! tip "Inhaltsrichtlinie"
-    Code-Review-Prozess: Checkliste, Feedback-Kultur, automatische Prüfungen, Genehmigungsregeln.
+    **Zielgruppe:** Alle Entwickler (Autoren und Reviewer)
+
+    **Pflicht-Abschnitte:**
+
+    - Review-Pflicht und Mindestanzahl Approvals
+    - Was der Reviewer prüft (Checkliste)
+    - Feedback-Kultur (konstruktiv, konkret, lösungsorientiert)
+    - Review-Kommentar-Konventionen (nit:, blocker:, question:)
+    - Zeitrahmen für Reviews (SLA)
+    - Auto-Merge-Regeln
+    - Umgang mit großen PRs (Aufteilen, Stacked PRs)
+
+    **Inhaltliche Tiefe:** Checkliste zum Ausdrucken/Einbetten. Beispiele für gute und schlechte Review-Kommentare.
+
+    **Abgrenzung:** Keine Git-Workflow-Details (→ development/git-workflow.md), keine Code-Style-Regeln (→ development/code-style.md).
+
+    **Beispiel-Inhalte:** Checkliste: Tests vorhanden? Docs aktualisiert? Keine Secrets im Code? Performance-Implikationen?, Gut: 'Dieser Loop hat O(n²) — könnten wir ein Set nutzen?', Schlecht: 'Das ist falsch.'.
 
 ## Review-Checkliste
 
@@ -5281,7 +7387,23 @@ TODO: Wie viele Approvals? Wer darf genehmigen?
 
     ("development/api-design.md", "API-Design-Guidelines", """
 !!! tip "Inhaltsrichtlinie"
-    Richtlinien für das Design neuer API-Endpunkte: Naming, Versionierung, Error-Handling.
+    **Zielgruppe:** Backend-Entwickler, Architekten
+
+    **Pflicht-Abschnitte:**
+
+    - REST-Designprinzipien (Ressourcen, HTTP-Verben, Statuscodes)
+    - URL-Struktur und Naming-Konventionen
+    - Request/Response-Format-Standards
+    - Pagination-Muster (Offset, Cursor, Keyset)
+    - Filterung, Sortierung, Feld-Selektion
+    - Versionierung neuer Endpunkte
+    - API-Review-Prozess vor Implementierung
+
+    **Inhaltliche Tiefe:** Jedes Muster mit Positivbeispiel und Anti-Pattern. Entscheidungsbaum für Pagination-Strategie.
+
+    **Abgrenzung:** Keine konkrete Endpunkt-Dokumentation (→ api/endpoints.md), keine GraphQL-Richtlinien (→ api/graphql.md).
+
+    **Beispiel-Inhalte:** Gut: `GET /api/v1/users/42/orders`, Schlecht: `GET /api/v1/getUserOrders?userId=42`, Pagination: `?cursor=abc123&limit=20` mit `next_cursor` in Response, Review: API-Design-Doc vor Implementierung vorlegen.
 
 ## REST-Konventionen
 
@@ -5328,7 +7450,23 @@ TODO: Verweis auf [API-Versionierung](../api/versioning.md)
 
     ("development/security-testing.md", "Sicherheitstests", """
 !!! tip "Inhaltsrichtlinie"
-    Sicherheitstests: SAST, DAST, Dependency-Scanning, Penetration-Tests, OWASP Top 10.
+    **Zielgruppe:** Entwickler, Security-Ingenieure
+
+    **Pflicht-Abschnitte:**
+
+    - SAST-Tools (Static Application Security Testing)
+    - DAST-Tools (Dynamic Application Security Testing)
+    - Dependency-Scanning (bekannte Schwachstellen)
+    - OWASP Top 10 Testfälle
+    - Security-Tests in CI/CD integrieren
+    - Penetration-Testing-Vorgehen
+    - Responsible Disclosure und Bug-Bounty
+
+    **Inhaltliche Tiefe:** Tool-Konfiguration vollständig. Mindestens ein Testfall pro OWASP-Kategorie.
+
+    **Abgrenzung:** Keine operative Sicherheit (→ operations/security.md), keine allgemeine Test-Strategie (→ development/testing.md).
+
+    **Beispiel-Inhalte:** SAST: `bandit -r src/`, DAST: `zap-cli quick-scan https://staging.example.com`, OWASP A01 Broken Access Control: Test unautorisierter Zugriff auf Admin-Endpunkte, CI: Stage `security-scan` nach Unit-Tests.
 
 ## Test-Typen
 
@@ -5363,7 +7501,23 @@ TODO: Verweis auf [Sicherheitslücke melden](../operations/security.md)
 
     ("development/performance-testing.md", "Performance-Tests", """
 !!! tip "Inhaltsrichtlinie"
-    Lasttests, Stresstests, Benchmarks: Tools, Szenarien, Schwellwerte, CI-Integration.
+    **Zielgruppe:** Entwickler, QA-Ingenieure, Ops-Teams
+
+    **Pflicht-Abschnitte:**
+
+    - Performance-Test-Typen (Load, Stress, Spike, Soak)
+    - Tools (Locust, k6, JMeter, Artillery)
+    - Test-Szenarien und Lastprofile definieren
+    - Messwerte und Akzeptanzkriterien (p50, p95, p99, Throughput)
+    - Performance-Baselines und Regression-Erkennung
+    - Ergebnis-Auswertung und Reporting
+    - Performance-Tests in CI/CD
+
+    **Inhaltliche Tiefe:** Vollständiges k6-/Locust-Skript. Tabelle mit SLOs (z. B. p99 < 500ms).
+
+    **Abgrenzung:** Keine Produktions-Performance-Optimierung (→ operations/performance.md), keine funktionalen Tests (→ development/testing.md).
+
+    **Beispiel-Inhalte:** k6-Skript: `export default function() { http.get('...'); }` mit `stages: [{duration: '2m', target: 100}]`, SLO-Tabelle: Endpoint | p95 | p99 | Max RPS, CI: 'Performance-Regression wenn p95 > 120% Baseline'.
 
 ## Test-Typen
 
@@ -5411,8 +7565,23 @@ TODO: Performance-Tests in Pipeline, Regression-Erkennung
 
     ("development/error-handling-guide.md", "Fehlerbehandlung (Entwickler-Guide)", """
 !!! tip "Inhaltsrichtlinie"
-    Best Practices für Fehlerbehandlung im Code: Custom Exceptions, Logging, User-Feedback.
-    Architektur-Perspektive in [Fehlerbehandlungsstrategie](../architecture/error-handling.md).
+    **Zielgruppe:** Alle Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Fehlerbehandlungs-Philosophie (fail fast, explizite Fehler)
+    - Exception-Hierarchie (Custom Exceptions)
+    - HTTP-Fehler-Mapping (Exception → HTTP-Statuscode)
+    - Fehler-Logging-Regeln (was, wann, welches Level)
+    - Benutzerfreundliche Fehlermeldungen (i18n-fähig)
+    - Retry-Patterns (Transient vs. Permanent Errors)
+    - Anti-Patterns (leere catch-Blöcke, Exception-Schlucken)
+
+    **Inhaltliche Tiefe:** Code-Beispiele pro Pattern. Entscheidungsbaum: 'Welche Exception werfen?'
+
+    **Abgrenzung:** Keine API-Fehler-Referenz (→ api/errors.md), keine Logging-Konfiguration (→ development/logging-guide.md).
+
+    **Beispiel-Inhalte:** Custom Exception: `class OrderNotFoundError(AppError): status_code = 404`, Gut: `raise ValidationError('Email ungültig', field='email')`, Anti-Pattern: `except Exception: pass`.
 
 ## Custom Exceptions
 
@@ -5451,8 +7620,23 @@ TODO: An tatsächliche Exception-Klassen anpassen
 
     ("development/logging-guide.md", "Logging (Entwickler-Guide)", """
 !!! tip "Inhaltsrichtlinie"
-    Logging-Best-Practices für Entwickler: Wann was loggen, Kontext, Performance.
-    Architektur in [Logging-Architektur](../architecture/logging-architecture.md).
+    **Zielgruppe:** Alle Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Log-Level-Definitionen (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    - Wann welches Level verwenden (Entscheidungstabelle)
+    - Strukturiertes Logging (JSON-Format, Correlation-ID)
+    - Sensitive Daten im Log vermeiden (PII, Passwörter, Tokens)
+    - Log-Kontexte (Request-ID, User-ID, Trace-ID)
+    - Performance-Auswirkungen von Logging
+    - Logger-Konfiguration pro Umgebung
+
+    **Inhaltliche Tiefe:** Code-Beispiel für strukturierten Logger. Tabelle: Situation → Log-Level.
+
+    **Abgrenzung:** Keine Log-Aggregation (→ operations/logging-strategy.md), keine Debugging-Techniken (→ development/debugging.md).
+
+    **Beispiel-Inhalte:** `logger.info('Bestellung erstellt', extra={'order_id': 42, 'user_id': 7})`, Tabelle: Benutzer-Login → INFO, DB-Verbindung verloren → ERROR, Schlecht: `logger.debug(f'User password: {password}')`, JSON: `{"level": "info", "msg": "...", "request_id": "abc-123"}`.
 
 ## Logger erstellen
 
@@ -5490,8 +7674,23 @@ logger.info("Datei verarbeitet", extra={
 
     ("development/database-guide.md", "Datenbank (Entwickler-Guide)", """
 !!! tip "Inhaltsrichtlinie"
-    Datenbank-Best-Practices für Entwickler: Queries, Migrationen, Transaktionen, Performance.
-    Architektur in [Datenbank-Architektur](../architecture/database-architecture.md).
+    **Zielgruppe:** Backend-Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Schema-Design-Prinzipien (Normalisierung, Denormalisierung)
+    - Naming-Konventionen (Tabellen, Spalten, Indizes, Constraints)
+    - Index-Strategie (wann, welcher Typ, zusammengesetzte Indizes)
+    - Query-Optimierung (N+1-Problem, JOINs, Subqueries)
+    - ORM-Nutzung und Raw-SQL-Regeln
+    - Transaktions-Handling und Isolation-Level
+    - Datenbank-spezifische Features (JSONB, Arrays, CTEs)
+
+    **Inhaltliche Tiefe:** Jede Regel mit SQL-Beispiel. EXPLAIN-Analyse-Beispiel für Query-Optimierung.
+
+    **Abgrenzung:** Keine DB-Verbindungskonfiguration (→ integrations/database.md), keine Migrations-Anleitung (→ development/migration-writing.md).
+
+    **Beispiel-Inhalte:** Naming: `orders` (Plural), `created_at` (snake_case), `idx_orders_user_id` (Prefix idx_), Anti-Pattern: `SELECT * FROM orders` in Schleifen (N+1), Gut: `SELECT o.*, u.name FROM orders o JOIN users u ON o.user_id = u.id`.
 
 ## ORM-Nutzung
 
@@ -5537,7 +7736,23 @@ TODO: Wann explizite Transaktionen? Isolation Level?
 
     ("development/migration-writing.md", "Migrationen schreiben", """
 !!! tip "Inhaltsrichtlinie"
-    Anleitung zum Schreiben von Datenbank-Migrationen: Konventionen, Beispiele, Testing.
+    **Zielgruppe:** Backend-Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Migrationstool und Befehle (Alembic, Django Migrations, Flyway)
+    - Migration erstellen, prüfen und anwenden
+    - Rückwärts-kompatible Migrationen (Zero-Downtime)
+    - Daten-Migrationen (vs. Schema-Migrationen)
+    - Rollback-Strategie und Down-Migrationen
+    - Review-Checkliste für Migrationen
+    - Große Tabellen migrieren (Lock-Vermeidung)
+
+    **Inhaltliche Tiefe:** Vollständige Beispiel-Migration. Entscheidungsbaum: 'Brauche ich eine Daten-Migration?'
+
+    **Abgrenzung:** Keine Schema-Design-Regeln (→ development/database-guide.md), keine DB-Konfiguration (→ integrations/database.md).
+
+    **Beispiel-Inhalte:** Alembic: `alembic revision --autogenerate -m 'add_email_to_users'`, Zero-Downtime: 1. Spalte nullable hinzufügen, 2. Daten füllen, 3. NOT NULL setzen, Checkliste: Rollback getestet? Lock-Dauer geprüft? Indizes concurrent?
 
 ## Namenskonvention
 
@@ -5590,8 +7805,23 @@ TODO: Schritt-für-Schritt mit Abwärtskompatibilität
 
     ("development/accessibility-guide.md", "Accessibility (Entwickler-Guide)", """
 !!! tip "Inhaltsrichtlinie"
-    Accessibility-Best-Practices für Entwickler: Semantisches HTML, ARIA, Tests, Checkliste.
-    Design-Richtlinien in [Accessibility-Richtlinien](../design/accessibility-guidelines.md).
+    **Zielgruppe:** Frontend-Entwickler, UX-Designer, QA-Ingenieure
+
+    **Pflicht-Abschnitte:**
+
+    - Barrierefreiheitsstandards (WCAG 2.1 AA/AAA, ARIA)
+    - Semantisches HTML und Landmark-Regionen
+    - Tastaturnavigation und Fokus-Management
+    - Farbkontrast und visuelle Gestaltung
+    - Screenreader-Kompatibilität (ARIA-Labels, Live-Regions)
+    - Test-Tools (axe, Lighthouse, NVDA)
+    - Checkliste pro Komponente
+
+    **Inhaltliche Tiefe:** Konkrete HTML-Beispiele pro Regel. Test-Befehle für automatisierte und manuelle Prüfung.
+
+    **Abgrenzung:** Keine allgemeine Code-Stil-Regeln (→ development/code-style.md), keine Test-Strategie (→ development/testing.md).
+
+    **Beispiel-Inhalte:** Gut: `<button aria-label='Menü öffnen'>`, Schlecht: `<div onclick='...'>Klick</div>`, Kontrast: mindestens 4.5:1 für normalen Text, Test: `npx axe-cli https://localhost:3000 --rules wcag2aa`.
 
 ## Semantisches HTML
 
@@ -5649,7 +7879,23 @@ npx lighthouse http://localhost:8000 --only-categories=accessibility
     # ━━ Betrieb ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("operations/deployment.md", "Deployment", """
 !!! tip "Inhaltsrichtlinie"
-    Deployment-Strategien, Umgebungen, Docker, CI/CD, Rollback, Health Checks.
+    **Zielgruppe:** DevOps-Ingenieure, SREs, Release-Manager
+
+    **Pflicht-Abschnitte:**
+
+    - Deployment-Strategien (Rolling, Blue-Green, Canary)
+    - Deployment-Pipeline und -Ablauf
+    - Umgebungen (Development, Staging, Production)
+    - Konfigurationsmanagement pro Umgebung
+    - Rollback-Verfahren (Schritt-für-Schritt)
+    - Deployment-Checkliste (Pre/Post-Deployment)
+    - Deployment-Metriken und -Validierung
+
+    **Inhaltliche Tiefe:** Entscheidungsbaum für Strategie-Wahl. Vollständige Rollback-Anleitung. Kubernetes-Manifeste oder Docker-Compose.
+
+    **Abgrenzung:** Keine CI/CD-Pipeline-Details (→ development/ci-cd.md), keine Infrastruktur-Provisionierung (→ operations/infrastructure.md).
+
+    **Beispiel-Inhalte:** Blue-Green: `kubectl set image deployment/app app=myapp:v2.0`, Canary: 10% Traffic → Metriken prüfen → 50% → 100%, Rollback: `kubectl rollout undo deployment/app`, Checkliste: DB-Migration lief? Health-Check grün? Alerts stummgeschaltet?
 
 ## Deployment-Strategien
 
@@ -5687,7 +7933,23 @@ TODO: Schnelles Rollback auf vorherige Version
 
     ("operations/monitoring.md", "Monitoring & Logging", """
 !!! tip "Inhaltsrichtlinie"
-    Metriken, Logging-Konventionen, Alerting, Dashboards, Tracing, Incident Response.
+    **Zielgruppe:** Ops-Teams, SREs, On-Call-Ingenieure
+
+    **Pflicht-Abschnitte:**
+
+    - Monitoring-Strategie (USE, RED, Golden Signals)
+    - Metriken-Übersicht (System, Applikation, Business)
+    - Logging-Architektur (Sammlung, Aggregation, Retention)
+    - Alerting-Philosophie (Alert-Fatigue vermeiden)
+    - Dashboard-Übersicht (welche Dashboards existieren)
+    - Distributed Tracing
+    - SLIs, SLOs und Error Budgets
+
+    **Inhaltliche Tiefe:** Vollständige Metriken-Tabelle. SLO-Definitionen mit Berechnungsbeispielen.
+
+    **Abgrenzung:** Keine Monitoring-Tool-Integration (→ integrations/monitoring.md), keine Alert-Regeln (→ operations/monitoring-alerts.md).
+
+    **Beispiel-Inhalte:** RED: Rate (req/s), Errors (%), Duration (Latenz), SLO: 'API-Verfügbarkeit 99.9% pro Monat = max 43 Min Downtime', Dashboard-Liste: Overview, Per-Service, Database, Queue.
 
 ## Wichtige Metriken
 
@@ -5726,7 +7988,23 @@ TODO: OpenTelemetry, Jaeger, Zipkin
 
     ("operations/backup.md", "Backup & Recovery", """
 !!! tip "Inhaltsrichtlinie"
-    Backup-Strategie, Zeitpläne, Recovery-Verfahren, RTO/RPO, Verifizierung.
+    **Zielgruppe:** Ops-Teams, Systemadministratoren, Compliance-Beauftragte
+
+    **Pflicht-Abschnitte:**
+
+    - Backup-Strategie (3-2-1-Regel, RPO/RTO-Ziele)
+    - Was wird gesichert (Datenbank, Dateien, Konfiguration, Secrets)
+    - Backup-Zeitplan und -Typen (Voll, Inkrementell, Differentiell)
+    - Verschlüsselung und Aufbewahrungsfristen
+    - Restore-Prozedur (Schritt-für-Schritt)
+    - Regelmäßiger Restore-Test (Zeitplan, Protokoll)
+    - Backup-Monitoring und Alerting
+
+    **Inhaltliche Tiefe:** RPO/RTO pro Datenkategorie definiert. Vollständiger Restore-Befehl. Testprotokoll-Template.
+
+    **Abgrenzung:** Keine Backup-Tool-Konfiguration (→ integrations/backup-services.md), keine Disaster-Recovery-Pläne (→ operations/disaster-recovery.md).
+
+    **Beispiel-Inhalte:** 3-2-1: 3 Kopien, 2 Medien, 1 offsite. RPO: Datenbank 1h, Dateien 24h. RTO: 4h. Restore: `pg_restore -d mydb backup_2024-03-15.dump`, Testprotokoll: Datum, Backup-ID, Restore-Dauer, Datenintegrität-Check.
 
 ## Was wird gesichert?
 
@@ -5755,7 +8033,23 @@ TODO: Wie oft und wie werden Backups getestet?
 
     ("operations/security.md", "Sicherheit (Betrieb)", """
 !!! tip "Inhaltsrichtlinie"
-    Operative Sicherheit: Härtung, Secrets-Rotation, Updates, Netzwerk, Audit.
+    **Zielgruppe:** Ops-Teams, Security-Ingenieure, Compliance-Beauftragte
+
+    **Pflicht-Abschnitte:**
+
+    - Sicherheitshärtung (OS, Container, Netzwerk)
+    - Secrets-Management (Vault, Sealed Secrets, Umgebungsvariablen)
+    - TLS-Konfiguration und Zertifikatsverwaltung
+    - Netzwerk-Segmentierung und Firewall-Regeln
+    - Vulnerability-Scanning (Images, Hosts, Dependencies)
+    - Audit-Logging und Compliance
+    - Incident-Response-Verfahren
+
+    **Inhaltliche Tiefe:** Konkrete Härtungs-Checklisten. Vault-Konfigurationsbeispiel. Firewall-Regelbeispiele.
+
+    **Abgrenzung:** Keine Sicherheitstests im Code (→ development/security-testing.md), keine API-Authentifizierung (→ api/authentication.md).
+
+    **Beispiel-Inhalte:** Dockerfile: `USER nonroot`, kein Root-Container. Vault: `vault kv put secret/app db_password=...`, TLS: `ssl_protocols TLSv1.2 TLSv1.3;`, Incident: 1. Eindämmen, 2. Analysieren, 3. Beheben, 4. Post-Mortem.
 
 ## Härtungs-Checkliste
 
@@ -5792,7 +8086,23 @@ KEINE öffentlichen Issues für Sicherheitsprobleme.
 
     ("operations/scaling.md", "Skalierung", """
 !!! tip "Inhaltsrichtlinie"
-    Praktische Skalierungsanleitungen: Horizontal/Vertikal, Load Balancing, Auto-Scaling.
+    **Zielgruppe:** Ops-Teams, Architekten, SREs
+
+    **Pflicht-Abschnitte:**
+
+    - Horizontale vs. vertikale Skalierung
+    - Auto-Scaling-Konfiguration (HPA, VPA, Custom Metrics)
+    - Skalierungsgrenzen und Bottlenecks identifizieren
+    - Datenbank-Skalierung (Read Replicas, Sharding, Connection Pooling)
+    - Cache-Skalierung (Redis Cluster, Memcached)
+    - Load-Balancer-Konfiguration
+    - Skalierungs-Runbooks für Notfälle
+
+    **Inhaltliche Tiefe:** HPA-YAML vollständig. Entscheidungsbaum: 'Horizontal oder vertikal skalieren?'
+
+    **Abgrenzung:** Keine Performance-Messung (→ operations/performance.md), keine Kapazitätsplanung (→ operations/capacity-planning.md).
+
+    **Beispiel-Inhalte:** HPA: `minReplicas: 2, maxReplicas: 10, targetCPUUtilization: 70`, Read Replica: `database.read_url: postgresql://replica:5432/db`, Notfall: 'Traffic-Spike → HPA-Max hochsetzen → Cache-TTL erhöhen → DB Read Replicas hinzufügen'.
 
 ## Horizontale Skalierung
 
@@ -5825,7 +8135,23 @@ TODO: Read Replicas, Sharding, Connection Pooling
 
     ("operations/performance.md", "Performance-Tuning", """
 !!! tip "Inhaltsrichtlinie"
-    Performance messen, Engpässe finden, Optimierungen anwenden.
+    **Zielgruppe:** Ops-Teams, Backend-Entwickler, SREs
+
+    **Pflicht-Abschnitte:**
+
+    - Performance-Metriken und SLOs (Latenz, Throughput, Error Rate)
+    - Profiling in Produktion (CPU, Memory, I/O)
+    - Datenbank-Performance (Slow Queries, Index-Nutzung)
+    - Caching-Strategien (Application Cache, CDN, Browser)
+    - Performance-Optimierungs-Workflows
+    - Kapazitätsplanung basierend auf Metriken
+    - Performance-Dashboards und Berichte
+
+    **Inhaltliche Tiefe:** Schritt-für-Schritt-Workflow: Problem identifizieren → Messen → Optimieren → Verifizieren. Slow-Query-Analyse-Beispiel.
+
+    **Abgrenzung:** Keine Performance-Tests in Entwicklung (→ development/performance-testing.md), keine Skalierung (→ operations/scaling.md).
+
+    **Beispiel-Inhalte:** Slow Query: `EXPLAIN ANALYZE SELECT ...`, Cache: `redis-cli INFO stats` → Hit-Rate prüfen, Workflow: 1. APM-Dashboard prüfen, 2. Slowest Endpoints identifizieren, 3. Profiler ansetzen, 4. Optimierung implementieren, 5. A/B-Vergleich.
 
 ## Performance messen
 
@@ -5865,7 +8191,23 @@ TODO: Async I/O, Batch-Verarbeitung, Lazy Loading
 
     ("operations/disaster-recovery.md", "Disaster Recovery", """
 !!! tip "Inhaltsrichtlinie"
-    Notfall-Wiederherstellung: Szenarien, Prozeduren, Kommunikation, Nachbereitung.
+    **Zielgruppe:** Ops-Teams, Management, Compliance-Beauftragte
+
+    **Pflicht-Abschnitte:**
+
+    - Disaster-Recovery-Plan (DRP) Übersicht
+    - Recovery-Ziele (RPO, RTO pro Service-Tier)
+    - Szenarien (Datenbank-Ausfall, Region-Ausfall, Datenverlust, Sicherheitsvorfall)
+    - Recovery-Prozeduren pro Szenario (Schritt-für-Schritt)
+    - Kommunikationsplan (intern, Kunden, Statuspage)
+    - DR-Test-Zeitplan und -Protokoll
+    - Verantwortlichkeiten (RACI-Matrix)
+
+    **Inhaltliche Tiefe:** Vollständige Runbooks pro Szenario. Kontaktlisten. Entscheidungsbäume.
+
+    **Abgrenzung:** Keine Backup-Details (→ operations/backup.md), keine täglichen Ops-Aufgaben (→ operations/maintenance.md).
+
+    **Beispiel-Inhalte:** Szenario: DB-Ausfall → 1. Failover auf Standby, 2. Health-Check, 3. DNS-Update, 4. Kunden informieren. RACI: DBA=Responsible, SRE-Lead=Accountable, CTO=Informed. DR-Test: Quartalweise, letzter Test: Datum, Ergebnis.
 
 ## Szenarien
 
@@ -5906,7 +8248,22 @@ TODO: Async I/O, Batch-Verarbeitung, Lazy Loading
 
     ("operations/runbooks.md", "Runbooks", """
 !!! tip "Inhaltsrichtlinie"
-    Standard Operating Procedures: wiederkehrende Betriebsaufgaben Schritt für Schritt.
+    **Zielgruppe:** On-Call-Ingenieure, Ops-Teams
+
+    **Pflicht-Abschnitte:**
+
+    - Runbook-Format und -Konventionen
+    - Runbook pro häufigem Vorfall (Tabelle: Alert → Runbook)
+    - Schritt-für-Schritt-Anleitungen mit Befehlen
+    - Eskalationspfade und Kontaktdaten
+    - Post-Incident-Checkliste
+    - Runbook-Pflege und Review-Zyklus
+
+    **Inhaltliche Tiefe:** Jedes Runbook mit exakten Befehlen. Entscheidungspunkte klar markiert ('Wenn X → Schritt Y, sonst → Schritt Z').
+
+    **Abgrenzung:** Keine Disaster-Recovery (→ operations/disaster-recovery.md), keine Monitoring-Konfiguration (→ operations/monitoring.md).
+
+    **Beispiel-Inhalte:** Alert: 'High Memory Usage' → 1. `kubectl top pods -n production`, 2. Pod mit höchstem Verbrauch identifizieren, 3. `kubectl describe pod <name>`, 4. Wenn OOMKilled → Restart, sonst → Heap-Dump + Eskalation an Dev-Team.
 
 ## Runbook: Service neustarten
 
@@ -5947,7 +8304,23 @@ TODO
 
     ("operations/infrastructure.md", "Infrastruktur", """
 !!! tip "Inhaltsrichtlinie"
-    Infrastruktur-Dokumentation: Server, Netzwerk, DNS, Zertifikate, Cloud-Ressourcen.
+    **Zielgruppe:** Ops-Teams, Infrastruktur-Architekten
+
+    **Pflicht-Abschnitte:**
+
+    - Infrastruktur-Übersicht (Diagramm mit allen Komponenten)
+    - IaC-Tool und Repository (Terraform, Pulumi, Ansible)
+    - Umgebungs-Topologien (Dev, Staging, Prod)
+    - Cloud-Ressourcen-Inventar (Compute, Storage, Network, DB)
+    - Netzwerk-Architektur (VPC, Subnets, Security Groups)
+    - DNS- und Domain-Management
+    - Infrastruktur-Änderungsprozess
+
+    **Inhaltliche Tiefe:** Architekturdiagramm als Mermaid oder ASCII. Terraform-Modul-Übersicht. Inventar-Tabelle.
+
+    **Abgrenzung:** Keine Deployment-Prozesse (→ operations/deployment.md), keine Netzwerk-Details (→ operations/network.md).
+
+    **Beispiel-Inhalte:** Mermaid-Diagramm: Load Balancer → App-Server (x3) → DB (Primary + Replica), Terraform: `module 'app' { source = './modules/app' instance_type = 't3.medium' }`, Inventar: Region eu-central-1, 3 EC2, 1 RDS, 1 ElastiCache.
 
 ## Server-Übersicht
 
@@ -5985,7 +8358,23 @@ TODO: Terraform, Ansible, Pulumi — Verweis auf Repository/Verzeichnis
 
     ("operations/maintenance.md", "Wartung & Pflege", """
 !!! tip "Inhaltsrichtlinie"
-    Regelmäßige Wartungsaufgaben: Zeitpläne, Checklisten, Automatisierung, Wartungsfenster.
+    **Zielgruppe:** Ops-Teams, Systemadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - Regelmäßige Wartungsaufgaben (Tabelle: Aufgabe, Frequenz, Verantwortlich)
+    - OS- und Paket-Updates (Patch-Strategie)
+    - Zertifikatserneuerung (Automatisierung, Monitoring)
+    - Datenbank-Wartung (VACUUM, ANALYZE, Index-Rebuild)
+    - Log-Rotation und Speicher-Bereinigung
+    - Maintenance-Window-Planung und Kommunikation
+    - Automatisierungsgrad und Verbesserungspotential
+
+    **Inhaltliche Tiefe:** Vollständiger Wartungskalender. Befehle pro Aufgabe. Automatisierungsskript-Verweise.
+
+    **Abgrenzung:** Keine Incident-Behandlung (→ operations/runbooks.md), keine Kapazitätsplanung (→ operations/capacity-planning.md).
+
+    **Beispiel-Inhalte:** Tabelle: 'DB VACUUM — wöchentlich — DBA', 'Zertifikate prüfen — monatlich — Ops', Befehl: `certbot renew --dry-run`, Log-Rotation: `logrotate -d /etc/logrotate.d/myapp`.
 
 ## Regelmäßige Aufgaben
 
@@ -6021,7 +8410,23 @@ TODO: Cron-Jobs, Systemd-Timer, Kubernetes CronJobs
 
     ("operations/capacity-planning.md", "Kapazitätsplanung", """
 !!! tip "Inhaltsrichtlinie"
-    Ressourcen-Planung: aktuelle Nutzung, Wachstumsprognose, Schwellwerte, Kosten.
+    **Zielgruppe:** Ops-Teams, Architekten, Management
+
+    **Pflicht-Abschnitte:**
+
+    - Aktuelle Ressourcenauslastung (CPU, RAM, Disk, Network)
+    - Wachstumsprognosen (Benutzer, Daten, Requests)
+    - Kapazitätsgrenzen pro Komponente
+    - Skalierungs-Trigger und Schwellenwerte
+    - Kostenmodell pro Skalierungsstufe
+    - Planungs-Zyklus und Review-Termine
+    - Reservierte vs. On-Demand-Ressourcen
+
+    **Inhaltliche Tiefe:** Tabellen mit aktuellen und projizierten Werten. Grafik-Beschreibung für Trends. Kosten-Vergleichstabelle.
+
+    **Abgrenzung:** Keine Skalierungskonfiguration (→ operations/scaling.md), keine Kostenoptimierung (→ operations/cost-optimization.md).
+
+    **Beispiel-Inhalte:** Tabelle: Komponente | Aktuell | 6 Monate | 12 Monate, DB: 50 GB | 80 GB | 120 GB, Trigger: 'CPU > 70% über 7 Tage → Skalierungsticket erstellen', Review: Quartalsweise im Ops-Meeting.
 
 ## Aktuelle Ressourcen
 
@@ -6055,7 +8460,23 @@ TODO: Nächste geplante Skalierungsschritte
 
     ("operations/logging-strategy.md", "Logging-Strategie", """
 !!! tip "Inhaltsrichtlinie"
-    Logging-Konfiguration: Level, Formate, Aggregation, Aufbewahrung, Datenschutz.
+    **Zielgruppe:** Ops-Teams, Backend-Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Logging-Architektur (Collection, Shipping, Storage, Visualization)
+    - Log-Formate und Standardisierung (JSON, Syslog)
+    - Zentrale Log-Aggregation (ELK, Loki, Fluentd)
+    - Retention-Policies pro Log-Typ
+    - Log-Indexierung und Suche
+    - Compliance-Anforderungen (Aufbewahrungspflicht, DSGVO)
+    - Kosten-Management bei hohem Log-Volumen
+
+    **Inhaltliche Tiefe:** Vollständige Pipeline-Konfiguration. Retention-Tabelle. Kosten-Schätzung pro GB/Monat.
+
+    **Abgrenzung:** Keine Entwickler-Logging-Regeln (→ development/logging-guide.md), keine Monitoring-Strategie (→ operations/monitoring.md).
+
+    **Beispiel-Inhalte:** Pipeline: App → Fluentd → Elasticsearch → Kibana, Retention: Access-Logs 30 Tage, Audit-Logs 365 Tage, Debug-Logs 7 Tage, Fluentd-Config: `<match app.**> @type elasticsearch host es:9200 </match>`.
 
 ## Logging-Level
 
@@ -6102,7 +8523,23 @@ Verweis auf [Datenschutz](../compliance/data-protection.md)
 
     ("operations/network.md", "Netzwerk-Konfiguration", """
 !!! tip "Inhaltsrichtlinie"
-    Netzwerk-Konfiguration: Ports, Firewall, DNS, TLS, Proxy, VPN.
+    **Zielgruppe:** Netzwerk-Ingenieure, Ops-Teams, Security-Team
+
+    **Pflicht-Abschnitte:**
+
+    - Netzwerk-Topologie-Diagramm
+    - VPC/Subnet-Layout und CIDR-Bereiche
+    - Firewall-Regeln und Security Groups
+    - Load-Balancer-Konfiguration (Layer 4/7)
+    - DNS-Konfiguration (intern, extern, Service Discovery)
+    - VPN- und Bastion-Host-Zugang
+    - Netzwerk-Troubleshooting-Befehle
+
+    **Inhaltliche Tiefe:** Vollständiges Topologie-Diagramm. Firewall-Regeln als Tabelle. DNS-Record-Übersicht.
+
+    **Abgrenzung:** Keine CDN-Konfiguration (→ integrations/cdn.md), keine Infrastruktur-Provisionierung (→ operations/infrastructure.md).
+
+    **Beispiel-Inhalte:** Subnet-Tabelle: public-a 10.0.1.0/24, private-a 10.0.10.0/24, Security Group: Ingress 443/tcp von 0.0.0.0/0, Egress all, DNS: `app.internal → 10.0.10.5 (A-Record)`, Debug: `dig app.internal`, `traceroute`, `curl -v`.
 
 ## Ports
 
@@ -6142,7 +8579,23 @@ TODO: VPN-Zugang für Administration, WireGuard/OpenVPN
 
     ("operations/monitoring-alerts.md", "Alert-Konfiguration", """
 !!! tip "Inhaltsrichtlinie"
-    Alert-Regeln: Schwellwerte, Eskalation, Benachrichtigungskanäle, Stummschaltung.
+    **Zielgruppe:** On-Call-Ingenieure, SREs, Ops-Teams
+
+    **Pflicht-Abschnitte:**
+
+    - Alert-Regeln-Übersicht (Tabelle: Name, Bedingung, Severity, Empfänger)
+    - Alert-Severity-Definitionen (Critical, Warning, Info)
+    - Eskalationsrichtlinien pro Severity
+    - Alert-Routing (Wer wird wann benachrichtigt)
+    - Silencing und Maintenance-Windows
+    - Alert-Tuning (False Positives reduzieren)
+    - Runbook-Verlinkung pro Alert
+
+    **Inhaltliche Tiefe:** Vollständige Alert-Rule-Definitionen (Prometheus/Grafana). Eskalations-Timeline pro Severity.
+
+    **Abgrenzung:** Keine Monitoring-Strategie (→ operations/monitoring.md), keine Runbook-Details (→ operations/runbooks.md).
+
+    **Beispiel-Inhalte:** Prometheus: `alert: HighErrorRate expr: rate(http_errors_total[5m]) > 0.05 for: 5m`, Severity: Critical → PagerDuty sofort, Warning → Slack #ops, Info → Dashboard, Silence: `amtool silence add alertname=HighCPU --duration=2h --comment='Deployment'`.
 
 ## Alert-Regeln
 
@@ -6185,7 +8638,23 @@ TODO: Wartungsfenster, bekannte Probleme temporär stummschalten
 
     ("operations/cost-optimization.md", "Kostenoptimierung", """
 !!! tip "Inhaltsrichtlinie"
-    Infrastruktur-Kosten optimieren: Cloud-Kosten, Ressourcen-Rightsizing, Reserved Instances.
+    **Zielgruppe:** Ops-Teams, Management, Finanzabteilung
+
+    **Pflicht-Abschnitte:**
+
+    - Aktuelle Kostenübersicht (pro Kategorie: Compute, Storage, Network, Lizenzen)
+    - Kostenanalyse-Tools und Dashboards
+    - Optimierungsmaßnahmen (Reserved Instances, Spot/Preemptible, Right-Sizing)
+    - Ressourcen-Tagging-Strategie für Kostenzuordnung
+    - Automatische Abschaltung (Dev/Staging außerhalb Geschäftszeiten)
+    - Storage-Tiering und Lifecycle-Policies
+    - Kosten-Alerts und Budgets
+
+    **Inhaltliche Tiefe:** Konkrete Einsparpotentiale mit Zahlen. Implementierungs-Checkliste pro Maßnahme.
+
+    **Abgrenzung:** Keine Kapazitätsplanung (→ operations/capacity-planning.md), keine Infrastruktur-Details (→ operations/infrastructure.md).
+
+    **Beispiel-Inhalte:** Right-Sizing: 't3.xlarge → t3.large' spart 50%/Monat, Reserved: 1-Jahr-Reservierung spart 30% vs. On-Demand, Auto-Off: `aws lambda` schaltet Dev-Umgebung 20:00–08:00 ab, Tags: `team: backend, env: prod, service: api`.
 
 ## Aktuelle Kosten
 
@@ -6226,7 +8695,24 @@ TODO: Cost-Alerts, Budget-Limits, Tagging für Kostenzuordnung
 
     ("operations/on-call.md", "On-Call & Bereitschaft", """
 !!! tip "Inhaltsrichtlinie"
-    Bereitschaftsdienst: Rotation, Verantwortlichkeiten, Werkzeuge, Übergabe, Vergütung.
+    **Zielgruppe:** On-Call-Ingenieure, Team-Leads, Management
+
+    **Pflicht-Abschnitte:**
+
+    - On-Call-Rotationsplan (Wochenrhythmus, Primär/Sekundär)
+    - Verantwortlichkeiten im Bereitschaftsdienst
+    - Eskalationspfade und Kontaktdaten
+    - Reaktionszeiten pro Severity (SLA)
+    - On-Call-Tools (PagerDuty, OpsGenie, Telefon)
+    - Handover-Prozess (Übergabe Schichtende)
+    - Kompensation und Work-Life-Balance-Regeln
+    - Post-Incident-Review-Pflicht
+
+    **Inhaltliche Tiefe:** Vollständiger Rotationsplan-Beispiel. SLA-Tabelle. Handover-Template.
+
+    **Abgrenzung:** Keine Runbook-Details (→ operations/runbooks.md), keine Alert-Regeln (→ operations/monitoring-alerts.md).
+
+    **Beispiel-Inhalte:** Rotation: Woche 1 → Alice (Primär), Bob (Sekundär), SLA: Critical → Reaktion in 15 Min, Warning → 1 Stunde, Handover: 'Offene Incidents, bekannte Probleme, geplante Deployments', Tool: PagerDuty-App auf Diensthandy, Lautstärke auf Maximum.
 
 ## On-Call-Rotation
 
@@ -6272,7 +8758,24 @@ TODO: Bereitschaftszulage, Regeln
 
     ("operations/change-management.md", "Change Management", """
 !!! tip "Inhaltsrichtlinie"
-    Änderungsmanagement: Klassifizierung, Genehmigung, Durchführung, Dokumentation.
+    **Zielgruppe:** Ops-Teams, Entwickler, Management
+
+    **Pflicht-Abschnitte:**
+
+    - Change-Typen (Standard, Normal, Emergency)
+    - Change-Request-Prozess (Antrag, Review, Genehmigung)
+    - Change-Advisory-Board (CAB) und Entscheidungskriterien
+    - Risikobewertung pro Change (Impact, Wahrscheinlichkeit)
+    - Change-Windows und Freeze-Perioden
+    - Rollback-Plan als Pflichtbestandteil
+    - Post-Implementation-Review
+    - Change-Log und Audit-Trail
+
+    **Inhaltliche Tiefe:** Change-Request-Template vollständig. Risiko-Matrix. Entscheidungsbaum für Change-Typ.
+
+    **Abgrenzung:** Keine Deployment-Details (→ operations/deployment.md), keine Incident-Management-Prozesse (→ operations/runbooks.md).
+
+    **Beispiel-Inhalte:** Template: Titel, Beschreibung, Betroffene Systeme, Risiko (Low/Medium/High), Rollback-Plan, Genehmiger. Standard-Change: 'Dependency-Update mit bestehenden Tests' → kein CAB nötig. Emergency-Change: 'Security-Patch' → Post-hoc CAB-Review innerhalb 48h.
 
 ## Change-Kategorien
 
@@ -6311,7 +8814,21 @@ TODO: Jeder Change braucht einen dokumentierten Rollback-Plan
     # ━━ Compliance ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("compliance/overview.md", "Compliance — Überblick", """
 !!! tip "Inhaltsrichtlinie"
-    Überblick über Compliance-Anforderungen, Datenschutz und regulatorische Pflichten.
+    **Zielgruppe:** Projektleitung, Compliance-Beauftragte, Auditoren, Geschäftsführung
+
+    **Pflicht-Abschnitte:**
+
+    - Übersicht aller regulatorischen Anforderungen (DSGVO, ISO 27001, branchenspezifische Normen)
+    - Compliance-Matrix: Anforderung → Maßnahme → Verantwortlicher → Status
+    - Zeitplan für Audits und Zertifizierungen
+    - Eskalationspfade bei Compliance-Verstößen
+    - Links zu allen Detail-Seiten im Compliance-Bereich
+
+    **Inhaltliche Tiefe:** Strategische Übersicht mit Verlinkung auf Detail-Seiten; tabellarische Compliance-Matrix; Status-Ampelsystem (grün/gelb/rot) für jede Anforderung
+
+    **Abgrenzung:** Keine vollständigen Richtlinientexte hier → `compliance/security-policies.md`; keine technischen Implementierungsdetails → `architecture/security.md`
+
+    **Beispiel-Inhalte:** Tabelle mit Spalten: Regulierung | Geltungsbereich | Verantwortlich | Nächstes Audit | Status; Übersichtsgrafik des Compliance-Frameworks
 
 ## Relevante Regelwerke
 
@@ -6332,7 +8849,22 @@ TODO: Welche Prüfungen, wie oft, durch wen?
 
     ("compliance/data-protection.md", "Datenschutz & DSGVO", """
 !!! tip "Inhaltsrichtlinie"
-    Datenschutzmaßnahmen, DSGVO-Konformität, personenbezogene Daten, Löschkonzept.
+    **Zielgruppe:** Datenschutzbeauftragte, Entwickler, Projektleitung, Rechtsabteilung
+
+    **Pflicht-Abschnitte:**
+
+    - Verzeichnis der Verarbeitungstätigkeiten (Art. 30 DSGVO)
+    - Rechtsgrundlagen je Datenverarbeitung (Einwilligung, Vertrag, berechtigtes Interesse)
+    - Technisch-organisatorische Maßnahmen (TOMs)
+    - Betroffenenrechte und deren technische Umsetzung (Auskunft, Löschung, Portabilität)
+    - Datenschutz-Folgenabschätzung (DSFA) bei Hochrisiko-Verarbeitungen
+    - Auftragsverarbeitungsverträge (AVV) mit Dienstleistern
+
+    **Inhaltliche Tiefe:** Juristisch korrekte Formulierungen; Verweis auf konkrete DSGVO-Artikel; Datenflussdiagramme mit Kennzeichnung personenbezogener Daten
+
+    **Abgrenzung:** Keine allgemeinen Sicherheitsmaßnahmen → `compliance/security-policies.md`; keine Aufbewahrungsfristen → `compliance/data-retention.md`
+
+    **Beispiel-Inhalte:** Tabelle: Datenart | Rechtsgrundlage | Speicherort | Löschfrist | Verantwortlicher; Datenflussdiagramm mit markierten PII-Feldern
 
 ## Personenbezogene Daten
 
@@ -6373,7 +8905,22 @@ TODO: Wurde eine DSFA durchgeführt? Ergebnis?
 
     ("compliance/audit.md", "Audit & Nachverfolgung", """
 !!! tip "Inhaltsrichtlinie"
-    Audit-Trail, Nachverfolgbarkeit von Änderungen, Compliance-Berichte.
+    **Zielgruppe:** Auditoren, DevOps-Ingenieure, Compliance-Beauftragte, Systemadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - Audit-Log-Architektur und erfasste Ereignisse
+    - Unveränderlichkeit und Integritätssicherung der Logs (Hashing, WORM-Speicher)
+    - Aufbewahrungsdauer und Archivierung von Audit-Daten
+    - Zugriffskontrolle auf Audit-Logs (Wer darf lesen, niemand darf löschen)
+    - Suchmöglichkeiten und Reporting auf Audit-Daten
+    - Regelmäßige Audit-Prüfzyklen und verantwortliche Rollen
+
+    **Inhaltliche Tiefe:** Technisch präzise: Log-Formate, Speicherorte, Retention-Policies; Beispielabfragen für typische Audit-Szenarien; Sequenzdiagramme für Audit-Event-Flow
+
+    **Abgrenzung:** Keine operativen Monitoring-Metriken → `operations/monitoring.md`; keine Incident-Prozesse → `compliance/incident-response.md`
+
+    **Beispiel-Inhalte:** JSON-Beispiel eines Audit-Log-Eintrags; Tabelle: Ereignistyp | Erfasste Felder | Aufbewahrungsdauer; Diagramm der Audit-Pipeline
 
 ## Audit-Trail
 
@@ -6409,7 +8956,22 @@ TODO: Wann finden externe Audits statt? Vorbereitung?
 
     ("compliance/sla.md", "Service Level Agreements", """
 !!! tip "Inhaltsrichtlinie"
-    SLA-Definitionen, Verfügbarkeits-Ziele, Reaktionszeiten, Eskalation, Reporting.
+    **Zielgruppe:** Projektleitung, Kunden, Operations-Team, Support-Leitung
+
+    **Pflicht-Abschnitte:**
+
+    - SLA-Definitionen je Service-Tier (z.B. Gold, Silber, Bronze)
+    - Verfügbarkeitsziele (z.B. 99,9 %) und deren Berechnung
+    - Reaktions- und Lösungszeiten je Prioritätsstufe
+    - Messmethodik und Ausschlüsse (geplante Wartung, höhere Gewalt)
+    - Eskalationsprozeduren bei SLA-Verletzung
+    - Kompensationsregelungen (Service-Credits)
+
+    **Inhaltliche Tiefe:** Exakte Zahlenwerte und Formeln; Unterscheidung zwischen Verfügbarkeit, Performance und Support-SLAs; monatliche SLA-Berichtsvorlage
+
+    **Abgrenzung:** Keine technischen Monitoring-Details → `operations/monitoring.md`; keine Incident-Prozesse → `compliance/incident-response.md`
+
+    **Beispiel-Inhalte:** Tabelle: Priorität | Reaktionszeit | Lösungszeit | Eskalation; Formel: Verfügbarkeit = (Gesamtzeit − Ausfallzeit) / Gesamtzeit × 100
 
 ## Verfügbarkeit
 
@@ -6446,7 +9008,22 @@ TODO: Eskalationspfade bei SLA-Verletzung
 
     ("compliance/security-policies.md", "Sicherheitsrichtlinien", """
 !!! tip "Inhaltsrichtlinie"
-    Interne Sicherheitsrichtlinien: Passwort-Policy, Zugriffskontrolle, Verschlüsselung, Entwicklungs-Sicherheit.
+    **Zielgruppe:** Alle Entwickler, Systemadministratoren, Sicherheitsbeauftragte, Geschäftsführung
+
+    **Pflicht-Abschnitte:**
+
+    - Passwort- und Authentifizierungsrichtlinien (Länge, Komplexität, MFA-Pflicht)
+    - Netzwerksicherheit (Firewall-Regeln, VPN-Pflicht, Segmentierung)
+    - Verschlüsselungsstandards (TLS-Versionen, Algorithmen, Schlüssellängen)
+    - Zugriffskontrollmodell (RBAC/ABAC, Least-Privilege-Prinzip)
+    - Sichere Entwicklungsrichtlinien (OWASP Top 10, Code-Review-Pflicht)
+    - Physische Sicherheit und Gerätemanagement
+
+    **Inhaltliche Tiefe:** Verbindlich formulierte Richtlinien mit MUSS/SOLL/KANN; konkrete technische Parameter; Verweise auf angewandte Standards (ISO 27001, BSI-Grundschutz)
+
+    **Abgrenzung:** Keine Incident-Prozesse → `compliance/incident-response.md`; keine Datenschutz-Themen → `compliance/data-protection.md`
+
+    **Beispiel-Inhalte:** Richtlinie: „Passwörter MÜSSEN mindestens 14 Zeichen lang sein und MFA ist für alle Produktionsumgebungen PFLICHT"; Tabelle erlaubter TLS-Cipher-Suites
 
 ## Passwort-Richtlinie
 
@@ -6483,7 +9060,22 @@ TODO: Verweis auf [Incident Response](incident-response.md)
 
     ("compliance/incident-response.md", "Incident Response", """
 !!! tip "Inhaltsrichtlinie"
-    Vorgehen bei Sicherheitsvorfällen: Erkennung, Eindämmung, Behebung, Kommunikation, Nachbereitung.
+    **Zielgruppe:** Security-Team, DevOps, Projektleitung, Kommunikationsabteilung
+
+    **Pflicht-Abschnitte:**
+
+    - Incident-Klassifizierung (Schweregrade SEV1–SEV4 mit Beispielen)
+    - Meldekette und Benachrichtigungsfristen (intern + DSGVO 72h-Frist)
+    - Sofortmaßnahmen je Schweregrad (Containment, Eradication, Recovery)
+    - Rollen und Verantwortlichkeiten im Incident-Response-Team
+    - Kommunikationsvorlagen (intern, Kunden, Behörden)
+    - Post-Incident-Review und Lessons-Learned-Prozess
+
+    **Inhaltliche Tiefe:** Schritt-für-Schritt-Ablauf als Checkliste; Entscheidungsbäume für Klassifizierung; Kontaktlisten mit Erreichbarkeit (24/7-Rufbereitschaft)
+
+    **Abgrenzung:** Keine allgemeinen Sicherheitsrichtlinien → `compliance/security-policies.md`; kein operatives Monitoring → `operations/monitoring.md`
+
+    **Beispiel-Inhalte:** Flowchart: Incident erkannt → Klassifizierung → Containment → Analyse → Behebung → Review; Vorlage für Behördenmeldung nach Art. 33 DSGVO
 
 ## Incident-Schweregrade
 
@@ -6519,7 +9111,21 @@ TODO: 72-Stunden-Frist, Meldung an Aufsichtsbehörde, Betroffene informieren
 
     ("compliance/data-retention.md", "Datenaufbewahrung", """
 !!! tip "Inhaltsrichtlinie"
-    Aufbewahrungsrichtlinien: Welche Daten, wie lange, wo, Löschprozess, gesetzliche Anforderungen.
+    **Zielgruppe:** Datenschutzbeauftragte, Datenbankadministratoren, Compliance-Beauftragte
+
+    **Pflicht-Abschnitte:**
+
+    - Aufbewahrungsfristen je Datenkategorie (Geschäftsdaten, Logdaten, Personaldaten, Kundendaten)
+    - Gesetzliche Grundlagen je Frist (HGB, AO, DSGVO, branchenspezifisch)
+    - Löschmechanismen und -automatisierung (Soft-Delete, Hard-Delete, Anonymisierung)
+    - Archivierungsstrategie (Warm/Cold-Storage, Zugriff auf archivierte Daten)
+    - Nachweispflicht: Dokumentation durchgeführter Löschungen
+
+    **Inhaltliche Tiefe:** Tabellarische Übersicht mit exakten Fristen; technische Beschreibung der Lösch-Jobs; Unterscheidung zwischen Löschung und Anonymisierung
+
+    **Abgrenzung:** Keine Backup-Strategien → `operations/backup-recovery.md`; keine DSGVO-Betroffenenrechte → `compliance/data-protection.md`
+
+    **Beispiel-Inhalte:** Tabelle: Datenkategorie | Aufbewahrungsfrist | Gesetzliche Grundlage | Löschmethode | Automatisiert; Cron-Job-Konfiguration für automatische Löschung
 
 ## Aufbewahrungsfristen
 
@@ -6550,7 +9156,22 @@ TODO: Wie wird die Löschung dokumentiert und nachgewiesen?
 
     ("compliance/third-party-risk.md", "Drittanbieter-Risiken", """
 !!! tip "Inhaltsrichtlinie"
-    Risikobewertung von Drittanbieter-Diensten: Auftragsverarbeitung, Datenweitergabe, Ausfallrisiko.
+    **Zielgruppe:** Einkauf, Compliance-Beauftragte, Architekten, Projektleitung
+
+    **Pflicht-Abschnitte:**
+
+    - Bewertungskriterien für Drittanbieter (Sicherheit, Datenschutz, Verfügbarkeit, Finanzkraft)
+    - Risikokategorisierung (niedrig/mittel/hoch/kritisch) mit Schwellenwerten
+    - Due-Diligence-Checkliste vor Beauftragung
+    - Vertragliche Anforderungen (AVV, SLA, Audit-Rechte, Exit-Klauseln)
+    - Regelmäßige Neubewertung und Monitoring laufender Anbieter
+    - Notfallplan bei Ausfall eines kritischen Anbieters
+
+    **Inhaltliche Tiefe:** Strukturierte Bewertungsbögen mit Punktesystem; Entscheidungsmatrix für Anbieterauswahl; Vertragsklausel-Vorlagen
+
+    **Abgrenzung:** Keine Lizenz-Compliance → `compliance/licensing-compliance.md`; keine SLA-Details → `compliance/sla.md`
+
+    **Beispiel-Inhalte:** Bewertungsmatrix: Anbieter | Sicherheitszertifikate | Datenschutzniveau | Abhängigkeitsgrad | Risikostufe; Checkliste mit 20+ Prüfpunkten für Due Diligence
 
 ## Drittanbieter-Übersicht
 
@@ -6584,7 +9205,22 @@ TODO: Wie oft werden Drittanbieter überprüft?
 
     ("compliance/accessibility-compliance.md", "Barrierefreiheit-Compliance", """
 !!! tip "Inhaltsrichtlinie"
-    Gesetzliche Anforderungen zur Barrierefreiheit: WCAG, BITV, EAA, Prüfverfahren, Berichte.
+    **Zielgruppe:** Entwickler, Designer, Projektleitung, Rechtsabteilung
+
+    **Pflicht-Abschnitte:**
+
+    - Geltende Gesetze (BITV 2.0, EU-Richtlinie 2016/2102, EAA/European Accessibility Act)
+    - Anwendungsbereich und betroffene Systeme
+    - Fristen und Übergangsregelungen
+    - Pflichtdokumentation (Barrierefreiheitserklärung, Feedback-Mechanismus)
+    - Prüfverfahren und Zertifizierung (BITV-Test, externe Audits)
+    - Konsequenzen bei Nichteinhaltung
+
+    **Inhaltliche Tiefe:** Juristische Anforderungen mit Gesetzesverweisen; Zuordnung zu WCAG-Kriterien → `design/accessibility-guidelines.md`; Zeitplan für Umsetzung
+
+    **Abgrenzung:** Keine technischen WCAG-Details → `design/accessibility-guidelines.md`; keine Test-Ergebnisse → `testing/accessibility-tests.md`
+
+    **Beispiel-Inhalte:** Zeitstrahl: Gesetzesfristen und interne Meilensteine; Vorlage für die Barrierefreiheitserklärung nach EU-Muster
 
 ## Relevante Gesetze & Standards
 
@@ -6621,7 +9257,22 @@ TODO: Öffentliche Erklärung gem. BITV/EAA
 
     ("compliance/licensing-compliance.md", "Lizenz-Compliance", """
 !!! tip "Inhaltsrichtlinie"
-    Open-Source-Lizenzen: Kompatibilität, Pflichten, SBOM, License-Scanning.
+    **Zielgruppe:** Entwickler, Architekten, Rechtsabteilung, Open-Source-Beauftragte
+
+    **Pflicht-Abschnitte:**
+
+    - Inventar aller verwendeten Open-Source-Bibliotheken mit Lizenztyp
+    - Lizenzkompatibilitätsmatrix (MIT, Apache 2.0, GPL, LGPL, AGPL, MPL)
+    - Pflichten je Lizenztyp (Attribution, Quellcode-Offenlegung, Copyleft)
+    - SBOM-Erstellung (Software Bill of Materials) und Aktualisierungsprozess
+    - Genehmigungsprozess für neue Abhängigkeiten
+    - Verbotene Lizenzen und Ausnahmen
+
+    **Inhaltliche Tiefe:** Vollständige SBOM-Tabelle; Entscheidungsbaum für Lizenzkompatibilität; automatisierte Prüfung via CI/CD-Pipeline (z.B. FOSSA, Snyk)
+
+    **Abgrenzung:** Keine Projekt-Lizenz → `reference/license.md`; keine Drittanbieter-Risiken → `compliance/third-party-risk.md`
+
+    **Beispiel-Inhalte:** SBOM-Tabelle: Bibliothek | Version | Lizenz | Copyleft | Kompatibel; Entscheidungsbaum: „Ist die Lizenz GPL-kompatibel? → Ja/Nein → nächster Schritt"
 
 ## Software Bill of Materials (SBOM)
 
@@ -6654,7 +9305,22 @@ TODO: Bekannte Lizenz-Inkompatibilitäten und wie sie gelöst wurden
 
     ("compliance/export-control.md", "Exportkontrolle & Kryptographie", """
 !!! tip "Inhaltsrichtlinie"
-    Exportkontrollvorschriften für Software mit Kryptographie: Regelwerke, Klassifizierung, Meldepflichten.
+    **Zielgruppe:** Geschäftsführung, Vertrieb, Compliance-Beauftragte, Entwickler (Kryptographie)
+
+    **Pflicht-Abschnitte:**
+
+    - Relevante Exportkontrollvorschriften (EU Dual-Use-VO, US EAR/ITAR falls zutreffend)
+    - Klassifizierung der Software nach Güterlisten (AL, EKL, ECCN)
+    - Kryptographie-Exportbeschränkungen und Ausnahmen
+    - Embargolisten und Screening-Prozess für Endkunden
+    - Dokumentationspflichten und Genehmigungsverfahren
+    - Schulungspflichten für betroffene Mitarbeiter
+
+    **Inhaltliche Tiefe:** Konkrete Einordnung der eigenen Software; Checkliste für Vertrieb vor Auslandsgeschäften; Verweis auf aktuelle Sanktionslisten (EU, UN, OFAC)
+
+    **Abgrenzung:** Keine Lizenz-Themen → `compliance/licensing-compliance.md`; keine allgemeine Rechtsberatung
+
+    **Beispiel-Inhalte:** Checkliste: „Verwendet die Software Verschlüsselung > 56 Bit? → Prüfung auf Listung erforderlich"; Tabelle: Zielland | Sanktionsstatus | Genehmigung erforderlich
 
 ## Relevanz
 
@@ -6688,7 +9354,22 @@ TODO: Müssen Kryptographie-Exporte gemeldet werden?
 
     ("project/onboarding.md", "Team-Onboarding", """
 !!! tip "Inhaltsrichtlinie"
-    Onboarding-Plan für neue Teammitglieder: Checkliste, Zeitplan, Mentor, Ressourcen.
+    **Zielgruppe:** Neue Teammitglieder, HR, Teamleitung, Buddy/Mentor
+
+    **Pflicht-Abschnitte:**
+
+    - Onboarding-Checkliste: Tag 1, Woche 1, Monat 1 (mit Verantwortlichkeiten)
+    - Zugänge und Accounts: welche Systeme, wer beantragt, Bearbeitungszeit
+    - Entwicklungsumgebung einrichten: Schritt-für-Schritt-Anleitung
+    - Architektur-Überblick für Neueinsteiger (vereinfachtes Diagramm)
+    - Ansprechpartner und Buddy-System
+    - Erste Aufgaben (Good-First-Issues, Pair-Programming-Sessions)
+
+    **Inhaltliche Tiefe:** Konkrete Checkliste mit Checkboxen; Links zu relevanten Wiki-Seiten; Zeitschätzungen pro Schritt; Feedback-Meilensteine (nach 2 Wochen, nach 1 Monat)
+
+    **Abgrenzung:** Keine vollständige Entwicklerdoku → `generated/developer/`; keine Projektübersicht → `project/overview.md`
+
+    **Beispiel-Inhalte:** Tag 1: Laptop einrichten, Slack beitreten, Git-Zugang erhalten; Woche 1: Architektur-Walkthrough, erstes PR erstellen; Monat 1: eigenständige Feature-Entwicklung
 
 ## Erste Woche
 
@@ -6731,7 +9412,21 @@ TODO: Interne Wikis, Slack-Kanäle, Ansprechpartner
 
     ("project/definition-of-done.md", "Definition of Done", """
 !!! tip "Inhaltsrichtlinie"
-    Definition of Done (DoD): Wann gilt eine Aufgabe/Story als fertig?
+    **Zielgruppe:** Entwickler, QA-Ingenieure, Product Owner, Scrum Master
+
+    **Pflicht-Abschnitte:**
+
+    - Definition of Done für User Stories (Code, Tests, Review, Doku)
+    - Definition of Done für Sprints (alle Stories abgenommen, Deployment-bereit)
+    - Definition of Done für Releases (Regressionstests, Performance-Check, Release-Notes)
+    - Qualitäts-Gates: was muss erfüllt sein, bevor der nächste Schritt erlaubt ist
+    - Ausnahmen und Umgang mit technischer Schuld
+
+    **Inhaltliche Tiefe:** Klare Checklisten je Ebene; messbare Kriterien (z.B. „Code-Coverage ≥ 80 %"); Beispiele für „Done" vs. „Nicht Done"
+
+    **Abgrenzung:** Keine einzelnen Testfälle → `testing/test-cases.md`; keine Prozessbeschreibung → `project/overview.md`
+
+    **Beispiel-Inhalte:** Story-DoD: Code geschrieben → Unit-Tests ≥ 80 % → Code-Review bestanden → Dokumentation aktualisiert → QA abgenommen → In Staging deployed
 
 ## Story / Feature
 
@@ -6771,7 +9466,22 @@ TODO: Interne Wikis, Slack-Kanäle, Ansprechpartner
 
     ("project/communication-plan.md", "Kommunikationsplan", """
 !!! tip "Inhaltsrichtlinie"
-    Wer kommuniziert wann was an wen: Kanäle, Frequenz, Vorlagen, Eskalation.
+    **Zielgruppe:** Projektleitung, Stakeholder, Kommunikationsverantwortliche, gesamtes Team
+
+    **Pflicht-Abschnitte:**
+
+    - Kommunikationsmatrix: Zielgruppe → Kanal → Frequenz → Inhalt → Verantwortlicher
+    - Interne Kommunikation: Slack-Channels, E-Mail-Verteiler, Wiki-Bereiche
+    - Externe Kommunikation: Kunden-Updates, Stakeholder-Reports, Release-Ankündigungen
+    - Eskalationskommunikation: wer informiert wen bei Problemen
+    - Status-Reporting: Vorlage und Rhythmus (wöchentlich, monatlich)
+    - Dokumentationsstandards: wo wird was festgehalten
+
+    **Inhaltliche Tiefe:** Vollständige Kommunikationsmatrix als Tabelle; Vorlagen für Status-Reports; Kanal-Übersicht mit Zweck und Regeln
+
+    **Abgrenzung:** Keine Stakeholder-Details → `project/stakeholders.md`; keine Meeting-Agenden → `project/meetings.md`
+
+    **Beispiel-Inhalte:** Matrix: Stakeholder-Gruppe | Kanal | Frequenz | Inhalt | Verantwortlich; Vorlage: „Wöchentlicher Status: Fortschritt | Risiken | Nächste Schritte"
 
 ## Regelmäßige Kommunikation
 
@@ -6818,7 +9528,20 @@ TODO: Wann und wie wird eskaliert? Verweis auf [On-Call](../operations/on-call.m
     # ━━ Referenz ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     ("reference/faq.md", "Häufig gestellte Fragen (FAQ)", """
 !!! tip "Inhaltsrichtlinie"
-    Häufige Fragen zu Installation, Konfiguration, Verwendung, Fehlerbehebung.
+    **Zielgruppe:** Endanwender, Entwickler, Support-Team, neue Teammitglieder
+
+    **Pflicht-Abschnitte:**
+
+    - FAQ nach Kategorien geordnet (Allgemein, Installation, Konfiguration, Fehlerbehebung, Lizenzierung)
+    - Je Frage: klare, kurze Antwort mit weiterführendem Link
+    - Häufigste Support-Anfragen als Top-10
+    - Suchfunktion oder Inhaltsverzeichnis für schnellen Zugriff
+
+    **Inhaltliche Tiefe:** Praxisnahe Fragen aus echtem Support-Aufkommen; Code-Snippets wo hilfreich; max. 5 Sätze pro Antwort, dann Verweis auf Detail-Seite
+
+    **Abgrenzung:** Keine vollständigen Anleitungen → spezifische Doku-Seiten; keine Fehlercodes → `reference/error-codes.md`
+
+    **Beispiel-Inhalte:** F: „Wie setze ich mein Passwort zurück?" A: „Klicken Sie auf ‚Passwort vergessen' auf der Login-Seite. Sie erhalten eine E-Mail mit Zurücksetzungslink."
 
 ## Allgemein
 
@@ -6847,7 +9570,21 @@ TODO: Lizenz, Support, Roadmap
 
     ("reference/troubleshooting.md", "Fehlerbehebung", """
 !!! tip "Inhaltsrichtlinie"
-    Systematische Fehlersuche: Häufige Probleme mit Ursache und Lösung, Debug-Modus.
+    **Zielgruppe:** Entwickler, Systemadministratoren, Support-Team
+
+    **Pflicht-Abschnitte:**
+
+    - Problemkategorien (Installation, Verbindung, Performance, Authentifizierung, Daten)
+    - Je Problem: Symptom → Ursache → Lösung (strukturiertes Format)
+    - Diagnose-Tools und -Befehle (Log-Dateien, Debug-Modus, Health-Checks)
+    - Entscheidungsbaum für häufige Problemsituationen
+    - Eskalationspfade wenn Selbsthilfe nicht ausreicht
+
+    **Inhaltliche Tiefe:** Reproduzierbare Lösungsschritte mit Befehlen; Log-Ausgabe-Beispiele mit Erklärung; Verlinkung zu relevanten Konfigurationsseiten
+
+    **Abgrenzung:** Keine Fehlercodes → `reference/error-codes.md`; keine bekannten Einschränkungen → `reference/known-issues.md`
+
+    **Beispiel-Inhalte:** Problem: „Verbindung zur Datenbank schlägt fehl" → Prüfung: `telnet db-host 5432` → Ursache: Firewall blockiert → Lösung: Port freigeben
 
 ## Allgemeine Vorgehensweise
 
@@ -6892,7 +9629,21 @@ TODO: Issue Tracker, Support-Kanäle
 
     ("reference/error-codes.md", "Fehlercodes", """
 !!! tip "Inhaltsrichtlinie"
-    Vollständige Liste aller Fehlercodes mit Beschreibung und Lösung.
+    **Zielgruppe:** Entwickler, Support-Team, Systemadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - Fehlercode-Schema und Namenskonvention (z.B. E-AUTH-001, E-DB-042)
+    - Vollständige Fehlercode-Tabelle: Code | Nachricht | Beschreibung | Lösung
+    - HTTP-Statuscodes und deren projektspezifische Bedeutung
+    - Fehlercode-Bereiche je Modul/Subsystem
+    - Logging-Level-Zuordnung je Fehlercode (ERROR, WARN, INFO)
+
+    **Inhaltliche Tiefe:** Jeder Fehlercode mit konkreter Lösungsanweisung; Suchbare Tabelle; Beispiel-Fehlermeldung wie sie dem Nutzer angezeigt wird
+
+    **Abgrenzung:** Keine Fehlerbehebungs-Anleitungen → `reference/troubleshooting.md`; keine API-Fehlermeldungen → API-Dokumentation
+
+    **Beispiel-Inhalte:** E-AUTH-001 | „Ungültige Anmeldedaten" | Benutzername oder Passwort falsch | Lösung: Passwort zurücksetzen; HTTP 429: Rate-Limit überschritten
 
 ## Fehlercodes
 
@@ -6918,7 +9669,22 @@ ERR-<KATEGORIE>-<NUMMER>
 
     ("reference/env-variables.md", "Umgebungsvariablen", """
 !!! tip "Inhaltsrichtlinie"
-    Vollständige Referenz aller unterstützten Umgebungsvariablen.
+    **Zielgruppe:** Entwickler, DevOps-Ingenieure, Systemadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - Vollständige Liste aller Umgebungsvariablen
+    - Je Variable: Name, Beschreibung, Typ, Pflicht/Optional, Standardwert, Beispielwert
+    - Gruppierung nach Subsystem (Datenbank, Cache, Auth, Logging, Feature-Flags)
+    - Validierungsregeln und erlaubte Wertemenge
+    - Sicherheitshinweise: welche Variablen geheim sind (Secrets)
+    - `.env.example`-Datei als Vorlage
+
+    **Inhaltliche Tiefe:** Tabellarische Referenz; Typ-Angaben (string, int, bool, URL); Wechselwirkungen zwischen Variablen dokumentieren
+
+    **Abgrenzung:** Keine Konfigurationsdateien → `reference/configuration-reference.md`; keine Deployment-Anleitungen → `operations/`
+
+    **Beispiel-Inhalte:** `DATABASE_URL` | PostgreSQL Connection String | Pflicht | — | `postgres://user:pass@localhost:5432/mydb` | SECRET
 
 ## Übersicht
 
@@ -6949,7 +9715,21 @@ Umgebungsvariablen überschreiben Werte aus der Konfigurationsdatei.
 
     ("reference/known-issues.md", "Bekannte Probleme", """
 !!! tip "Inhaltsrichtlinie"
-    Aktuell bekannte Einschränkungen, Bugs und deren Workarounds.
+    **Zielgruppe:** Entwickler, QA-Ingenieure, Support-Team, Product Owner
+
+    **Pflicht-Abschnitte:**
+
+    - Liste bekannter Einschränkungen und Bugs mit Status
+    - Je Eintrag: ID, Beschreibung, betroffene Version, Schweregrad, Workaround, geplante Behebung
+    - Kategorisierung (UI, API, Performance, Sicherheit, Kompatibilität)
+    - Verknüpfung mit Issue-Tracker (Jira/GitHub-Issue-Nummer)
+    - Wann zuletzt aktualisiert
+
+    **Inhaltliche Tiefe:** Konkrete Reproduktionsschritte für jeden Bug; Workarounds mit Code-Beispielen wo möglich; Zeitplan für Fixes
+
+    **Abgrenzung:** Keine behobenen Bugs → `reference/changelog.md`; keine allgemeine Fehlerbehebung → `reference/troubleshooting.md`
+
+    **Beispiel-Inhalte:** KI-023: „CSV-Export bricht bei > 10.000 Zeilen ab" | v2.3 | Hoch | Workaround: Daten in Batches exportieren | Fix geplant: v2.5
 
 ## Aktuelle Probleme
 
@@ -6968,7 +9748,23 @@ TODO: Verweis auf Roadmap / Issue Tracker
 
     ("reference/migration-guide.md", "Migrations-Handbuch", """
 !!! tip "Inhaltsrichtlinie"
-    Anleitungen für die Migration zwischen Major-Versionen.
+    **Zielgruppe:** Entwickler, DevOps-Ingenieure, Systemadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - Migrations-Übersicht: von welcher Version zu welcher Version
+    - Voraussetzungen und Backup-Empfehlung vor Migration
+    - Schritt-für-Schritt-Anleitung (mit Befehlen und Konfigurationsänderungen)
+    - Breaking Changes: was sich geändert hat und wie der Code angepasst werden muss
+    - Datenbank-Migrationen: Schema-Änderungen, Datenmigrationsskripte
+    - Rollback-Plan falls die Migration fehlschlägt
+    - Verifikation: wie prüft man, ob die Migration erfolgreich war
+
+    **Inhaltliche Tiefe:** Exakte Befehle mit Versions-Parametern; Vorher-Nachher-Code-Vergleiche für Breaking Changes; geschätzte Ausfallzeit; Checkliste
+
+    **Abgrenzung:** Keine Versionshistorie → `reference/changelog.md`; keine allgemeine Konfiguration → `reference/configuration-reference.md`
+
+    **Beispiel-Inhalte:** Migration v2→v3: 1. Backup erstellen, 2. `npm install @app/core@3.0`, 3. `config.yml` aktualisieren (Auth-Sektion umbenannt), 4. DB-Migration ausführen
 
 ## Übersicht
 
@@ -7001,7 +9797,20 @@ TODO
 
     ("reference/glossary.md", "Glossar", """
 !!! tip "Inhaltsrichtlinie"
-    Begriffserklärungen: Fachbegriffe, Abkürzungen, projektspezifische Terminologie.
+    **Zielgruppe:** Alle Projektbeteiligten, neue Teammitglieder, Fachbereich
+
+    **Pflicht-Abschnitte:**
+
+    - Alphabetisch sortiertes Verzeichnis aller Fachbegriffe
+    - Je Begriff: Definition, Kontext/Verwendung im Projekt, Synonyme
+    - Unterscheidung zwischen fachlichen und technischen Begriffen
+    - Abkürzungsverzeichnis (Akronyme mit Auflösung)
+
+    **Inhaltliche Tiefe:** Kurze, präzise Definitionen (1–3 Sätze); Verlinkung zu relevanten Doku-Seiten; konsistente Verwendung im gesamten Projekt sicherstellen
+
+    **Abgrenzung:** Keine vollständigen Erklärungen → spezifische Doku-Seiten; kein allgemeines IT-Glossar, nur projektrelevante Begriffe
+
+    **Beispiel-Inhalte:** **Tenant** – Ein isolierter Mandant im Multi-Tenancy-System. Jeder Tenant hat eigene Daten und Konfiguration. Siehe: `architecture/data-model.md`
 
 Alphabetisch sortierte Begriffsdefinitionen.
 
@@ -7025,7 +9834,21 @@ TODO: Projektspezifische Fachbegriffe ergänzen
 
     ("reference/changelog.md", "Changelog", """
 !!! tip "Inhaltsrichtlinie"
-    Versionshistorie nach [Keep a Changelog](https://keepachangelog.com/) Format.
+    **Zielgruppe:** Entwickler, Product Owner, Kunden, Support-Team
+
+    **Pflicht-Abschnitte:**
+
+    - Versionshistorie in umgekehrt chronologischer Reihenfolge (neueste zuerst)
+    - Je Version: Versionsnummer, Datum, Kategorien (Added, Changed, Fixed, Removed, Security)
+    - Semantic Versioning erklären (Major.Minor.Patch)
+    - Verlinkung zu zugehörigen Release Notes, Git-Tags, Merge-Requests
+    - Breaking Changes klar hervorgehoben
+
+    **Inhaltliche Tiefe:** Keep-a-Changelog-Format; entwicklerzentriert (technisch); jeder Eintrag verlinkt auf Issue/PR; automatisierte Generierung wo möglich
+
+    **Abgrenzung:** Keine nutzerzentrierte Sprache → `reference/release-notes.md`; keine Migrationsanleitung → `reference/migration-guide.md`
+
+    **Beispiel-Inhalte:** ## [2.5.0] - 2025-01-15 / Added: Multi-Tenant-Support (#234) / Fixed: CSV-Export bei großen Dateien (#189) / Breaking: Auth-Config-Key umbenannt
 
 ## [Unreleased]
 
@@ -7045,8 +9868,21 @@ TODO: Projektspezifische Fachbegriffe ergänzen
 
     ("reference/configuration-reference.md", "Konfigurationsreferenz", """
 !!! tip "Inhaltsrichtlinie"
-    Vollständige Referenz ALLER Konfigurationsoptionen — alphabetisch oder nach Kategorie.
-    Diese Seite ist die EINE Anlaufstelle für alle Konfigurationsfragen.
+    **Zielgruppe:** Entwickler, DevOps-Ingenieure, Systemadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - Vollständige Referenz aller Konfigurationsdateien (YAML, JSON, TOML, INI)
+    - Je Option: Schlüssel, Beschreibung, Typ, Standardwert, erlaubte Werte, Beispiel
+    - Konfigurationshierarchie: Datei → Umgebungsvariable → CLI-Flag (Priorität)
+    - Validierungsregeln und Fehlermeldungen bei ungültiger Konfiguration
+    - Minimal-Konfiguration vs. vollständige Konfiguration
+
+    **Inhaltliche Tiefe:** Vollständige kommentierte Beispiel-Konfigurationsdatei; Typ-Angaben und Constraints; Seiteneffekte bei Kombinationen dokumentieren
+
+    **Abgrenzung:** Keine Umgebungsvariablen → `reference/env-variables.md`; keine Deployment-Anleitung → `operations/`
+
+    **Beispiel-Inhalte:** `server.port` | int | 8080 | 1024–65535 | HTTP-Port des Servers; Beispiel: vollständige `config.yml` mit Kommentaren
 
 ## Konfigurationsdatei
 
@@ -7086,7 +9922,22 @@ TODO: Alle Optionen nach diesem Schema dokumentieren
 
     ("reference/permissions-matrix.md", "Berechtigungsmatrix", """
 !!! tip "Inhaltsrichtlinie"
-    Vollständige Matrix: Welche Rolle darf welche Aktion auf welcher Ressource ausführen?
+    **Zielgruppe:** Projektleitung, Administratoren, Sicherheitsbeauftragte, Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Rollen-Definitionen (Admin, Manager, User, Guest, Service-Account)
+    - Berechtigungs-Matrix: Rolle × Ressource × Aktion (Lesen, Schreiben, Löschen, Admin)
+    - Feingranulare Berechtigungen je Modul/Feature
+    - Rollenvererbung und -hierarchie
+    - Sonderfälle: Tenant-übergreifende Berechtigungen, API-Key-Scopes
+    - Änderungsprozess für Berechtigungen
+
+    **Inhaltliche Tiefe:** Vollständige Matrix als Tabelle; RBAC-Modell-Diagramm; Code-Beispiele für Berechtigungsprüfung; Audit-Anforderungen
+
+    **Abgrenzung:** Keine Sicherheitsrichtlinien → `compliance/security-policies.md`; keine API-Auth-Details → API-Dokumentation
+
+    **Beispiel-Inhalte:** Matrix: Rolle | Benutzer verwalten | Reports lesen | Einstellungen ändern | Daten exportieren; Admin: ✓/✓/✓/✓; User: ✗/✓/✗/✓
 
 ## Matrix
 
@@ -7117,7 +9968,22 @@ TODO: Zusätzliche Berechtigungen die nicht in die Matrix passen
 
     ("reference/supported-platforms.md", "Plattform-Unterstützung", """
 !!! tip "Inhaltsrichtlinie"
-    Support-Matrix: Betriebssysteme, Browser, Architekturen, Container-Runtimes.
+    **Zielgruppe:** Kunden, Vertrieb, DevOps, Support-Team
+
+    **Pflicht-Abschnitte:**
+
+    - Unterstützte Betriebssysteme mit Versionsangaben
+    - Unterstützte Browser und Mindestversionen
+    - Hardware-Mindestanforderungen (CPU, RAM, Speicher)
+    - Unterstützte Datenbanken und Versionen
+    - Runtime-Anforderungen (Node.js, Python, Java-Version)
+    - Support-Lifecycle: wie lange wird eine Plattform unterstützt nach EOL
+
+    **Inhaltliche Tiefe:** Klare Tabellen mit Status (unterstützt, eingeschränkt, nicht unterstützt, abgekündigt); Datum der nächsten Abkündigung; empfohlene Konfiguration
+
+    **Abgrenzung:** Keine Kompatibilitätstests → `testing/compatibility-tests.md`; keine Installationsanleitung → relevante Doku
+
+    **Beispiel-Inhalte:** Tabelle: Plattform | Version | Status | Support-Ende; Linux Ubuntu 22.04: voll unterstützt bis 04/2027; Windows Server 2019: eingeschränkt
 
 ## Betriebssysteme
 
@@ -7157,8 +10023,22 @@ TODO: AWS, GCP, Azure — welche Dienste wurden getestet?
 
     ("reference/release-notes.md", "Release Notes", """
 !!! tip "Inhaltsrichtlinie"
-    Detaillierte Release Notes pro Version: Highlights, neue Features, Bugfixes, Breaking Changes, Upgrade-Hinweise.
-    Unterschied zum [Changelog](changelog.md): Release Notes sind ausführlicher und benutzerorientiert.
+    **Zielgruppe:** Endanwender, Kunden, Product Owner, Marketing
+
+    **Pflicht-Abschnitte:**
+
+    - Versionsnummer und Veröffentlichungsdatum
+    - Zusammenfassung der wichtigsten Neuerungen (nutzerzentriert formuliert)
+    - Neue Features mit Beschreibung und ggf. Screenshots
+    - Verbesserungen und Fehlerbehebungen (verständlich, nicht technisch)
+    - Hinweise auf Breaking Changes oder erforderliche Aktionen
+    - Update-Anleitung oder Verweis auf Migrations-Guide
+
+    **Inhaltliche Tiefe:** Nutzerzentriert, nicht technisch; Bilder/GIFs für neue Features; klare Handlungsanweisungen bei Breaking Changes
+
+    **Abgrenzung:** Keine technischen Details → `reference/changelog.md`; keine Migrationsschritte → `reference/migration-guide.md`
+
+    **Beispiel-Inhalte:** „Neu in v2.5: Dashboard jetzt mit Echtzeit-Updates! Ihre Daten werden automatisch aktualisiert, ohne die Seite neu zu laden."
 
 ## Version X.Y.Z (Datum)
 
@@ -7194,7 +10074,22 @@ TODO: Verweis auf [Bekannte Probleme](known-issues.md)
 
     ("reference/license.md", "Lizenz", """
 !!! tip "Inhaltsrichtlinie"
-    Projektlizenz, Drittanbieter-Lizenzen, Lizenz-Kompatibilität, Beitragsvereinbarung.
+    **Zielgruppe:** Rechtsabteilung, Kunden, Open-Source-Community, Vertrieb
+
+    **Pflicht-Abschnitte:**
+
+    - Vollständiger Lizenztext des Projekts
+    - Lizenztyp und wesentliche Bestimmungen in verständlicher Sprache
+    - Rechte: was darf man mit der Software tun
+    - Pflichten: was muss man beachten (Attribution, Copyleft)
+    - Einschränkungen: was ist nicht erlaubt
+    - Kontakt für Lizenzanfragen (kommerzielle Lizenzen, Sondergenehmigungen)
+
+    **Inhaltliche Tiefe:** Vollständiger, unveränderter Lizenztext; zusätzlich eine Kurzfassung in verständlicher Sprache; SPDX-Identifier
+
+    **Abgrenzung:** Keine Drittanbieter-Lizenzen → `compliance/licensing-compliance.md`; keine Vertragsbedingungen
+
+    **Beispiel-Inhalte:** SPDX: MIT; Kurzfassung: „Sie dürfen die Software frei verwenden, kopieren und verändern, solange der Copyright-Vermerk erhalten bleibt."
 
 ## Projektlizenz
 
@@ -7258,6 +10153,1471 @@ Auf dieser Seite werden automatisch alle verwendeten Tags und die zugehörigen S
 *[i18n]: Internationalization
 *[l10n]: Localization
 """),
+
+    # ━━ Design-System ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("design/overview.md", "Design-System — Überblick", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Designer, Frontend-Entwickler, Produktmanager, UX-Researcher
+
+    **Pflicht-Abschnitte:**
+
+    - Vision und Prinzipien des Design-Systems (Konsistenz, Wiederverwendbarkeit, Barrierefreiheit)
+    - Übersicht aller Bestandteile (Tokens, Komponenten, Patterns, Vorlagen)
+    - Governance: Wer pflegt das Design-System, Änderungsprozess, Versionierung
+    - Tooling und Technologie-Stack (Figma, Storybook, CSS-Framework)
+    - Adoptions-Roadmap und aktueller Reifegrad
+    - Links zu allen Unterseiten des Design-Bereichs
+
+    **Inhaltliche Tiefe:** Strategische Übersicht mit visuellen Beispielen; Architekturdiagramm des Design-Systems; Entscheidungsmatrix für Komponenten-Auswahl
+
+    **Abgrenzung:** Keine einzelnen Komponenten-Details → `design/components.md`; keine Token-Werte → `design/tokens.md`
+
+    **Beispiel-Inhalte:** Diagramm: Tokens → Komponenten → Patterns → Seitenvorlagen; Tabelle: Prinzip | Beschreibung | Beispiel
+
+## Design-Prinzipien
+
+- **Konsistenz**: Gleiche Muster für gleiche Aktionen
+- **Einfachheit**: So wenig UI-Elemente wie nötig
+- **Barrierefreiheit**: WCAG 2.1 AA als Mindeststandard
+- **Responsivität**: Funktioniert auf allen Bildschirmgrößen
+
+## Farben
+
+| Name | Hex | Verwendung |
+|------|-----|-----------|
+| Primary | TODO | Hauptaktionen, Links |
+| Secondary | TODO | Sekundäre Aktionen |
+| Success | TODO | Erfolgsmeldungen |
+| Warning | TODO | Warnungen |
+| Error | TODO | Fehlermeldungen |
+| Background | TODO | Hintergrund |
+| Text | TODO | Fließtext |
+
+## Typographie
+
+| Stil | Schrift | Größe | Verwendung |
+|------|--------|-------|-----------|
+| H1 | TODO | 2rem | Seitentitel |
+| H2 | TODO | 1.5rem | Abschnitte |
+| Body | TODO | 1rem | Fließtext |
+| Small | TODO | 0.875rem | Hinweise |
+| Code | Monospace | 0.875rem | Code-Blöcke |
+
+## Abstände
+
+TODO: Spacing-System (4px, 8px, 16px, 24px, 32px, 48px, 64px)
+
+## Icons
+
+TODO: Welches Icon-Set? (Material Icons, Heroicons, Lucide, etc.)
+"""),
+
+    ("design/components.md", "UI-Komponenten", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Frontend-Entwickler, Designer, QA-Ingenieure
+
+    **Pflicht-Abschnitte:**
+
+    - Komponentenkatalog mit Kategorien (Navigation, Formulare, Feedback, Layout, Daten)
+    - Je Komponente: Name, Beschreibung, Varianten, Props/API, Barrierefreiheit
+    - Verwendungsrichtlinien (Do's and Don'ts) je Komponente
+    - Status je Komponente (stabil, beta, deprecated)
+    - Kompositionsmuster: wie Komponenten kombiniert werden
+
+    **Inhaltliche Tiefe:** Vollständige API-Dokumentation je Komponente; Code-Beispiele in der verwendeten Framework-Syntax; Screenshots aller Varianten; ARIA-Attribute
+
+    **Abgrenzung:** Keine Design-Token-Werte → `design/tokens.md`; keine Animations-Details → `design/animations.md`; keine Formular-Patterns → `design/forms.md`
+
+    **Beispiel-Inhalte:** Komponente „Button": Varianten (primary, secondary, ghost, danger); Props-Tabelle: Prop | Typ | Default | Beschreibung; Code-Snippet
+
+## Buttons
+
+| Variante | Verwendung | Beispiel |
+|----------|-----------|---------|
+| Primary | Hauptaktion | Speichern, Erstellen |
+| Secondary | Nebenaktionen | Abbrechen, Zurück |
+| Danger | Destruktive Aktionen | Löschen |
+| Ghost | Subtile Aktionen | Links, Icons |
+
+## Formulare
+
+TODO: Input, Select, Checkbox, Radio, Textarea, DatePicker, FilePicker
+
+## Navigation
+
+TODO: Navbar, Sidebar, Breadcrumbs, Tabs, Pagination
+
+## Feedback
+
+TODO: Alert, Toast, Modal, Tooltip, Loading-Spinner, Progress-Bar
+
+## Daten-Darstellung
+
+TODO: Table, Card, List, Badge, Tag, Avatar
+
+## Layout
+
+TODO: Grid, Container, Divider, Spacer
+
+## Komponentenstatus
+
+| Komponente | Status | Dokumentiert | Getestet |
+|-----------|--------|-------------|---------|
+| Button | Stabil | ✓ | ✓ |
+| TODO | TODO | TODO | TODO |
+"""),
+
+    ("design/tokens.md", "Design Tokens", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Frontend-Entwickler, Designer, Design-System-Maintainer
+
+    **Pflicht-Abschnitte:**
+
+    - Farbpalette: Primär-, Sekundär-, Neutral-, Status-Farben (Hex, HSL, CSS-Variablen)
+    - Typografie-Tokens: Schriftfamilien, Größen, Zeilenhöhen, Gewichte
+    - Abstands-System (Spacing-Skala: 4px-Raster)
+    - Schatten, Border-Radien, Z-Index-Skala
+    - Breakpoints für Responsive Design
+    - Token-Namenskonvention und Alias-System (semantisch → primitiv)
+
+    **Inhaltliche Tiefe:** Vollständige Token-Tabellen mit Werten; Farbkontrast-Verhältnisse (WCAG AA/AAA); visuelle Beispiele für jede Token-Kategorie
+
+    **Abgrenzung:** Keine Komponenten → `design/components.md`; kein Dark-Mode-Mapping → `design/dark-mode.md`
+
+    **Beispiel-Inhalte:** Tabelle: Token-Name | Wert (Light) | Wert (Dark) | Verwendung; z.B. `--color-primary-500: #2563eb` → Haupt-CTA-Buttons
+
+## Was sind Design Tokens?
+
+Design Tokens sind die kleinsten Bausteine des Design-Systems — Werte für
+Farben, Abstände, Schriften etc. als Variablen definiert.
+
+## Farb-Tokens
+
+```css
+--color-primary: #3b82f6;
+--color-primary-hover: #2563eb;
+--color-primary-active: #1d4ed8;
+--color-text: #1f2937;
+--color-text-secondary: #6b7280;
+--color-background: #ffffff;
+--color-surface: #f9fafb;
+--color-border: #e5e7eb;
+```
+
+TODO: An tatsächliche Farben anpassen
+
+## Spacing-Tokens
+
+```css
+--space-1: 0.25rem;  /* 4px */
+--space-2: 0.5rem;   /* 8px */
+--space-3: 0.75rem;  /* 12px */
+--space-4: 1rem;     /* 16px */
+--space-6: 1.5rem;   /* 24px */
+--space-8: 2rem;     /* 32px */
+```
+
+## Typography-Tokens
+
+TODO: Font-Family, Font-Size, Line-Height, Font-Weight
+
+## Shadow-Tokens
+
+TODO: Box-Shadow-Stufen (sm, md, lg, xl)
+
+## Border-Tokens
+
+TODO: Border-Radius, Border-Width, Border-Color
+
+## Dark-Mode-Tokens
+
+TODO: Overrides für Dark Mode
+"""),
+
+    ("design/style-guide.md", "Style Guide", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Designer, Content-Ersteller, Marketing, Frontend-Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Logo-Verwendung (Varianten, Schutzzone, Mindestgrößen, verbotene Modifikationen)
+    - Bildsprache und Fotografie-Richtlinien
+    - Tonalität und Schreibstil (formell/informell, Anredeform, Fachbegriffe)
+    - Layout-Raster und Seitenaufbau-Prinzipien
+    - Markenfarben im Kontext (Print vs. Digital, Kontrastvorgaben)
+    - Konsistenzregeln für Texte (Datum, Zahlen, Abkürzungen)
+
+    **Inhaltliche Tiefe:** Visuelle Beispiele für korrekte und falsche Anwendung; konkrete Textbeispiele für Tonalität; Checkliste für Review
+
+    **Abgrenzung:** Keine technischen Token-Werte → `design/tokens.md`; keine Komponentenspezifikation → `design/components.md`
+
+    **Beispiel-Inhalte:** Do/Don't-Gegenüberstellungen für Logo-Platzierung; Textbeispiel: „Sagen Sie ‚Speichern' statt ‚Submit'"; Raster-Overlay auf Beispielseite
+
+## Sprache & Ton
+
+- **Klar**: Fachbegriffe erklären, Abkürzungen vermeiden
+- **Freundlich**: Positive Formulierungen bevorzugen
+- **Prägnant**: So kurz wie möglich, so lang wie nötig
+- **Aktiv**: Aktiv statt Passiv ("Klicken Sie" statt "Es wird geklickt")
+
+## Textkonventionen
+
+| Element | Konvention | Beispiel |
+|---------|-----------|---------|
+| Button-Texte | Imperativ, kurz | "Speichern", "Löschen" |
+| Überschriften | Title Case (DE: Normal) | "Neue Datei erstellen" |
+| Fehlermeldungen | Ursache + Lösung | "Datei nicht gefunden. Prüfen Sie den Pfad." |
+| Platzhalter | Beispielwert | "max@example.com" |
+| Tooltips | Kurze Erklärung | "Datei als PDF exportieren" |
+
+## Do's und Don'ts
+
+### Do's
+- Konsistente Terminologie verwenden
+- Benutzer mit "Sie" ansprechen
+- Fehler verständlich erklären
+
+### Don'ts
+- Technischen Jargon in der UI
+- Doppelte Verneinungen
+- Mehrdeutige Icons ohne Label
+
+## Bilder & Screenshots
+
+TODO: Dateiformate (WebP/PNG), max. Breite, Beschriftung, Alt-Texte
+
+## Animationen
+
+TODO: Dauer (150-300ms), Easing, wann animieren?
+"""),
+
+    ("design/accessibility-guidelines.md", "Accessibility-Richtlinien", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Frontend-Entwickler, Designer, QA-Ingenieure, Content-Ersteller
+
+    **Pflicht-Abschnitte:**
+
+    - WCAG 2.1 AA-Konformitätsziele und relevante Erfolgskriterien
+    - Farbkontraste: Mindestverhältnisse (4.5:1 Text, 3:1 große Schrift, 3:1 UI-Elemente)
+    - Tastaturnavigation: Fokusreihenfolge, Fokus-Indikatoren, Skip-Links
+    - Screenreader-Unterstützung: ARIA-Rollen, Landmarks, Live-Regions
+    - Alternativtexte für Bilder, Videos und andere Medien
+    - Formulare: Labels, Fehlermeldungen, Gruppierung
+
+    **Inhaltliche Tiefe:** Code-Beispiele für ARIA-Patterns; Kontrast-Checker-Tool-Empfehlungen; Checkliste je Komponente; Prüfverfahren mit assistiven Technologien
+
+    **Abgrenzung:** Keine gesetzlichen Anforderungen → `compliance/accessibility-compliance.md`; keine Testergebnisse → `testing/accessibility-tests.md`
+
+    **Beispiel-Inhalte:** Code: `<button aria-label="Menü schließen">X</button>`; Kontrast-Tabelle für alle Farbkombinationen; Checkliste: Tastatur-Test je Seite
+
+## WCAG 2.1 Level AA Anforderungen
+
+### Wahrnehmbar
+
+- **Farbkontrast**: Min. 4.5:1 für Text, 3:1 für große Schrift
+- **Nicht nur Farbe**: Information nicht ausschließlich über Farbe vermitteln
+- **Alt-Texte**: Alle Bilder mit beschreibendem Alt-Text
+- **Untertitel**: Videos mit Untertiteln (falls zutreffend)
+
+### Bedienbar
+
+- **Tastatur**: Alle Funktionen per Tastatur erreichbar
+- **Tab-Reihenfolge**: Logische Navigation mit Tab
+- **Focus-Indicator**: Sichtbarer Fokus-Ring
+- **Skip-Links**: "Zum Inhalt springen"-Link
+
+### Verständlich
+
+- **Sprache**: `lang`-Attribut gesetzt
+- **Konsistenz**: Gleiche Navigation auf allen Seiten
+- **Fehlervermeidung**: Validierung vor Absenden
+
+### Robust
+
+- **Semantisches HTML**: Korrekte Überschriften-Hierarchie, Landmarks
+- **ARIA**: ARIA-Labels wo nötig, `role`-Attribute
+
+## ARIA-Verwendung
+
+| Widget | ARIA-Attribute | Beispiel |
+|--------|---------------|---------|
+| Modal | `role="dialog"`, `aria-modal="true"` | Bestätigungsdialog |
+| Tab | `role="tablist"`, `role="tab"` | Tab-Navigation |
+| Alert | `role="alert"` | Fehlermeldung |
+
+## Automatische Tests
+
+TODO: axe-core, Lighthouse Accessibility, pa11y
+
+## Manuelle Tests
+
+TODO: Screen-Reader-Test, Tastatur-Test, Zoom-Test (200%)
+"""),
+
+    ("design/responsive.md", "Responsive Design", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Frontend-Entwickler, Designer, QA-Ingenieure
+
+    **Pflicht-Abschnitte:**
+
+    - Breakpoint-Definitionen (mobile, tablet, desktop, large-desktop) mit exakten Pixelwerten
+    - Layout-Strategie: Mobile-First vs. Desktop-First
+    - Grid-System und Spalten-Konfiguration je Breakpoint
+    - Typografie-Skalierung (fluid typography oder stufenweise)
+    - Bild- und Medien-Strategie (srcset, picture-Element, lazy loading)
+    - Touch-Zielgrößen (mind. 44×44px) und Abstände auf Mobilgeräten
+
+    **Inhaltliche Tiefe:** CSS-Code-Beispiele für Media-Queries; visuelle Vergleiche je Breakpoint; Performance-Hinweise für mobile Geräte
+
+    **Abgrenzung:** Keine Design-Token-Werte → `design/tokens.md`; keine Komponenten-Varianten → `design/components.md`
+
+    **Beispiel-Inhalte:** Breakpoint-Tabelle: Name | Min-Width | Spalten | Gutter; Wireframe-Vergleich: Mobile vs. Desktop-Layout
+
+## Breakpoints
+
+| Name | Breite | Gerätetyp |
+|------|--------|----------|
+| xs | < 576px | Smartphone (Portrait) |
+| sm | ≥ 576px | Smartphone (Landscape) |
+| md | ≥ 768px | Tablet |
+| lg | ≥ 992px | Desktop |
+| xl | ≥ 1200px | Großer Desktop |
+| xxl | ≥ 1400px | Ultrawide |
+
+## Mobile-First-Prinzip
+
+TODO: Basis-Layout für Mobile, erweitert per Media Query
+
+## Grid-System
+
+TODO: CSS Grid / Flexbox, Spalten, Abstände
+
+## Touch-Targets
+
+- Mindestgröße: 44x44px (Apple) / 48x48px (Material Design)
+- Mindestabstand zwischen Targets: 8px
+
+## Navigation auf verschiedenen Geräten
+
+| Gerät | Navigation |
+|-------|-----------|
+| Desktop | Sidebar + Top-Bar |
+| Tablet | Einklappbare Sidebar |
+| Mobile | Hamburger-Menü / Bottom-Navigation |
+
+## Bilder & Medien
+
+TODO: Responsive Images (`srcset`, `picture`), Lazy Loading
+
+## Testing
+
+TODO: Wie auf verschiedenen Geräten testen? (DevTools, reale Geräte)
+"""),
+
+
+    ("design/animations.md", "Animationen & Übergänge", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Frontend-Entwickler, Designer, UX-Designer
+
+    **Pflicht-Abschnitte:**
+
+    - Animationsprinzipien (Zweck: Feedback, Orientierung, Persönlichkeit)
+    - Timing-Funktionen und Dauern (schnell: 150ms, mittel: 300ms, langsam: 500ms)
+    - Easing-Kurven (ease-in-out für UI, ease-out für Einblendungen)
+    - Bewegungsrichtlinien (reduzierte Bewegung für prefers-reduced-motion)
+    - Verbotene Animationen (endlose Loops, ablenkende Effekte)
+    - Performance-Richtlinien (GPU-beschleunigte Eigenschaften bevorzugen)
+
+    **Inhaltliche Tiefe:** CSS/JS-Code-Beispiele; Vergleich: mit und ohne Animation; Timing-Token-Tabelle; Barrierefreiheits-Hinweise
+
+    **Abgrenzung:** Keine Komponenten-Details → `design/components.md`; keine Responsive-Layouts → `design/responsive.md`
+
+    **Beispiel-Inhalte:** CSS: `transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1)`; Tabelle: Anwendungsfall | Dauer | Easing | Eigenschaft
+
+## Grundprinzipien
+
+- **Funktional**: Animationen verdeutlichen Übergänge, keine reine Dekoration
+- **Schnell**: Maximal 300ms für UI-Feedback
+- **Konsistent**: Gleiche Aktionen → gleiche Animationen
+
+## Standard-Timings
+
+| Aktion | Dauer | Easing |
+|--------|-------|--------|
+| Hover-Feedback | 150ms | ease-out |
+| Modal öffnen | 200ms | ease-out |
+| Modal schließen | 150ms | ease-in |
+| Seitenwechsel | 250ms | ease-in-out |
+| Toast erscheinen | 200ms | ease-out |
+| Toast verschwinden | 300ms | ease-in |
+
+## Easing-Funktionen
+
+```css
+--ease-in: cubic-bezier(0.4, 0, 1, 0.7);
+--ease-out: cubic-bezier(0, 0.3, 0.6, 1);
+--ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+```
+
+## Reduced Motion
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+## Performance
+
+TODO: CSS-Transitions bevorzugen, `transform` und `opacity` animieren, `will-change` sparsam
+"""),
+
+    ("design/iconography.md", "Icons & Symbole", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Designer, Frontend-Entwickler, Content-Ersteller
+
+    **Pflicht-Abschnitte:**
+
+    - Icon-Bibliothek und Quellen (eigene Icons, Icon-Set wie Material Icons, Lucide)
+    - Stilrichtlinien (Strichstärke, Rastermaß, optische Größen)
+    - Größenvarianten (16px, 20px, 24px, 32px) und Verwendungskontext
+    - Icon-Benennung und Dateistruktur
+    - Barrierefreiheit: aria-hidden für dekorative Icons, aria-label für funktionale
+    - Farbverwendung und Zustandsvarianten (default, hover, disabled, active)
+
+    **Inhaltliche Tiefe:** Vollständiger Icon-Katalog mit Vorschau; SVG-Optimierungsrichtlinien; Implementierungsbeispiele (Inline-SVG vs. Icon-Font vs. Sprite)
+
+    **Abgrenzung:** Keine allgemeine Komponentenbibliothek → `design/components.md`; kein Logo-Guide → `design/style-guide.md`
+
+    **Beispiel-Inhalte:** Icon-Grid: Name | Vorschau | Größen | Verwendung; Code: `<svg aria-hidden="true" class="icon icon-24">...</svg>`
+
+## Icon-Bibliothek
+
+TODO: Material Icons, Heroicons, Lucide, Phosphor, etc.
+
+## Größen
+
+| Größe | Pixel | Verwendung |
+|-------|-------|-----------|
+| xs | 12px | Inline-Hinweise |
+| sm | 16px | Buttons, Inputs |
+| md | 20px | Navigation, Listen |
+| lg | 24px | Überschriften |
+| xl | 32px | Feature-Icons |
+| 2xl | 48px | Illustrationen |
+
+## Farben
+
+- **Primär**: Interaktive Icons (Buttons, Links)
+- **Sekundär**: Dekorative Icons (Labels, Badges)
+- **Muted**: Weniger wichtige Icons
+- **Danger**: Destruktive Aktionen
+- **Keine Farbe allein**: Icons nie als einziges Unterscheidungsmerkmal
+
+## Konventionen
+
+| Aktion | Icon | Beschreibung |
+|--------|------|-------------|
+| Erstellen | + (Plus) | Neuen Eintrag erstellen |
+| Bearbeiten | Stift | Eintrag bearbeiten |
+| Löschen | Mülleimer | Eintrag löschen |
+| Suchen | Lupe | Suche öffnen |
+| Einstellungen | Zahnrad | Einstellungen öffnen |
+| Schließen | X | Dialog/Panel schließen |
+
+## Accessibility
+
+- Dekorative Icons: `aria-hidden="true"`
+- Funktionale Icons: `aria-label="Beschreibung"`
+"""),
+
+    ("design/dark-mode.md", "Dark Mode", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Frontend-Entwickler, Designer, Design-System-Maintainer
+
+    **Pflicht-Abschnitte:**
+
+    - Dark-Mode-Strategie (systemgesteuert vs. nutzerwählbar vs. beides)
+    - Token-Mapping: Light-Token → Dark-Token (komplette Zuordnungstabelle)
+    - Farbumkehrungsregeln (nicht einfach invertieren, sondern bewusst anpassen)
+    - Kontrast-Anforderungen im Dark Mode (WCAG-konform)
+    - Bilder und Medien im Dark Mode (Anpassung von Schatten, Rändern)
+    - Implementierung: CSS custom properties, prefers-color-scheme
+
+    **Inhaltliche Tiefe:** Vollständige Token-Mapping-Tabelle; Code-Beispiele für Theme-Switching; Screenshots im Vergleich; Kontrast-Prüfwerte
+
+    **Abgrenzung:** Keine Light-Mode-Token-Definitionen → `design/tokens.md`; keine Komponenten-Details → `design/components.md`
+
+    **Beispiel-Inhalte:** Tabelle: Token | Light-Wert | Dark-Wert | Kontrastverhältnis; CSS: `@media (prefers-color-scheme: dark) { --bg: #1a1a2e; }`
+
+## Farbpalette Dark Mode
+
+| Token | Light | Dark |
+|-------|-------|------|
+| Background | #ffffff | #1a1a2e |
+| Surface | #f9fafb | #16213e |
+| Text Primary | #1f2937 | #e2e8f0 |
+| Text Secondary | #6b7280 | #94a3b8 |
+| Border | #e5e7eb | #334155 |
+| Primary | #3b82f6 | #60a5fa |
+
+TODO: An tatsächliche Farben anpassen
+
+## Kontraste
+
+- Text auf Background: mindestens 4.5:1 (auch im Dark Mode!)
+- Alle Farben mit Contrast-Checker verifizieren
+
+## Bilder im Dark Mode
+
+TODO: Dunklere Bilder, reduzierte Helligkeit, Schatten statt Ränder
+
+## Umschaltung
+
+| Modus | Beschreibung |
+|-------|-------------|
+| System | Folgt der Betriebssystem-Einstellung |
+| Hell | Immer Light Mode |
+| Dunkel | Immer Dark Mode |
+
+```css
+@media (prefers-color-scheme: dark) {
+  :root { /* Dark-Mode-Tokens */ }
+}
+```
+
+## Verweis
+
+- [Design Tokens](tokens.md)
+"""),
+
+    ("design/forms.md", "Formular-Design", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Frontend-Entwickler, Designer, UX-Designer, QA-Ingenieure
+
+    **Pflicht-Abschnitte:**
+
+    - Formular-Layout-Patterns (einspaltiges, zweispaltiges, Wizard-Muster)
+    - Eingabefeld-Typen und wann welcher zu verwenden ist
+    - Validierung: Inline-Validierung, Zeitpunkt (on blur, on submit), Fehlermeldungs-Sprache
+    - Pflichtfeld-Kennzeichnung und Hilfetexte
+    - Barrierefreiheit: Label-Zuordnung, Fehlerzusammenfassung, aria-describedby
+    - Formular-Zustände (loading, success, error, disabled)
+
+    **Inhaltliche Tiefe:** Code-Beispiele für jedes Pattern; Fehlermeldungs-Textvorlagen; UX-Best-Practices mit Begründung; Vergleich guter und schlechter Formular-Gestaltung
+
+    **Abgrenzung:** Keine Komponenten-API → `design/components.md`; keine Backend-Validierung → relevante API-Dokumentation
+
+    **Beispiel-Inhalte:** Pattern: „Adresseingabe mit Autocomplete"; Fehlermeldung: „Bitte geben Sie eine gültige E-Mail-Adresse ein (z.B. name@beispiel.de)"
+
+## Layout
+
+- **Einspaltiges Layout** bevorzugen (bessere Lesbarkeit)
+- **Labels über dem Feld** (nicht daneben)
+- **Logische Gruppierung** zusammengehöriger Felder
+- **Pflichtfelder** markieren (Stern * oder "Pflicht"-Label)
+
+## Validierung
+
+### Wann validieren?
+
+| Zeitpunkt | Verwendung |
+|-----------|-----------|
+| On Submit | Standard — alle Fehler auf einmal |
+| On Blur | Für komplexe Felder (E-Mail, Passwort) |
+| On Input | Nur für Echtzeit-Feedback (Passwort-Stärke) |
+
+### Fehlermeldungen
+
+```
+✗ Bitte geben Sie eine gültige E-Mail-Adresse ein.
+✗ Das Passwort muss mindestens 8 Zeichen lang sein.
+```
+
+**Regeln:**
+- Unter dem betroffenen Feld anzeigen
+- Rot markieren (+ Icon, nicht nur Farbe)
+- Sagen was falsch ist UND was erwartet wird
+- `aria-describedby` für Screen-Reader
+
+## Multi-Step-Formulare
+
+TODO: Wizard-Pattern, Fortschrittsanzeige, Vor/Zurück, Zwischenspeichern
+
+## Verweis
+
+- [UI-Komponenten](components.md)
+- [Accessibility-Richtlinien](accessibility-guidelines.md)
+"""),
+
+    # ━━ Testdokumentation ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("testing/overview.md", "Testdokumentation — Überblick", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** QA-Ingenieure, Entwickler, Projektleitung, Product Owner
+
+    **Pflicht-Abschnitte:**
+
+    - Test-Strategie: Pyramide (Unit → Integration → E2E), Verteilung der Testarten
+    - Qualitätsziele: Mindest-Coverage, maximale Fehlerrate, Defect-Escape-Rate
+    - Test-Umgebungen und deren Konfiguration (Dev, Staging, Pre-Prod)
+    - Rollen und Verantwortlichkeiten im Test-Prozess
+    - Test-Tools und Frameworks (nach Testart aufgeteilt)
+    - Metriken und Reporting-Rhythmus
+
+    **Inhaltliche Tiefe:** Strategieebene mit Verlinkung auf Detail-Seiten; Test-Pyramide als Grafik; KPI-Dashboard-Vorlage; CI/CD-Integration beschreiben
+
+    **Abgrenzung:** Keine einzelnen Testfälle → `testing/test-cases.md`; keine Performance-Ergebnisse → `testing/performance-tests.md`
+
+    **Beispiel-Inhalte:** Test-Pyramide: 70 % Unit, 20 % Integration, 10 % E2E; Tabelle: Testart | Tool | Verantwortlich | Coverage-Ziel
+
+## Test-Übersicht
+
+| Typ | Anzahl | Coverage | Dauer | Frequenz |
+|-----|--------|---------|-------|---------|
+| Unit | TODO | TODO% | TODO | Jeder Commit |
+| Integration | TODO | - | TODO | Jeder PR |
+| E2E | TODO | - | TODO | Nightly |
+| Performance | TODO | - | TODO | Wöchentlich |
+| Security | TODO | - | TODO | Wöchentlich |
+
+## Tests ausführen
+
+```bash
+# Alle Tests
+pytest
+
+# Nur Unit-Tests
+pytest tests/unit/
+
+# Mit Coverage
+pytest --cov=src --cov-report=html
+```
+
+## Verzeichnisstruktur
+
+```
+tests/
+  unit/           ← Schnelle, isolierte Tests
+  integration/    ← Komponentenübergreifende Tests
+  e2e/            ← End-to-End Workflow-Tests
+  fixtures/       ← Gemeinsame Testdaten
+  conftest.py     ← Shared Fixtures
+```
+
+## Verweis
+
+- [Test-Architektur](../architecture/testing-architecture.md)
+- [CI/CD-Pipeline](../development/ci-cd.md)
+"""),
+
+    ("testing/test-plan.md", "Testplan", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** QA-Lead, Projektleitung, Product Owner, Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Testumfang und Abgrenzung (was wird getestet, was explizit nicht)
+    - Testmethoden je Feature-Bereich (manuell, automatisiert, explorativ)
+    - Eingangs- und Ausgangskriterien (Entry/Exit Criteria)
+    - Ressourcenplanung: Personal, Testumgebungen, Testdaten
+    - Zeitplan: Testphasen mit Start-/Enddatum und Meilensteinen
+    - Risikobewertung und Risikominderung für den Testprozess
+
+    **Inhaltliche Tiefe:** Formal nach IEEE 829 oder ISO/IEC 29119 strukturiert; konkrete Deadlines und Verantwortliche; Abhängigkeiten zwischen Testphasen klar benennen
+
+    **Abgrenzung:** Keine einzelnen Testfälle → `testing/test-cases.md`; keine Automatisierungs-Architektur → `testing/test-automation.md`
+
+    **Beispiel-Inhalte:** Gantt-Diagramm der Testphasen; Entry Criteria: „Alle Unit-Tests grün, Code-Review abgeschlossen, Staging-Deployment erfolgreich"
+
+## Testziele
+
+TODO: Was soll durch Tests sichergestellt werden?
+
+## Scope
+
+### In Scope
+
+TODO: Welche Funktionen werden getestet?
+
+### Out of Scope
+
+TODO: Was wird NICHT getestet? (z.B. externe Abhängigkeiten)
+
+## Test-Umgebung
+
+| Umgebung | Zweck | Datenbank | URL |
+|----------|-------|----------|-----|
+| Lokal | Entwicklung | SQLite | localhost |
+| CI | Automatisiert | PostgreSQL | - |
+| Staging | Manuell | PostgreSQL | TODO |
+
+## Risiken
+
+| Risiko | Wahrscheinlichkeit | Gegenmaßnahme |
+|--------|-------------------|--------------|
+| Instabile Tests | TODO | TODO |
+| Langsame Pipeline | TODO | TODO |
+
+## Abnahmekriterien
+
+- [ ] Alle Tests bestehen
+- [ ] Coverage ≥ TODO%
+- [ ] Keine kritischen Sicherheitslücken
+- [ ] Performance-Schwellwerte eingehalten
+"""),
+
+    ("testing/test-cases.md", "Testfälle", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** QA-Ingenieure, Entwickler, Product Owner (Abnahme)
+
+    **Pflicht-Abschnitte:**
+
+    - Testfall-Katalog geordnet nach Feature-Bereichen/Modulen
+    - Je Testfall: ID, Titel, Vorbedingungen, Schritte, erwartetes Ergebnis, Priorität
+    - Traceability-Matrix: Testfall ↔ Anforderung/User Story
+    - Testfall-Status (offen, bestanden, fehlgeschlagen, blockiert)
+    - Abdeckungsanalyse: Anforderungen ohne zugeordnete Testfälle
+
+    **Inhaltliche Tiefe:** Vollständige Testfall-Dokumentation mit reproduzierbaren Schritten; Priorisierung (kritisch, hoch, mittel, niedrig); Screenshots oder Mock-Daten wo nötig
+
+    **Abgrenzung:** Keine Testdaten-Details → `testing/test-data.md`; keine Automatisierungsskripte → `testing/test-automation.md`
+
+    **Beispiel-Inhalte:** TC-001: „Login mit gültigem Passwort" | Vorbedingung: Benutzer existiert | Schritt 1: Seite öffnen | Schritt 2: Credentials eingeben | Erwartet: Dashboard sichtbar
+
+## Testfall-Format
+
+| Feld | Beschreibung |
+|------|-------------|
+| **ID** | Eindeutige Kennung (TC-XXX) |
+| **Titel** | Kurzbeschreibung |
+| **Vorbedingung** | Was muss gegeben sein? |
+| **Schritte** | Durchzuführende Aktionen |
+| **Erwartetes Ergebnis** | Was soll passieren? |
+| **Priorität** | Hoch / Mittel / Niedrig |
+
+## Authentifizierung
+
+### TC-001: Erfolgreicher Login
+
+- **Vorbedingung**: Gültiger Benutzer existiert
+- **Schritte**: 1. Login-Seite öffnen, 2. Credentials eingeben, 3. Absenden
+- **Erwartet**: Dashboard wird angezeigt, Session erstellt
+- **Priorität**: Hoch
+
+### TC-002: Login mit falschen Credentials
+
+- **Vorbedingung**: -
+- **Schritte**: 1. Login-Seite, 2. Falsche Credentials, 3. Absenden
+- **Erwartet**: Fehlermeldung, kein Zugang
+- **Priorität**: Hoch
+
+TODO: Weitere Testfälle nach diesem Schema
+
+## CRUD-Operationen
+
+TODO: Testfälle für Erstellen, Lesen, Aktualisieren, Löschen
+
+## Edge Cases
+
+TODO: Grenzwerte, leere Eingaben, Sonderzeichen, große Datenmengen
+"""),
+
+    ("testing/test-automation.md", "Testautomatisierung", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** QA-Automation-Ingenieure, DevOps, Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Automatisierungsframework und Technologie-Stack (z.B. Playwright, Cypress, pytest)
+    - Architektur: Page-Object-Model, Fixtures, Test-Utilities
+    - CI/CD-Integration: wann laufen welche Tests (Commit, PR, Nightly)
+    - Parallele Ausführung, Retries, Flaky-Test-Management
+    - Test-Reporting und Artefakt-Archivierung
+    - Wartbarkeit: Namenskonventionen, Ordnerstruktur, Review-Prozess für Tests
+
+    **Inhaltliche Tiefe:** Code-Beispiele für typische Testfälle; CI-Pipeline-Konfiguration (YAML-Ausschnitte); Entscheidungsbaum: wann automatisieren, wann manuell
+
+    **Abgrenzung:** Keine manuellen Testfälle → `testing/test-cases.md`; keine Performance-Tests → `testing/performance-tests.md`
+
+    **Beispiel-Inhalte:** Ordnerstruktur: `tests/e2e/pages/`, `tests/e2e/specs/`; CI-Snippet: „Playwright-Tests bei jedem PR mit 3 Retries"; Beispiel-Page-Object
+
+## Framework
+
+TODO: pytest, Jest, JUnit — Version, Konfiguration
+
+## Konfiguration
+
+```ini
+# pytest.ini / pyproject.toml
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+markers = [
+    "slow: Langsame Tests",
+    "integration: Integrationstests",
+    "e2e: End-to-End Tests",
+]
+```
+
+## Fixtures
+
+TODO: Gemeinsame Fixtures, Factory-Pattern, Datenbank-Fixtures
+
+## Mocking
+
+TODO: Mocking-Bibliothek, Mocking-Strategien, Wann mocken?
+
+## Test-Daten
+
+TODO: Faker, Factories, Seed-Daten, Snapshots
+
+## Parallelisierung
+
+TODO: Tests parallel ausführen (pytest-xdist, jest --workers)
+
+## CI-Integration
+
+TODO: Tests in Pipeline, Coverage-Upload, Artefakte
+"""),
+
+    ("testing/performance-tests.md", "Performance-Testberichte", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Performance-Ingenieure, DevOps, Architekten, Projektleitung
+
+    **Pflicht-Abschnitte:**
+
+    - Performance-Ziele: Antwortzeiten (P50, P95, P99), Durchsatz, gleichzeitige Benutzer
+    - Testwerkzeuge (k6, JMeter, Locust, Lighthouse) und deren Konfiguration
+    - Testszenarien: Lasttest, Stresstest, Spike-Test, Soak-Test
+    - Ergebnisse: Metriken, Grafiken, Engpass-Analyse
+    - Baselines und Schwellenwerte für CI-Gate (Test scheitert bei Regression)
+    - Empfehlungen und durchgeführte Optimierungen
+
+    **Inhaltliche Tiefe:** Grafiken mit Latenz-/Durchsatz-Kurven; Vergleich vor/nach Optimierung; konkrete Testskript-Ausschnitte; Hardware-/Umgebungs-Beschreibung
+
+    **Abgrenzung:** Keine funktionalen Tests → `testing/test-cases.md`; keine Infrastruktur-Skalierung → `operations/scaling.md`
+
+    **Beispiel-Inhalte:** Grafik: Latenz vs. gleichzeitige User; Tabelle: Endpunkt | P50 | P95 | P99 | Ziel; k6-Skript-Ausschnitt für Hauptszenario
+
+## Baseline
+
+| Endpunkt | P50 | P95 | P99 | RPS |
+|----------|-----|-----|-----|-----|
+| GET /api/v1/health | TODO | TODO | TODO | TODO |
+| GET /api/v1/resources | TODO | TODO | TODO | TODO |
+| POST /api/v1/resources | TODO | TODO | TODO | TODO |
+
+## Aktuelle Messung
+
+TODO: Datum, Umgebung, Last-Profil, Ergebnisse
+
+## Trends
+
+TODO: Diagramm oder Tabelle — Performance über letzte N Releases
+
+## Identifizierte Engpässe
+
+TODO: Langsame Queries, Speicherverbrauch, CPU-Spitzen
+
+## Verweis
+
+- [Performance-Tests (Entwicklung)](../development/performance-testing.md)
+- [Performance-Tuning (Betrieb)](../operations/performance.md)
+"""),
+
+    ("testing/security-tests.md", "Sicherheitstest-Berichte", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Security-Ingenieure, Entwickler, Compliance-Beauftragte
+
+    **Pflicht-Abschnitte:**
+
+    - Sicherheitstest-Strategie: SAST, DAST, SCA, Penetrationstest, Dependency-Scanning
+    - Eingesetzte Tools je Methode (SonarQube, OWASP ZAP, Trivy, Snyk)
+    - CI/CD-Integration: wann welcher Scan läuft, Break-Kriterien (Critical/High)
+    - Ergebnisübersicht: gefundene Schwachstellen nach Schweregrad
+    - Behebungsstatus und Zeitvorgaben (Critical: 24h, High: 7 Tage)
+    - Penetrationstest-Berichte (Zusammenfassung, vollständige Reports separat)
+
+    **Inhaltliche Tiefe:** Dashboard-artige Zusammenfassung; CVE-Nummern bei bekannten Schwachstellen; Trend-Grafiken über Zeit; OWASP-Top-10-Abdeckung
+
+    **Abgrenzung:** Keine Sicherheitsrichtlinien → `compliance/security-policies.md`; keine Incident-Response → `compliance/incident-response.md`
+
+    **Beispiel-Inhalte:** Tabelle: Schwachstelle | Schweregrad | CVSS | Status | Frist; CI-Gate: „Pipeline bricht bei Critical-Findings ab"
+
+## Letzter Scan
+
+- **Datum**: TODO
+- **Tool**: TODO (Bandit, SonarQube, OWASP ZAP)
+- **Scope**: TODO
+
+## Ergebnisse
+
+| Schweregrad | Anzahl | Behoben | Offen |
+|------------|--------|---------|-------|
+| Kritisch | TODO | TODO | TODO |
+| Hoch | TODO | TODO | TODO |
+| Mittel | TODO | TODO | TODO |
+| Niedrig | TODO | TODO | TODO |
+
+## Offene Findings
+
+TODO: Liste der offenen Sicherheitsbefunde mit Risikobewertung
+
+## Dependency-Scan
+
+TODO: Bekannte CVEs in Abhängigkeiten
+
+## Verweis
+
+- [Sicherheitstests (Entwicklung)](../development/security-testing.md)
+- [Sicherheitsrichtlinien](../compliance/security-policies.md)
+"""),
+
+    ("testing/acceptance-tests.md", "Abnahmetests", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Product Owner, Fachbereich, QA-Ingenieure, Projektleitung
+
+    **Pflicht-Abschnitte:**
+
+    - Abnahmekriterien je User Story / Epic (Given-When-Then-Format)
+    - Abnahmeprozess: Wer nimmt ab, wann, welche Umgebung
+    - Protokollvorlage für Abnahme (Datum, Tester, Ergebnis, Kommentare)
+    - Umgang mit Abweichungen (Showstopper vs. akzeptable Einschränkungen)
+    - Abnahme-Ergebnisse und Sign-Off-Dokumentation
+
+    **Inhaltliche Tiefe:** Fachlich verständlich, nicht technisch; konkrete Akzeptanzkriterien; BDD-Syntax (Gherkin) wo möglich; Screenshots der Abnahme-Umgebung
+
+    **Abgrenzung:** Keine technischen Testfälle → `testing/test-cases.md`; keine automatisierten Tests → `testing/test-automation.md`
+
+    **Beispiel-Inhalte:** Szenario: „GEGEBEN ein eingeloggter Benutzer, WENN er auf ‚Exportieren' klickt, DANN wird eine CSV-Datei heruntergeladen"; Abnahmeprotokoll-Vorlage
+
+## Abnahmekriterien
+
+| Kriterium | Schwellwert | Status |
+|----------|-----------|--------|
+| Alle Unit-Tests bestehen | 100% | TODO |
+| Integration-Tests bestehen | 100% | TODO |
+| Coverage | ≥ TODO% | TODO |
+| Keine kritischen Bugs | 0 | TODO |
+| Performance P95 | < TODO ms | TODO |
+| Security Scan | Keine kritischen Findings | TODO |
+
+## Manuelle Prüfungen
+
+- [ ] Alle Hauptfunktionen in Staging getestet
+- [ ] Cross-Browser-Test durchgeführt
+- [ ] Mobile-Test durchgeführt
+- [ ] Accessibility-Test durchgeführt
+- [ ] Dokumentation aktualisiert
+
+## Freigabe
+
+- **Getestet von**: TODO
+- **Datum**: TODO
+- **Version**: TODO
+- **Ergebnis**: Freigegeben / Nicht freigegeben
+
+## Verweis
+
+- [Release-Prozess](../development/release.md)
+- [Testplan](test-plan.md)
+"""),
+
+
+    ("testing/regression-tests.md", "Regressionstests", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** QA-Ingenieure, Entwickler, Release-Manager
+
+    **Pflicht-Abschnitte:**
+
+    - Regressionstests-Umfang: Welche Bereiche werden bei jedem Release geprüft
+    - Automatisierte vs. manuelle Regressionstests und Begründung
+    - Priorisierung: kritische Pfade zuerst (Smoke-Test-Suite)
+    - Ausführungsplan: wann und wie oft (je Sprint, je Release, nightly)
+    - Ergebnisse: Trend der Regressionsrate über Releases
+    - Prozess bei Regressionsfund (Bug-Ticket, Priorität, Blockade)
+
+    **Inhaltliche Tiefe:** Liste der Smoke-Test-Szenarien; Automatisierungsgrad pro Modul; Grafik: Regressionsfunde pro Release
+
+    **Abgrenzung:** Keine neuen Feature-Tests → `testing/test-cases.md`; keine Automatisierungs-Architektur → `testing/test-automation.md`
+
+    **Beispiel-Inhalte:** Smoke-Suite: Login → Dashboard → CRUD-Operation → Logout; Tabelle: Modul | Automatisiert (%) | Manuell (%) | Letzte Ausführung
+
+## Strategie
+
+TODO: Wann werden Regressionstests ausgeführt? (Nightly, vor Release, nach Merge)
+
+## Test-Suite
+
+| Suite | Anzahl Tests | Dauer | Scope |
+|-------|-------------|-------|-------|
+| Smoke | TODO | < 5 Min | Kritische Pfade |
+| Regression (klein) | TODO | < 30 Min | Letzte 3 Releases |
+| Regression (voll) | TODO | < 2 Std | Alle Features |
+
+## Triage bei Regression
+
+1. Test fehlgeschlagen — Bug oder Testfehler?
+2. Seit welchem Commit? (`git bisect`)
+3. Kritikalität bewerten
+4. Fix oder Revert
+
+## Testauswahl
+
+TODO: Risiko-basierte Auswahl, Changed-Code-basiert, Impact Analysis
+
+## Verweis
+
+- [CI/CD-Pipeline](../development/ci-cd.md)
+- [Testplan](test-plan.md)
+"""),
+
+    ("testing/compatibility-tests.md", "Kompatibilitätstests", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** QA-Ingenieure, Frontend-Entwickler, Product Owner
+
+    **Pflicht-Abschnitte:**
+
+    - Browser-Matrix: unterstützte Browser und Versionen (Chrome, Firefox, Safari, Edge)
+    - Betriebssystem-Matrix: Windows, macOS, Linux, iOS, Android
+    - Geräte-Matrix: Desktop, Tablet, Smartphone (physische und emulierte Geräte)
+    - Testmethodik: manuell, BrowserStack/Sauce Labs, automatisiert
+    - Bekannte Inkompatibilitäten und Workarounds
+    - Mindestanforderungen und Support-Abkündigungsrichtlinie
+
+    **Inhaltliche Tiefe:** Vollständige Support-Matrix mit Status (voll unterstützt, eingeschränkt, nicht unterstützt); Screenshots je Plattform bei Abweichungen
+
+    **Abgrenzung:** Keine Responsive-Design-Regeln → `design/responsive.md`; keine Performance → `testing/performance-tests.md`
+
+    **Beispiel-Inhalte:** Matrix: Browser | Version | OS | Status | Bemerkung; BrowserStack-Konfiguration für CI; Screenshot-Vergleich Chrome vs. Safari
+
+## Browser-Testmatrix
+
+| Browser | Version | Desktop | Mobile | Status |
+|---------|---------|---------|--------|--------|
+| Chrome | Letzte 2 | TODO | TODO | TODO |
+| Firefox | Letzte 2 | TODO | TODO | TODO |
+| Safari | Letzte 2 | TODO | TODO | TODO |
+| Edge | Letzte 2 | TODO | TODO | TODO |
+
+## Plattform-Testmatrix
+
+| OS | Version | Status |
+|-----|---------|--------|
+| Ubuntu | 22.04 | TODO |
+| macOS | 14 | TODO |
+| Windows | 11 | TODO |
+
+## Automatisierung
+
+TODO: Selenium Grid, BrowserStack, Sauce Labs, Playwright
+
+## Testfälle
+
+TODO: Welche Funktionen werden browser-/plattform-übergreifend getestet?
+
+## Verweis
+
+- [Plattform-Unterstützung](../reference/supported-platforms.md)
+"""),
+
+    ("testing/accessibility-tests.md", "Accessibility-Tests", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** QA-Ingenieure, Frontend-Entwickler, Accessibility-Beauftragte
+
+    **Pflicht-Abschnitte:**
+
+    - Testmethoden: automatisiert (axe-core, Lighthouse), manuell (Screenreader, Tastatur), Experten-Review
+    - Prüfung gegen WCAG 2.1 AA: vollständige Checkliste der Erfolgskriterien
+    - Screenreader-Tests: NVDA (Windows), VoiceOver (macOS/iOS), TalkBack (Android)
+    - Tastaturnavigation: Tab-Reihenfolge, Fokus-Management, Skip-Links
+    - Ergebnisse: Befunde, Schweregrad, Behebungsstatus
+    - CI-Integration: automatisierte A11y-Prüfung bei jedem Build
+
+    **Inhaltliche Tiefe:** Befundliste mit WCAG-Kriterium-Verweis; Screenshot + Screenreader-Transkript bei Fehlern; Trend-Grafik der A11y-Score-Entwicklung
+
+    **Abgrenzung:** Keine Design-Richtlinien → `design/accessibility-guidelines.md`; keine gesetzlichen Anforderungen → `compliance/accessibility-compliance.md`
+
+    **Beispiel-Inhalte:** Befund: „Formularfeld ‚Name' hat kein Label → WCAG 1.3.1 verletzt → Severity: hoch"; axe-core CI-Konfiguration
+
+## Automatisierte Tests
+
+### axe-core (CI)
+
+```bash
+npx @axe-core/cli http://localhost:8000
+```
+
+### Lighthouse (CI)
+
+```bash
+npx lighthouse http://localhost:8000 --only-categories=accessibility --output=json
+```
+
+### pa11y (CI)
+
+```bash
+npx pa11y http://localhost:8000
+```
+
+## Manuelle Tests
+
+### Tastatur-Test
+
+- [ ] Alle interaktiven Elemente erreichbar mit Tab
+- [ ] Fokus-Reihenfolge logisch
+- [ ] Focus-Indicator sichtbar
+- [ ] Dialoge per Escape schließbar
+
+### Screen-Reader-Test
+
+| Screen-Reader | Browser | Status |
+|-------------|---------|--------|
+| NVDA | Firefox | TODO |
+| VoiceOver | Safari | TODO |
+| JAWS | Chrome | TODO |
+
+### Zoom-Test
+
+- [ ] 200% Zoom — Layout bricht nicht
+- [ ] 400% Zoom — Inhalte weiterhin nutzbar
+
+## Ergebnisse
+
+TODO: Verweis auf letzte Testergebnisse
+
+## Verweis
+
+- [Accessibility-Richtlinien (Design)](../design/accessibility-guidelines.md)
+- [Barrierefreiheit-Compliance](../compliance/accessibility-compliance.md)
+"""),
+
+    ("testing/test-data.md", "Testdaten-Management", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** QA-Ingenieure, Entwickler, Datenbankadministratoren
+
+    **Pflicht-Abschnitte:**
+
+    - Testdaten-Strategie: synthetisch, anonymisiert aus Produktion, Fixtures
+    - Erstellung und Verwaltung: Factories, Seeders, Faker-Bibliotheken
+    - Datenschutz: Anonymisierungs-/Pseudonymisierungsverfahren für produktionsnahe Daten
+    - Testdaten-Umgebungen und -Isolierung (Tenant-Separation, DB-Snapshots)
+    - Datenreset-Strategien zwischen Testläufen (Truncate, Rollback, Docker-Reset)
+    - Versionierung von Testdaten-Sets
+
+    **Inhaltliche Tiefe:** Code-Beispiele für Factories; Konfiguration der Anonymisierungs-Pipeline; Verzeichnis verfügbarer Test-Datensätze mit Beschreibung
+
+    **Abgrenzung:** Keine Testfälle → `testing/test-cases.md`; kein Datenschutz-Recht → `compliance/data-protection.md`
+
+    **Beispiel-Inhalte:** Factory: `UserFactory.create(role='admin', verified=True)`; Anonymisierungsregel: E-Mail → `user_{id}@test.local`; Seed-Datensatz: 100 User, 500 Bestellungen
+
+## Testdaten-Strategien
+
+| Strategie | Beschreibung | Einsatz |
+|----------|-------------|---------|
+| Fixtures | Statische Testdaten | Einfache, vorhersagbare Tests |
+| Factories | Dynamisch generierte Daten | Flexible, variantenreiche Tests |
+| Faker | Realistische Zufallsdaten | Massentests, Edge Cases |
+| Snapshots | Kopie von Produktionsdaten | Integrations-/E2E-Tests |
+
+## Factory-Pattern
+
+```python
+# TODO: An tatsächliches Framework anpassen
+class UserFactory:
+    @staticmethod
+    def create(**kwargs):
+        defaults = {
+            "name": faker.name(),
+            "email": faker.email(),
+            "role": "viewer",
+        }
+        defaults.update(kwargs)
+        return User.create(**defaults)
+```
+
+## Anonymisierung von Produktionsdaten
+
+TODO: PII entfernen, E-Mails/Namen ersetzen, IDs beibehalten, Relationen intakt halten
+
+## Seed-Daten
+
+```bash
+# TODO: Befehl zum Laden von Seed-Daten
+```
+
+## Regeln
+
+1. **Keine echten Daten** in Tests oder Repositories
+2. **Deterministische Tests** — gleiche Eingabe → gleiches Ergebnis
+3. **Aufräumen** — Testdaten nach dem Test löschen
+"""),
+
+    # ━━ Projektmanagement ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ("project/overview.md", "Projektmanagement — Überblick", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Gesamtes Projektteam, Stakeholder, neue Teammitglieder
+
+    **Pflicht-Abschnitte:**
+
+    - Projektziel und Vision (1–2 Sätze)
+    - Teamstruktur: Rollen, Personen, Verantwortlichkeiten
+    - Methodik: Scrum/Kanban/SAFe – Sprint-Rhythmus, Zeremonien
+    - Kommunikationskanäle (Slack, E-Mail, Jira, Confluence)
+    - Projekt-Timeline mit Meilensteinen
+    - Links zu allen Unterseiten des Project-Bereichs
+
+    **Inhaltliche Tiefe:** Übersichtsebene mit schnellem Einstieg für neue Mitglieder; Organigramm oder Verantwortungsmatrix (RACI); Verlinkung zu Detail-Seiten
+
+    **Abgrenzung:** Keine fachlichen Anforderungen → Anforderungsdokumentation; keine technische Architektur → `architecture/`
+
+    **Beispiel-Inhalte:** RACI-Matrix: Aufgabe | Responsible | Accountable | Consulted | Informed; Timeline mit 4 Meilensteinen je Quartal
+
+## Projektmethodik
+
+TODO: Scrum, Kanban, SAFe, Wasserfall?
+
+## Team
+
+| Rolle | Verantwortung | Person |
+|-------|-------------|--------|
+| Product Owner | Anforderungen, Priorisierung | TODO |
+| Tech Lead | Architektur, Code-Qualität | TODO |
+| Entwickler | Implementierung | TODO |
+| QA | Testing, Qualitätssicherung | TODO |
+| DevOps | Infrastruktur, CI/CD | TODO |
+
+## Kommunikation
+
+| Kanal | Zweck | Frequenz |
+|-------|-------|---------|
+| Daily Standup | Status, Blocker | Täglich |
+| Sprint Planning | Sprintplanung | Alle 2 Wochen |
+| Retro | Verbesserung | Alle 2 Wochen |
+| Slack/Teams | Schnelle Fragen | Laufend |
+
+## Tools
+
+TODO: Jira, GitHub Projects, Linear, Notion?
+
+## Verweis
+
+- [Roadmap](roadmap.md)
+- [Stakeholder](stakeholders.md)
+"""),
+
+    ("project/roadmap.md", "Roadmap", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Product Owner, Projektleitung, Stakeholder, Entwickler
+
+    **Pflicht-Abschnitte:**
+
+    - Strategische Vision (6–12 Monate)
+    - Quartals-/Release-Planung mit Epics und Features
+    - Priorisierung und Abhängigkeiten zwischen Features
+    - Status je Roadmap-Element (geplant, in Arbeit, abgeschlossen, verschoben)
+    - Kapazitätsplanung und Ressourcenzuordnung
+    - Änderungshistorie der Roadmap
+
+    **Inhaltliche Tiefe:** Visueller Roadmap-Zeitstrahl; Verlinkung zu Jira/GitHub-Epics; Begründung für Priorisierungsentscheidungen
+
+    **Abgrenzung:** Keine Sprint-Planung (zu granular) → Jira/Board; keine technische Architekturentscheidungen → `architecture/decisions/`
+
+    **Beispiel-Inhalte:** Zeitstrahl: Q1: „Authentifizierung v2", Q2: „Dashboard-Redesign", Q3: „API v3"; Status-Legende: geplant/in Arbeit/fertig
+
+## Aktuelle Phase
+
+TODO: In welcher Phase befindet sich das Projekt?
+
+## Meilensteine
+
+| Meilenstein | Zieldatum | Status | Beschreibung |
+|------------|----------|--------|-------------|
+| MVP | TODO | TODO | Minimales lauffähiges Produkt |
+| v1.0 | TODO | TODO | Erster stabiler Release |
+| v2.0 | TODO | TODO | Nächstes Major-Release |
+
+## Q1 TODO
+
+- [ ] Feature A
+- [ ] Feature B
+- [ ] Verbesserung C
+
+## Q2 TODO
+
+- [ ] Feature D
+- [ ] Feature E
+
+## Backlog (ungeplant)
+
+TODO: Features die gewünscht aber nicht terminiert sind
+
+## Entscheidungslog
+
+TODO: Verweis auf [ADR](../architecture/decisions.md)
+"""),
+
+    ("project/stakeholders.md", "Stakeholder", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Projektleitung, Product Owner, Kommunikationsverantwortliche
+
+    **Pflicht-Abschnitte:**
+
+    - Stakeholder-Verzeichnis: Name, Rolle, Organisation, Kontaktdaten
+    - Einfluss-/Interesse-Matrix (Power-Interest-Grid)
+    - Kommunikationsbedürfnisse je Stakeholder-Gruppe
+    - Erwartungen und Erfolgskriterien je Stakeholder
+    - Eskalationspfade und Entscheidungsbefugnisse
+
+    **Inhaltliche Tiefe:** Strukturierte Tabelle; Power-Interest-Grid als Diagramm; je Stakeholder: bevorzugter Kommunikationskanal und -frequenz
+
+    **Abgrenzung:** Keine Meeting-Details → `project/meetings.md`; kein Kommunikationsplan-Detail → `project/communication-plan.md`
+
+    **Beispiel-Inhalte:** Tabelle: Stakeholder | Rolle | Einfluss (hoch/mittel) | Interesse | Kommunikationskanal | Frequenz; Grid-Diagramm mit Quadranten
+
+## Stakeholder-Matrix
+
+| Stakeholder | Typ | Interesse | Einfluss | Kommunikation |
+|------------|-----|----------|---------|--------------|
+| Endanwender | Nutzer | Hoch | Mittel | Release Notes, Docs |
+| Management | Sponsor | Mittel | Hoch | Status-Reports |
+| Entwickler | Team | Hoch | Hoch | Daily, Slack |
+| Support | Intern | Hoch | Niedrig | Ticket-System |
+| Partner | Extern | Mittel | Niedrig | Newsletter |
+
+## Erwartungen
+
+### Endanwender
+TODO: Was erwarten die Benutzer?
+
+### Management
+TODO: KPIs, Budget, Timeline
+
+### Entwickler
+TODO: Technische Qualität, DX
+
+## Feedback-Kanäle
+
+TODO: Wie können Stakeholder Feedback geben?
+"""),
+
+    ("project/risks.md", "Risiken & Maßnahmen", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Projektleitung, Architekten, Stakeholder, Risikomanager
+
+    **Pflicht-Abschnitte:**
+
+    - Risikoregister: ID, Beschreibung, Kategorie (technisch, organisatorisch, extern)
+    - Bewertung: Eintrittswahrscheinlichkeit × Auswirkung = Risikoprioritätszahl
+    - Mitigationsstrategien je Risiko (vermeiden, reduzieren, übertragen, akzeptieren)
+    - Risikoverantwortliche (Risk Owner)
+    - Überwachungs- und Eskalationsmechanismen
+    - Regelmäßiger Review-Rhythmus (z.B. alle 2 Wochen)
+
+    **Inhaltliche Tiefe:** Vollständige Risikotabelle; Risikomatrix (Heatmap); konkrete Maßnahmen mit Deadlines; Trend-Tracking (Risiko steigend/stabil/sinkend)
+
+    **Abgrenzung:** Keine Drittanbieter-Risiken → `compliance/third-party-risk.md`; keine Sicherheitsvorfälle → `compliance/incident-response.md`
+
+    **Beispiel-Inhalte:** R-001: „Schlüsselentwickler verlässt das Team" | W: hoch | A: hoch | Mitigation: Cross-Training, Dokumentation; Heatmap 5×5
+
+## Risikoregister
+
+| # | Risiko | Wahrscheinl. | Auswirkung | Risikostufe | Maßnahme | Verantwortlich |
+|---|--------|-------------|-----------|------------|----------|---------------|
+| R1 | Personalausfall | Mittel | Hoch | Hoch | Cross-Training, Dokumentation | TODO |
+| R2 | Technische Schuld | Hoch | Mittel | Hoch | Refactoring-Sprints | TODO |
+| R3 | Scope Creep | Hoch | Mittel | Hoch | Klare Anforderungen, Sprint Goals | TODO |
+| R4 | Sicherheitsvorfall | Niedrig | Hoch | Mittel | Security-Tests, Audits | TODO |
+| R5 | Abhängigkeit von Drittanbieter | Mittel | Mittel | Mittel | Abstraktion, Exit-Strategie | TODO |
+
+TODO: An tatsächliche Projektrisiken anpassen
+
+## Risikobewertung
+
+| | Niedrige Auswirkung | Mittlere Auswirkung | Hohe Auswirkung |
+|---|---|---|---|
+| **Hoch** | Mittel | Hoch | Kritisch |
+| **Mittel** | Niedrig | Mittel | Hoch |
+| **Niedrig** | Niedrig | Niedrig | Mittel |
+
+## Überprüfung
+
+TODO: Wie oft wird das Risikoregister überprüft?
+"""),
+
+    ("project/meetings.md", "Meeting-Protokolle & Vorlagen", """
+!!! tip "Inhaltsrichtlinie"
+    **Zielgruppe:** Scrum Master, Projektleitung, Teammitglieder
+
+    **Pflicht-Abschnitte:**
+
+    - Meeting-Typen: Daily, Sprint Planning, Review, Retro, Refinement, Steering Committee
+    - Je Meeting-Typ: Ziel, Teilnehmer, Dauer, Frequenz, Agenda-Template
+    - Moderationshinweise und Timeboxing-Regeln
+    - Protokoll-Vorlage: Entscheidungen, Action Items, Verantwortliche, Fristen
+    - Anti-Patterns: Welche Meeting-Praktiken vermieden werden sollen
+
+    **Inhaltliche Tiefe:** Detaillierte Agenda-Templates je Meeting-Typ; Beispiel-Protokoll; Kalenderübersicht aller wiederkehrenden Meetings
+
+    **Abgrenzung:** Keine Stakeholder-Details → `project/stakeholders.md`; keine Kommunikationskanäle → `project/communication-plan.md`
+
+    **Beispiel-Inhalte:** Daily-Template: „Was habe ich gestern erreicht? Was mache ich heute? Gibt es Blocker?"; Retro-Format: „Start, Stop, Continue"
+
+## Daily Standup
+
+| Frage | Antwort |
+|-------|---------|
+| Was habe ich gestern gemacht? | TODO |
+| Was mache ich heute? | TODO |
+| Gibt es Blocker? | TODO |
+
+Dauer: 15 Minuten, täglich
+
+## Sprint Planning
+
+### Agenda
+
+1. Review der Sprint-Ziele
+2. Backlog-Refinement
+3. Kapazitätsplanung
+4. Task-Zuordnung
+
+### Protokoll-Vorlage
+
+- **Sprint**: #TODO
+- **Zeitraum**: TODO – TODO
+- **Kapazität**: TODO Story Points
+- **Sprint-Ziel**: TODO
+- **Ausgewählte Stories**: TODO
+
+## Retrospektive
+
+### Format
+
+1. **Was lief gut?** (Keep)
+2. **Was lief schlecht?** (Stop)
+3. **Was können wir verbessern?** (Start)
+
+### Aktionspunkte
+
+| Aktion | Verantwortlich | Frist |
+|--------|---------------|-------|
+| TODO | TODO | TODO |
+
+## Architektur-Review
+
+### Agenda
+
+1. Architektur-Entscheidungen besprechen
+2. Technische Schuld bewerten
+3. ADRs erstellen/aktualisieren
+
+TODO: Verweis auf [Entscheidungslog](../architecture/decisions.md)
+"""),
+
 ]
 
 
@@ -7375,1087 +11735,7 @@ def get_skeleton_tree(output_dir: Path) -> list[tuple[str, int]]:
     return tree
 
 
-def _walk_tree(base: Path, current: Path, tree: list[tuple[str, int]
-    # ━━ Design-System ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    ("design/overview.md", "Design-System — Überblick", """
-!!! tip "Inhaltsrichtlinie"
-    Überblick über das Design-System: Prinzipien, Farben, Typographie, Abstände, Icons.
-
-## Design-Prinzipien
-
-- **Konsistenz**: Gleiche Muster für gleiche Aktionen
-- **Einfachheit**: So wenig UI-Elemente wie nötig
-- **Barrierefreiheit**: WCAG 2.1 AA als Mindeststandard
-- **Responsivität**: Funktioniert auf allen Bildschirmgrößen
-
-## Farben
-
-| Name | Hex | Verwendung |
-|------|-----|-----------|
-| Primary | TODO | Hauptaktionen, Links |
-| Secondary | TODO | Sekundäre Aktionen |
-| Success | TODO | Erfolgsmeldungen |
-| Warning | TODO | Warnungen |
-| Error | TODO | Fehlermeldungen |
-| Background | TODO | Hintergrund |
-| Text | TODO | Fließtext |
-
-## Typographie
-
-| Stil | Schrift | Größe | Verwendung |
-|------|--------|-------|-----------|
-| H1 | TODO | 2rem | Seitentitel |
-| H2 | TODO | 1.5rem | Abschnitte |
-| Body | TODO | 1rem | Fließtext |
-| Small | TODO | 0.875rem | Hinweise |
-| Code | Monospace | 0.875rem | Code-Blöcke |
-
-## Abstände
-
-TODO: Spacing-System (4px, 8px, 16px, 24px, 32px, 48px, 64px)
-
-## Icons
-
-TODO: Welches Icon-Set? (Material Icons, Heroicons, Lucide, etc.)
-"""),
-
-    ("design/components.md", "UI-Komponenten", """
-!!! tip "Inhaltsrichtlinie"
-    Komponentenbibliothek: Alle wiederverwendbaren UI-Komponenten mit Varianten, Props, Beispielen.
-
-## Buttons
-
-| Variante | Verwendung | Beispiel |
-|----------|-----------|---------|
-| Primary | Hauptaktion | Speichern, Erstellen |
-| Secondary | Nebenaktionen | Abbrechen, Zurück |
-| Danger | Destruktive Aktionen | Löschen |
-| Ghost | Subtile Aktionen | Links, Icons |
-
-## Formulare
-
-TODO: Input, Select, Checkbox, Radio, Textarea, DatePicker, FilePicker
-
-## Navigation
-
-TODO: Navbar, Sidebar, Breadcrumbs, Tabs, Pagination
-
-## Feedback
-
-TODO: Alert, Toast, Modal, Tooltip, Loading-Spinner, Progress-Bar
-
-## Daten-Darstellung
-
-TODO: Table, Card, List, Badge, Tag, Avatar
-
-## Layout
-
-TODO: Grid, Container, Divider, Spacer
-
-## Komponentenstatus
-
-| Komponente | Status | Dokumentiert | Getestet |
-|-----------|--------|-------------|---------|
-| Button | Stabil | ✓ | ✓ |
-| TODO | TODO | TODO | TODO |
-"""),
-
-    ("design/tokens.md", "Design Tokens", """
-!!! tip "Inhaltsrichtlinie"
-    Design Tokens: Farben, Abstände, Schriften, Schatten, Radien als wiederverwendbare Variablen.
-
-## Was sind Design Tokens?
-
-Design Tokens sind die kleinsten Bausteine des Design-Systems — Werte für
-Farben, Abstände, Schriften etc. als Variablen definiert.
-
-## Farb-Tokens
-
-```css
---color-primary: #3b82f6;
---color-primary-hover: #2563eb;
---color-primary-active: #1d4ed8;
---color-text: #1f2937;
---color-text-secondary: #6b7280;
---color-background: #ffffff;
---color-surface: #f9fafb;
---color-border: #e5e7eb;
-```
-
-TODO: An tatsächliche Farben anpassen
-
-## Spacing-Tokens
-
-```css
---space-1: 0.25rem;  /* 4px */
---space-2: 0.5rem;   /* 8px */
---space-3: 0.75rem;  /* 12px */
---space-4: 1rem;     /* 16px */
---space-6: 1.5rem;   /* 24px */
---space-8: 2rem;     /* 32px */
-```
-
-## Typography-Tokens
-
-TODO: Font-Family, Font-Size, Line-Height, Font-Weight
-
-## Shadow-Tokens
-
-TODO: Box-Shadow-Stufen (sm, md, lg, xl)
-
-## Border-Tokens
-
-TODO: Border-Radius, Border-Width, Border-Color
-
-## Dark-Mode-Tokens
-
-TODO: Overrides für Dark Mode
-"""),
-
-    ("design/style-guide.md", "Style Guide", """
-!!! tip "Inhaltsrichtlinie"
-    Visueller Style Guide: Sprache & Ton, Do's und Don'ts, Textkonventionen, Bildrichtlinien.
-
-## Sprache & Ton
-
-- **Klar**: Fachbegriffe erklären, Abkürzungen vermeiden
-- **Freundlich**: Positive Formulierungen bevorzugen
-- **Prägnant**: So kurz wie möglich, so lang wie nötig
-- **Aktiv**: Aktiv statt Passiv ("Klicken Sie" statt "Es wird geklickt")
-
-## Textkonventionen
-
-| Element | Konvention | Beispiel |
-|---------|-----------|---------|
-| Button-Texte | Imperativ, kurz | "Speichern", "Löschen" |
-| Überschriften | Title Case (DE: Normal) | "Neue Datei erstellen" |
-| Fehlermeldungen | Ursache + Lösung | "Datei nicht gefunden. Prüfen Sie den Pfad." |
-| Platzhalter | Beispielwert | "max@example.com" |
-| Tooltips | Kurze Erklärung | "Datei als PDF exportieren" |
-
-## Do's und Don'ts
-
-### Do's
-- Konsistente Terminologie verwenden
-- Benutzer mit "Sie" ansprechen
-- Fehler verständlich erklären
-
-### Don'ts
-- Technischen Jargon in der UI
-- Doppelte Verneinungen
-- Mehrdeutige Icons ohne Label
-
-## Bilder & Screenshots
-
-TODO: Dateiformate (WebP/PNG), max. Breite, Beschriftung, Alt-Texte
-
-## Animationen
-
-TODO: Dauer (150-300ms), Easing, wann animieren?
-"""),
-
-    ("design/accessibility-guidelines.md", "Accessibility-Richtlinien", """
-!!! tip "Inhaltsrichtlinie"
-    WCAG-Konformität: Farbkontraste, Tastatur-Navigation, ARIA, Screen-Reader, automatische Tests.
-
-## WCAG 2.1 Level AA Anforderungen
-
-### Wahrnehmbar
-
-- **Farbkontrast**: Min. 4.5:1 für Text, 3:1 für große Schrift
-- **Nicht nur Farbe**: Information nicht ausschließlich über Farbe vermitteln
-- **Alt-Texte**: Alle Bilder mit beschreibendem Alt-Text
-- **Untertitel**: Videos mit Untertiteln (falls zutreffend)
-
-### Bedienbar
-
-- **Tastatur**: Alle Funktionen per Tastatur erreichbar
-- **Tab-Reihenfolge**: Logische Navigation mit Tab
-- **Focus-Indicator**: Sichtbarer Fokus-Ring
-- **Skip-Links**: "Zum Inhalt springen"-Link
-
-### Verständlich
-
-- **Sprache**: `lang`-Attribut gesetzt
-- **Konsistenz**: Gleiche Navigation auf allen Seiten
-- **Fehlervermeidung**: Validierung vor Absenden
-
-### Robust
-
-- **Semantisches HTML**: Korrekte Überschriften-Hierarchie, Landmarks
-- **ARIA**: ARIA-Labels wo nötig, `role`-Attribute
-
-## ARIA-Verwendung
-
-| Widget | ARIA-Attribute | Beispiel |
-|--------|---------------|---------|
-| Modal | `role="dialog"`, `aria-modal="true"` | Bestätigungsdialog |
-| Tab | `role="tablist"`, `role="tab"` | Tab-Navigation |
-| Alert | `role="alert"` | Fehlermeldung |
-
-## Automatische Tests
-
-TODO: axe-core, Lighthouse Accessibility, pa11y
-
-## Manuelle Tests
-
-TODO: Screen-Reader-Test, Tastatur-Test, Zoom-Test (200%)
-"""),
-
-    ("design/responsive.md", "Responsive Design", """
-!!! tip "Inhaltsrichtlinie"
-    Responsives Layout: Breakpoints, Mobile-First, Grid-System, Touch-Targets.
-
-## Breakpoints
-
-| Name | Breite | Gerätetyp |
-|------|--------|----------|
-| xs | < 576px | Smartphone (Portrait) |
-| sm | ≥ 576px | Smartphone (Landscape) |
-| md | ≥ 768px | Tablet |
-| lg | ≥ 992px | Desktop |
-| xl | ≥ 1200px | Großer Desktop |
-| xxl | ≥ 1400px | Ultrawide |
-
-## Mobile-First-Prinzip
-
-TODO: Basis-Layout für Mobile, erweitert per Media Query
-
-## Grid-System
-
-TODO: CSS Grid / Flexbox, Spalten, Abstände
-
-## Touch-Targets
-
-- Mindestgröße: 44x44px (Apple) / 48x48px (Material Design)
-- Mindestabstand zwischen Targets: 8px
-
-## Navigation auf verschiedenen Geräten
-
-| Gerät | Navigation |
-|-------|-----------|
-| Desktop | Sidebar + Top-Bar |
-| Tablet | Einklappbare Sidebar |
-| Mobile | Hamburger-Menü / Bottom-Navigation |
-
-## Bilder & Medien
-
-TODO: Responsive Images (`srcset`, `picture`), Lazy Loading
-
-## Testing
-
-TODO: Wie auf verschiedenen Geräten testen? (DevTools, reale Geräte)
-"""),
-
-
-    ("design/animations.md", "Animationen & Übergänge", """
-!!! tip "Inhaltsrichtlinie"
-    Animations-Richtlinien: Dauer, Easing, Zweck, Performance, Reduced Motion.
-
-## Grundprinzipien
-
-- **Funktional**: Animationen verdeutlichen Übergänge, keine reine Dekoration
-- **Schnell**: Maximal 300ms für UI-Feedback
-- **Konsistent**: Gleiche Aktionen → gleiche Animationen
-
-## Standard-Timings
-
-| Aktion | Dauer | Easing |
-|--------|-------|--------|
-| Hover-Feedback | 150ms | ease-out |
-| Modal öffnen | 200ms | ease-out |
-| Modal schließen | 150ms | ease-in |
-| Seitenwechsel | 250ms | ease-in-out |
-| Toast erscheinen | 200ms | ease-out |
-| Toast verschwinden | 300ms | ease-in |
-
-## Easing-Funktionen
-
-```css
---ease-in: cubic-bezier(0.4, 0, 1, 0.7);
---ease-out: cubic-bezier(0, 0.3, 0.6, 1);
---ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-```
-
-## Reduced Motion
-
-```css
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-```
-
-## Performance
-
-TODO: CSS-Transitions bevorzugen, `transform` und `opacity` animieren, `will-change` sparsam
-"""),
-
-    ("design/iconography.md", "Icons & Symbole", """
-!!! tip "Inhaltsrichtlinie"
-    Icon-System: Bibliothek, Größen, Farben, Konventionen, eigene Icons.
-
-## Icon-Bibliothek
-
-TODO: Material Icons, Heroicons, Lucide, Phosphor, etc.
-
-## Größen
-
-| Größe | Pixel | Verwendung |
-|-------|-------|-----------|
-| xs | 12px | Inline-Hinweise |
-| sm | 16px | Buttons, Inputs |
-| md | 20px | Navigation, Listen |
-| lg | 24px | Überschriften |
-| xl | 32px | Feature-Icons |
-| 2xl | 48px | Illustrationen |
-
-## Farben
-
-- **Primär**: Interaktive Icons (Buttons, Links)
-- **Sekundär**: Dekorative Icons (Labels, Badges)
-- **Muted**: Weniger wichtige Icons
-- **Danger**: Destruktive Aktionen
-- **Keine Farbe allein**: Icons nie als einziges Unterscheidungsmerkmal
-
-## Konventionen
-
-| Aktion | Icon | Beschreibung |
-|--------|------|-------------|
-| Erstellen | + (Plus) | Neuen Eintrag erstellen |
-| Bearbeiten | Stift | Eintrag bearbeiten |
-| Löschen | Mülleimer | Eintrag löschen |
-| Suchen | Lupe | Suche öffnen |
-| Einstellungen | Zahnrad | Einstellungen öffnen |
-| Schließen | X | Dialog/Panel schließen |
-
-## Accessibility
-
-- Dekorative Icons: `aria-hidden="true"`
-- Funktionale Icons: `aria-label="Beschreibung"`
-"""),
-
-    ("design/dark-mode.md", "Dark Mode", """
-!!! tip "Inhaltsrichtlinie"
-    Dark-Mode-Design: Farbpalette, Kontraste, Bilder, Umschaltung, System-Präferenz.
-
-## Farbpalette Dark Mode
-
-| Token | Light | Dark |
-|-------|-------|------|
-| Background | #ffffff | #1a1a2e |
-| Surface | #f9fafb | #16213e |
-| Text Primary | #1f2937 | #e2e8f0 |
-| Text Secondary | #6b7280 | #94a3b8 |
-| Border | #e5e7eb | #334155 |
-| Primary | #3b82f6 | #60a5fa |
-
-TODO: An tatsächliche Farben anpassen
-
-## Kontraste
-
-- Text auf Background: mindestens 4.5:1 (auch im Dark Mode!)
-- Alle Farben mit Contrast-Checker verifizieren
-
-## Bilder im Dark Mode
-
-TODO: Dunklere Bilder, reduzierte Helligkeit, Schatten statt Ränder
-
-## Umschaltung
-
-| Modus | Beschreibung |
-|-------|-------------|
-| System | Folgt der Betriebssystem-Einstellung |
-| Hell | Immer Light Mode |
-| Dunkel | Immer Dark Mode |
-
-```css
-@media (prefers-color-scheme: dark) {
-  :root { /* Dark-Mode-Tokens */ }
-}
-```
-
-## Verweis
-
-- [Design Tokens](tokens.md)
-"""),
-
-    ("design/forms.md", "Formular-Design", """
-!!! tip "Inhaltsrichtlinie"
-    Formular-Patterns: Layout, Validierung, Fehlermeldungen, Barrierefreiheit, Multi-Step.
-
-## Layout
-
-- **Einspaltiges Layout** bevorzugen (bessere Lesbarkeit)
-- **Labels über dem Feld** (nicht daneben)
-- **Logische Gruppierung** zusammengehöriger Felder
-- **Pflichtfelder** markieren (Stern * oder "Pflicht"-Label)
-
-## Validierung
-
-### Wann validieren?
-
-| Zeitpunkt | Verwendung |
-|-----------|-----------|
-| On Submit | Standard — alle Fehler auf einmal |
-| On Blur | Für komplexe Felder (E-Mail, Passwort) |
-| On Input | Nur für Echtzeit-Feedback (Passwort-Stärke) |
-
-### Fehlermeldungen
-
-```
-✗ Bitte geben Sie eine gültige E-Mail-Adresse ein.
-✗ Das Passwort muss mindestens 8 Zeichen lang sein.
-```
-
-**Regeln:**
-- Unter dem betroffenen Feld anzeigen
-- Rot markieren (+ Icon, nicht nur Farbe)
-- Sagen was falsch ist UND was erwartet wird
-- `aria-describedby` für Screen-Reader
-
-## Multi-Step-Formulare
-
-TODO: Wizard-Pattern, Fortschrittsanzeige, Vor/Zurück, Zwischenspeichern
-
-## Verweis
-
-- [UI-Komponenten](components.md)
-- [Accessibility-Richtlinien](accessibility-guidelines.md)
-"""),
-
-    # ━━ Testdokumentation ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    ("testing/overview.md", "Testdokumentation — Überblick", """
-!!! tip "Inhaltsrichtlinie"
-    Überblick über die Test-Strategie: Welche Tests existieren, wie werden sie ausgeführt, wo liegen sie.
-
-## Test-Übersicht
-
-| Typ | Anzahl | Coverage | Dauer | Frequenz |
-|-----|--------|---------|-------|---------|
-| Unit | TODO | TODO% | TODO | Jeder Commit |
-| Integration | TODO | - | TODO | Jeder PR |
-| E2E | TODO | - | TODO | Nightly |
-| Performance | TODO | - | TODO | Wöchentlich |
-| Security | TODO | - | TODO | Wöchentlich |
-
-## Tests ausführen
-
-```bash
-# Alle Tests
-pytest
-
-# Nur Unit-Tests
-pytest tests/unit/
-
-# Mit Coverage
-pytest --cov=src --cov-report=html
-```
-
-## Verzeichnisstruktur
-
-```
-tests/
-  unit/           ← Schnelle, isolierte Tests
-  integration/    ← Komponentenübergreifende Tests
-  e2e/            ← End-to-End Workflow-Tests
-  fixtures/       ← Gemeinsame Testdaten
-  conftest.py     ← Shared Fixtures
-```
-
-## Verweis
-
-- [Test-Architektur](../architecture/testing-architecture.md)
-- [CI/CD-Pipeline](../development/ci-cd.md)
-"""),
-
-    ("testing/test-plan.md", "Testplan", """
-!!! tip "Inhaltsrichtlinie"
-    Formaler Testplan: Testziele, Scope, Risiken, Umgebung, Zeitplan, Kriterien.
-
-## Testziele
-
-TODO: Was soll durch Tests sichergestellt werden?
-
-## Scope
-
-### In Scope
-
-TODO: Welche Funktionen werden getestet?
-
-### Out of Scope
-
-TODO: Was wird NICHT getestet? (z.B. externe Abhängigkeiten)
-
-## Test-Umgebung
-
-| Umgebung | Zweck | Datenbank | URL |
-|----------|-------|----------|-----|
-| Lokal | Entwicklung | SQLite | localhost |
-| CI | Automatisiert | PostgreSQL | - |
-| Staging | Manuell | PostgreSQL | TODO |
-
-## Risiken
-
-| Risiko | Wahrscheinlichkeit | Gegenmaßnahme |
-|--------|-------------------|--------------|
-| Instabile Tests | TODO | TODO |
-| Langsame Pipeline | TODO | TODO |
-
-## Abnahmekriterien
-
-- [ ] Alle Tests bestehen
-- [ ] Coverage ≥ TODO%
-- [ ] Keine kritischen Sicherheitslücken
-- [ ] Performance-Schwellwerte eingehalten
-"""),
-
-    ("testing/test-cases.md", "Testfälle", """
-!!! tip "Inhaltsrichtlinie"
-    Katalog wichtiger Testfälle: ID, Beschreibung, Vorbedingung, Schritte, erwartetes Ergebnis.
-
-## Testfall-Format
-
-| Feld | Beschreibung |
-|------|-------------|
-| **ID** | Eindeutige Kennung (TC-XXX) |
-| **Titel** | Kurzbeschreibung |
-| **Vorbedingung** | Was muss gegeben sein? |
-| **Schritte** | Durchzuführende Aktionen |
-| **Erwartetes Ergebnis** | Was soll passieren? |
-| **Priorität** | Hoch / Mittel / Niedrig |
-
-## Authentifizierung
-
-### TC-001: Erfolgreicher Login
-
-- **Vorbedingung**: Gültiger Benutzer existiert
-- **Schritte**: 1. Login-Seite öffnen, 2. Credentials eingeben, 3. Absenden
-- **Erwartet**: Dashboard wird angezeigt, Session erstellt
-- **Priorität**: Hoch
-
-### TC-002: Login mit falschen Credentials
-
-- **Vorbedingung**: -
-- **Schritte**: 1. Login-Seite, 2. Falsche Credentials, 3. Absenden
-- **Erwartet**: Fehlermeldung, kein Zugang
-- **Priorität**: Hoch
-
-TODO: Weitere Testfälle nach diesem Schema
-
-## CRUD-Operationen
-
-TODO: Testfälle für Erstellen, Lesen, Aktualisieren, Löschen
-
-## Edge Cases
-
-TODO: Grenzwerte, leere Eingaben, Sonderzeichen, große Datenmengen
-"""),
-
-    ("testing/test-automation.md", "Testautomatisierung", """
-!!! tip "Inhaltsrichtlinie"
-    Automatisierte Tests: Framework, Konfiguration, Fixtures, Mocking, CI-Integration.
-
-## Framework
-
-TODO: pytest, Jest, JUnit — Version, Konfiguration
-
-## Konfiguration
-
-```ini
-# pytest.ini / pyproject.toml
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-v --tb=short"
-markers = [
-    "slow: Langsame Tests",
-    "integration: Integrationstests",
-    "e2e: End-to-End Tests",
-]
-```
-
-## Fixtures
-
-TODO: Gemeinsame Fixtures, Factory-Pattern, Datenbank-Fixtures
-
-## Mocking
-
-TODO: Mocking-Bibliothek, Mocking-Strategien, Wann mocken?
-
-## Test-Daten
-
-TODO: Faker, Factories, Seed-Daten, Snapshots
-
-## Parallelisierung
-
-TODO: Tests parallel ausführen (pytest-xdist, jest --workers)
-
-## CI-Integration
-
-TODO: Tests in Pipeline, Coverage-Upload, Artefakte
-"""),
-
-    ("testing/performance-tests.md", "Performance-Testberichte", """
-!!! tip "Inhaltsrichtlinie"
-    Ergebnisse von Performance-Tests: Baseline, aktuelle Werte, Trends, Optimierungsvorschläge.
-
-## Baseline
-
-| Endpunkt | P50 | P95 | P99 | RPS |
-|----------|-----|-----|-----|-----|
-| GET /api/v1/health | TODO | TODO | TODO | TODO |
-| GET /api/v1/resources | TODO | TODO | TODO | TODO |
-| POST /api/v1/resources | TODO | TODO | TODO | TODO |
-
-## Aktuelle Messung
-
-TODO: Datum, Umgebung, Last-Profil, Ergebnisse
-
-## Trends
-
-TODO: Diagramm oder Tabelle — Performance über letzte N Releases
-
-## Identifizierte Engpässe
-
-TODO: Langsame Queries, Speicherverbrauch, CPU-Spitzen
-
-## Verweis
-
-- [Performance-Tests (Entwicklung)](../development/performance-testing.md)
-- [Performance-Tuning (Betrieb)](../operations/performance.md)
-"""),
-
-    ("testing/security-tests.md", "Sicherheitstest-Berichte", """
-!!! tip "Inhaltsrichtlinie"
-    Ergebnisse von Sicherheitstests: SAST/DAST-Ergebnisse, offene Findings, Risikobewertung.
-
-## Letzter Scan
-
-- **Datum**: TODO
-- **Tool**: TODO (Bandit, SonarQube, OWASP ZAP)
-- **Scope**: TODO
-
-## Ergebnisse
-
-| Schweregrad | Anzahl | Behoben | Offen |
-|------------|--------|---------|-------|
-| Kritisch | TODO | TODO | TODO |
-| Hoch | TODO | TODO | TODO |
-| Mittel | TODO | TODO | TODO |
-| Niedrig | TODO | TODO | TODO |
-
-## Offene Findings
-
-TODO: Liste der offenen Sicherheitsbefunde mit Risikobewertung
-
-## Dependency-Scan
-
-TODO: Bekannte CVEs in Abhängigkeiten
-
-## Verweis
-
-- [Sicherheitstests (Entwicklung)](../development/security-testing.md)
-- [Sicherheitsrichtlinien](../compliance/security-policies.md)
-"""),
-
-    ("testing/acceptance-tests.md", "Abnahmetests", """
-!!! tip "Inhaltsrichtlinie"
-    Abnahmetests für Releases: Kriterien, Checkliste, Ergebnisse, Freigabe.
-
-## Abnahmekriterien
-
-| Kriterium | Schwellwert | Status |
-|----------|-----------|--------|
-| Alle Unit-Tests bestehen | 100% | TODO |
-| Integration-Tests bestehen | 100% | TODO |
-| Coverage | ≥ TODO% | TODO |
-| Keine kritischen Bugs | 0 | TODO |
-| Performance P95 | < TODO ms | TODO |
-| Security Scan | Keine kritischen Findings | TODO |
-
-## Manuelle Prüfungen
-
-- [ ] Alle Hauptfunktionen in Staging getestet
-- [ ] Cross-Browser-Test durchgeführt
-- [ ] Mobile-Test durchgeführt
-- [ ] Accessibility-Test durchgeführt
-- [ ] Dokumentation aktualisiert
-
-## Freigabe
-
-- **Getestet von**: TODO
-- **Datum**: TODO
-- **Version**: TODO
-- **Ergebnis**: Freigegeben / Nicht freigegeben
-
-## Verweis
-
-- [Release-Prozess](../development/release.md)
-- [Testplan](test-plan.md)
-"""),
-
-
-    ("testing/regression-tests.md", "Regressionstests", """
-!!! tip "Inhaltsrichtlinie"
-    Regressionstests: Strategie, Testauswahl, Automatisierung, Triage von Regressionen.
-
-## Strategie
-
-TODO: Wann werden Regressionstests ausgeführt? (Nightly, vor Release, nach Merge)
-
-## Test-Suite
-
-| Suite | Anzahl Tests | Dauer | Scope |
-|-------|-------------|-------|-------|
-| Smoke | TODO | < 5 Min | Kritische Pfade |
-| Regression (klein) | TODO | < 30 Min | Letzte 3 Releases |
-| Regression (voll) | TODO | < 2 Std | Alle Features |
-
-## Triage bei Regression
-
-1. Test fehlgeschlagen — Bug oder Testfehler?
-2. Seit welchem Commit? (`git bisect`)
-3. Kritikalität bewerten
-4. Fix oder Revert
-
-## Testauswahl
-
-TODO: Risiko-basierte Auswahl, Changed-Code-basiert, Impact Analysis
-
-## Verweis
-
-- [CI/CD-Pipeline](../development/ci-cd.md)
-- [Testplan](test-plan.md)
-"""),
-
-    ("testing/compatibility-tests.md", "Kompatibilitätstests", """
-!!! tip "Inhaltsrichtlinie"
-    Browser-, Plattform-, Versions-Kompatibilität: Testmatrix, Tools, Automatisierung.
-
-## Browser-Testmatrix
-
-| Browser | Version | Desktop | Mobile | Status |
-|---------|---------|---------|--------|--------|
-| Chrome | Letzte 2 | TODO | TODO | TODO |
-| Firefox | Letzte 2 | TODO | TODO | TODO |
-| Safari | Letzte 2 | TODO | TODO | TODO |
-| Edge | Letzte 2 | TODO | TODO | TODO |
-
-## Plattform-Testmatrix
-
-| OS | Version | Status |
-|-----|---------|--------|
-| Ubuntu | 22.04 | TODO |
-| macOS | 14 | TODO |
-| Windows | 11 | TODO |
-
-## Automatisierung
-
-TODO: Selenium Grid, BrowserStack, Sauce Labs, Playwright
-
-## Testfälle
-
-TODO: Welche Funktionen werden browser-/plattform-übergreifend getestet?
-
-## Verweis
-
-- [Plattform-Unterstützung](../reference/supported-platforms.md)
-"""),
-
-    ("testing/accessibility-tests.md", "Accessibility-Tests", """
-!!! tip "Inhaltsrichtlinie"
-    Accessibility-Tests: Automatisierte Tools, manuelle Prüfung, Screen-Reader-Tests.
-
-## Automatisierte Tests
-
-### axe-core (CI)
-
-```bash
-npx @axe-core/cli http://localhost:8000
-```
-
-### Lighthouse (CI)
-
-```bash
-npx lighthouse http://localhost:8000 --only-categories=accessibility --output=json
-```
-
-### pa11y (CI)
-
-```bash
-npx pa11y http://localhost:8000
-```
-
-## Manuelle Tests
-
-### Tastatur-Test
-
-- [ ] Alle interaktiven Elemente erreichbar mit Tab
-- [ ] Fokus-Reihenfolge logisch
-- [ ] Focus-Indicator sichtbar
-- [ ] Dialoge per Escape schließbar
-
-### Screen-Reader-Test
-
-| Screen-Reader | Browser | Status |
-|-------------|---------|--------|
-| NVDA | Firefox | TODO |
-| VoiceOver | Safari | TODO |
-| JAWS | Chrome | TODO |
-
-### Zoom-Test
-
-- [ ] 200% Zoom — Layout bricht nicht
-- [ ] 400% Zoom — Inhalte weiterhin nutzbar
-
-## Ergebnisse
-
-TODO: Verweis auf letzte Testergebnisse
-
-## Verweis
-
-- [Accessibility-Richtlinien (Design)](../design/accessibility-guidelines.md)
-- [Barrierefreiheit-Compliance](../compliance/accessibility-compliance.md)
-"""),
-
-    ("testing/test-data.md", "Testdaten-Management", """
-!!! tip "Inhaltsrichtlinie"
-    Testdaten erstellen, verwalten, anonymisieren: Factories, Fixtures, Faker, Snapshots.
-
-## Testdaten-Strategien
-
-| Strategie | Beschreibung | Einsatz |
-|----------|-------------|---------|
-| Fixtures | Statische Testdaten | Einfache, vorhersagbare Tests |
-| Factories | Dynamisch generierte Daten | Flexible, variantenreiche Tests |
-| Faker | Realistische Zufallsdaten | Massentests, Edge Cases |
-| Snapshots | Kopie von Produktionsdaten | Integrations-/E2E-Tests |
-
-## Factory-Pattern
-
-```python
-# TODO: An tatsächliches Framework anpassen
-class UserFactory:
-    @staticmethod
-    def create(**kwargs):
-        defaults = {
-            "name": faker.name(),
-            "email": faker.email(),
-            "role": "viewer",
-        }
-        defaults.update(kwargs)
-        return User.create(**defaults)
-```
-
-## Anonymisierung von Produktionsdaten
-
-TODO: PII entfernen, E-Mails/Namen ersetzen, IDs beibehalten, Relationen intakt halten
-
-## Seed-Daten
-
-```bash
-# TODO: Befehl zum Laden von Seed-Daten
-```
-
-## Regeln
-
-1. **Keine echten Daten** in Tests oder Repositories
-2. **Deterministische Tests** — gleiche Eingabe → gleiches Ergebnis
-3. **Aufräumen** — Testdaten nach dem Test löschen
-"""),
-
-    # ━━ Projektmanagement ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    ("project/overview.md", "Projektmanagement — Überblick", """
-!!! tip "Inhaltsrichtlinie"
-    Projektorganisation: Methodik, Team, Kommunikation, Tools, Zeitplanung.
-
-## Projektmethodik
-
-TODO: Scrum, Kanban, SAFe, Wasserfall?
-
-## Team
-
-| Rolle | Verantwortung | Person |
-|-------|-------------|--------|
-| Product Owner | Anforderungen, Priorisierung | TODO |
-| Tech Lead | Architektur, Code-Qualität | TODO |
-| Entwickler | Implementierung | TODO |
-| QA | Testing, Qualitätssicherung | TODO |
-| DevOps | Infrastruktur, CI/CD | TODO |
-
-## Kommunikation
-
-| Kanal | Zweck | Frequenz |
-|-------|-------|---------|
-| Daily Standup | Status, Blocker | Täglich |
-| Sprint Planning | Sprintplanung | Alle 2 Wochen |
-| Retro | Verbesserung | Alle 2 Wochen |
-| Slack/Teams | Schnelle Fragen | Laufend |
-
-## Tools
-
-TODO: Jira, GitHub Projects, Linear, Notion?
-
-## Verweis
-
-- [Roadmap](roadmap.md)
-- [Stakeholder](stakeholders.md)
-"""),
-
-    ("project/roadmap.md", "Roadmap", """
-!!! tip "Inhaltsrichtlinie"
-    Produkt-Roadmap: Geplante Features, Meilensteine, Zeitplanung, Prioritäten.
-
-## Aktuelle Phase
-
-TODO: In welcher Phase befindet sich das Projekt?
-
-## Meilensteine
-
-| Meilenstein | Zieldatum | Status | Beschreibung |
-|------------|----------|--------|-------------|
-| MVP | TODO | TODO | Minimales lauffähiges Produkt |
-| v1.0 | TODO | TODO | Erster stabiler Release |
-| v2.0 | TODO | TODO | Nächstes Major-Release |
-
-## Q1 TODO
-
-- [ ] Feature A
-- [ ] Feature B
-- [ ] Verbesserung C
-
-## Q2 TODO
-
-- [ ] Feature D
-- [ ] Feature E
-
-## Backlog (ungeplant)
-
-TODO: Features die gewünscht aber nicht terminiert sind
-
-## Entscheidungslog
-
-TODO: Verweis auf [ADR](../architecture/decisions.md)
-"""),
-
-    ("project/stakeholders.md", "Stakeholder", """
-!!! tip "Inhaltsrichtlinie"
-    Stakeholder-Übersicht: Wer hat Interesse am Projekt? Erwartungen, Kommunikation.
-
-## Stakeholder-Matrix
-
-| Stakeholder | Typ | Interesse | Einfluss | Kommunikation |
-|------------|-----|----------|---------|--------------|
-| Endanwender | Nutzer | Hoch | Mittel | Release Notes, Docs |
-| Management | Sponsor | Mittel | Hoch | Status-Reports |
-| Entwickler | Team | Hoch | Hoch | Daily, Slack |
-| Support | Intern | Hoch | Niedrig | Ticket-System |
-| Partner | Extern | Mittel | Niedrig | Newsletter |
-
-## Erwartungen
-
-### Endanwender
-TODO: Was erwarten die Benutzer?
-
-### Management
-TODO: KPIs, Budget, Timeline
-
-### Entwickler
-TODO: Technische Qualität, DX
-
-## Feedback-Kanäle
-
-TODO: Wie können Stakeholder Feedback geben?
-"""),
-
-    ("project/risks.md", "Risiken & Maßnahmen", """
-!!! tip "Inhaltsrichtlinie"
-    Risikoregister: Identifizierte Risiken, Bewertung, Gegenmaßnahmen, Verantwortliche.
-
-## Risikoregister
-
-| # | Risiko | Wahrscheinl. | Auswirkung | Risikostufe | Maßnahme | Verantwortlich |
-|---|--------|-------------|-----------|------------|----------|---------------|
-| R1 | Personalausfall | Mittel | Hoch | Hoch | Cross-Training, Dokumentation | TODO |
-| R2 | Technische Schuld | Hoch | Mittel | Hoch | Refactoring-Sprints | TODO |
-| R3 | Scope Creep | Hoch | Mittel | Hoch | Klare Anforderungen, Sprint Goals | TODO |
-| R4 | Sicherheitsvorfall | Niedrig | Hoch | Mittel | Security-Tests, Audits | TODO |
-| R5 | Abhängigkeit von Drittanbieter | Mittel | Mittel | Mittel | Abstraktion, Exit-Strategie | TODO |
-
-TODO: An tatsächliche Projektrisiken anpassen
-
-## Risikobewertung
-
-| | Niedrige Auswirkung | Mittlere Auswirkung | Hohe Auswirkung |
-|---|---|---|---|
-| **Hoch** | Mittel | Hoch | Kritisch |
-| **Mittel** | Niedrig | Mittel | Hoch |
-| **Niedrig** | Niedrig | Niedrig | Mittel |
-
-## Überprüfung
-
-TODO: Wie oft wird das Risikoregister überprüft?
-"""),
-
-    ("project/meetings.md", "Meeting-Protokolle & Vorlagen", """
-!!! tip "Inhaltsrichtlinie"
-    Vorlagen für wiederkehrende Meetings: Agenda, Protokoll-Format, Aktionspunkte.
-
-## Daily Standup
-
-| Frage | Antwort |
-|-------|---------|
-| Was habe ich gestern gemacht? | TODO |
-| Was mache ich heute? | TODO |
-| Gibt es Blocker? | TODO |
-
-Dauer: 15 Minuten, täglich
-
-## Sprint Planning
-
-### Agenda
-
-1. Review der Sprint-Ziele
-2. Backlog-Refinement
-3. Kapazitätsplanung
-4. Task-Zuordnung
-
-### Protokoll-Vorlage
-
-- **Sprint**: #TODO
-- **Zeitraum**: TODO – TODO
-- **Kapazität**: TODO Story Points
-- **Sprint-Ziel**: TODO
-- **Ausgewählte Stories**: TODO
-
-## Retrospektive
-
-### Format
-
-1. **Was lief gut?** (Keep)
-2. **Was lief schlecht?** (Stop)
-3. **Was können wir verbessern?** (Start)
-
-### Aktionspunkte
-
-| Aktion | Verantwortlich | Frist |
-|--------|---------------|-------|
-| TODO | TODO | TODO |
-
-## Architektur-Review
-
-### Agenda
-
-1. Architektur-Entscheidungen besprechen
-2. Technische Schuld bewerten
-3. ADRs erstellen/aktualisieren
-
-TODO: Verweis auf [Entscheidungslog](../architecture/decisions.md)
-"""),
-
-], depth: int) -> None:
+def _walk_tree(base: Path, current: Path, tree: list[tuple[str, int]], depth: int) -> None:
     """Recursively walk directory and build tree display."""
     entries = sorted(current.iterdir(), key=lambda p: (not p.is_dir(), p.name))
     for entry in entries:

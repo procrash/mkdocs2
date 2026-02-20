@@ -1,10 +1,14 @@
 """Prompt template for index/overview page generation."""
 from ..registry import register
+from . import format_guideline_section
 
 
 @register("generator", "index")
 def render(ctx) -> str:
+    guideline_section = format_guideline_section(ctx)
+
     return f"""Erstelle eine Index-Seite (Inhaltsverzeichnis) für den folgenden Dokumentationsbereich.
+{guideline_section}
 
 Bereich: {ctx.section_name}
 Enthaltene Seiten:

@@ -87,6 +87,68 @@ def _clean_markdown(content: str) -> str:
     return content
 
 
+def write_new_page(
+    content: str,
+    output_dir: Path,
+    page_path: str,
+    title: str,
+) -> Path:
+    """Create a new documentation page and return its path.
+
+    Used when LLM-generated content doesn't fit any existing skeleton page.
+    The nav structure is updated automatically by ``nav_builder.build_nav()``
+    on the next ``write_mkdocs_config()`` call.
+
+    Args:
+        content: Markdown content for the page body.
+        output_dir: Project output directory (parent of ``docs/``).
+        page_path: Relative path inside ``docs/``, e.g.
+            ``"tutorials/advanced-caching.md"``.
+        title: Page title (used as ``# title`` heading).
+    """
+    file_path = output_dir / "docs" / page_path
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+    cleaned = _clean_markdown(content)
+    full_content = f"# {title}\n\n{cleaned}"
+    file_path.write_text(full_content, encoding="utf-8")
+    logger.info("Created new page: %s", file_path)
+    return file_path
+
+
+# Pattern for LLM responses that request new page creation:
+#   <<<NEW_PAGE path="..." title="...">>>
+#   content
+#   <<<END>>>
+_NEW_PAGE_PATTERN = re.compile(
+    r'<<<NEW_PAGE\s+path="([^"]+)"\s+title="([^"]+)">>>\n'
+    r'(.*?)'
+    r'<<<END>>>',
+    re.DOTALL,
+)
+
+
+def parse_new_pages(llm_output: str) -> list[dict[str, str]]:
+    """Parse ``<<<NEW_PAGE ...>>>`` blocks from LLM output.
+
+    Returns a list of dicts with keys ``path``, ``title``, ``content``.
+    The remaining text (outside NEW_PAGE blocks) is also accessible via
+    the *cleaned* key if the caller needs it.
+    """
+    pages: list[dict[str, str]] = []
+    for m in _NEW_PAGE_PATTERN.finditer(llm_output):
+        pages.append({
+            "path": m.group(1).strip(),
+            "title": m.group(2).strip(),
+            "content": m.group(3).strip(),
+        })
+    return pages
+
+
+def extract_content_without_new_pages(llm_output: str) -> str:
+    """Return the LLM output with all <<<NEW_PAGE>>> blocks removed."""
+    return _NEW_PAGE_PATTERN.sub("", llm_output).strip()
+
+
 def write_manual_placeholder(output_dir: Path, filename: str, title: str) -> Path:
     """Write a placeholder manual page if it doesn't exist."""
     file_path = output_dir / "docs" / "manual" / filename

@@ -1,10 +1,14 @@
 """Prompt template for user tutorial generation."""
 from ..registry import register
+from . import format_guideline_section
 
 
 @register("user", "tutorials")
 def render(ctx) -> str:
+    guideline_section = format_guideline_section(ctx)
+
     return f"""Erstelle ein Schritt-für-Schritt Tutorial basierend auf dem folgenden Code.
+{guideline_section}
 
 ## Anforderungen:
 1. **Titel**: Klarer, aktionsorientierter Titel

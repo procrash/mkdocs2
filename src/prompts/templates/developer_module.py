@@ -1,5 +1,6 @@
 """Prompt template for module overview (developer stakeholder)."""
 from ..registry import register
+from . import format_guideline_section
 
 
 @register("developer", "modules")
@@ -8,8 +9,11 @@ def render(ctx) -> str:
     if ctx.doxygen_section:
         doxygen = f"\n## Vorhandene Doxygen-Dokumentation:\n{ctx.doxygen_section}\n"
 
+    guideline_section = format_guideline_section(ctx)
+
     return f"""Du bist ein Software-Architekt. Erstelle eine Modul-Übersicht für das folgende
 {ctx.language}-Modul.
+{guideline_section}
 
 ## Anforderungen:
 1. **Modulzweck**: Was macht dieses Modul? (1-2 Sätze)

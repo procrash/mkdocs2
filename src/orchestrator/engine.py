@@ -14,6 +14,7 @@ from ..analyzer.scanner import ScanResult
 from ..config.schema import AppConfig
 from ..discovery.opencode_configurator import get_model_provider_id
 from ..discovery.role_assigner import RoleAssignment
+from ..generator.skeleton_reader import load_all_guidelines, find_matching_page
 from ..prompts.builder import PromptContext, build_prompt
 from .ensemble import query_ensemble, EnsembleResult, FailureCallback
 from .judge import judge_drafts
@@ -110,6 +111,9 @@ class OrchestrationEngine:
         self._disabled_models: set[str] = disabled_models or set()
         self._completed_task_ids: set[str] = completed_task_ids or set()
         self.pool = WorkerPool(config.system.parallel_workers)
+        # Skeleton guidelines (loaded lazily on first run)
+        self._skeleton_guidelines: dict[str, str] = {}
+        self._skeleton_loaded: bool = False
 
     def disable_model(self, model_id: str) -> None:
         """Disable a model so it won't be used for future tasks."""
@@ -123,6 +127,31 @@ class OrchestrationEngine:
             logger.warning("All analyst models disabled, falling back to first available")
             return analyst_ids[:1]
         return active
+
+    def _ensure_skeleton_loaded(self, output_dir: Path) -> None:
+        """Load skeleton guidelines once from the docs directory."""
+        if self._skeleton_loaded:
+            return
+        docs_dir = output_dir / "docs"
+        if docs_dir.is_dir():
+            self._skeleton_guidelines = load_all_guidelines(docs_dir)
+            logger.info(
+                "Loaded %d skeleton guidelines", len(self._skeleton_guidelines),
+            )
+        self._skeleton_loaded = True
+
+    def _find_target_page(self, task: GenerationTask) -> str:
+        """Find the best skeleton page for a generation task."""
+        # Build a description from file path, stakeholder, doc_type
+        desc_parts = [
+            str(task.file.relative_path),
+            task.stakeholder,
+            task.doc_type,
+        ]
+        desc_parts.extend(task.file.classes)
+        desc_parts.extend(task.file.functions)
+        description = " ".join(desc_parts)
+        return find_matching_page(description, self._skeleton_guidelines) or ""
 
     @staticmethod
     def task_id(task: GenerationTask) -> str:
@@ -167,6 +196,10 @@ class OrchestrationEngine:
             api_key=self.config.server.api_key,
             timeout_read=self.config.server.timeout_read,
         )
+
+        # Load skeleton guidelines for prompt enrichment
+        output_dir = Path(self.config.output.directory)
+        self._ensure_skeleton_loaded(output_dir)
 
         tasks = self._build_tasks()
         pipeline_result = PipelineResult(total_tasks=len(tasks))
@@ -249,6 +282,10 @@ class OrchestrationEngine:
             max_tokens=8000,
         )
 
+        # Find matching skeleton page and its guideline
+        target_page = self._find_target_page(task)
+        guideline = self._skeleton_guidelines.get(target_page, "")
+
         all_content_parts: list[str] = []
 
         for chunk in chunks:
@@ -259,6 +296,8 @@ class OrchestrationEngine:
                 classes=task.file.classes,
                 functions=task.file.functions,
                 doxygen_section=doxygen_ctx,
+                skeleton_guidelines=guideline,
+                target_page_path=target_page,
             )
 
             prompt = build_prompt(task.stakeholder, task.doc_type, ctx)

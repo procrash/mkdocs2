@@ -1,5 +1,6 @@
 """Prompt template for class documentation (developer stakeholder)."""
 from ..registry import register
+from . import format_guideline_section
 
 
 @register("developer", "classes")
@@ -8,8 +9,11 @@ def render(ctx) -> str:
     if ctx.doxygen_section:
         doxygen = f"\n## Vorhandene Doxygen-Dokumentation:\n{ctx.doxygen_section}\n"
 
+    guideline_section = format_guideline_section(ctx)
+
     return f"""Du bist ein Senior Technical Writer. Analysiere die folgende {ctx.language} Klasse und erstelle
 eine vollständige technische Dokumentation im Markdown-Format.
+{guideline_section}
 
 ## Anforderungen:
 1. **Klassenübersicht**: Zweck, Verantwortlichkeiten, Design-Pattern

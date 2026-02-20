@@ -10,10 +10,22 @@ from ..registry import register
 @register("enhance", "analysis")
 def render(ctx) -> str:
     project_name = ctx.section_name or "das Projekt"
+
+    skeleton_section = ""
+    if ctx.skeleton_page_map:
+        skeleton_section = f"""
+## Vorhandene Skeleton-Seiten mit Inhaltsrichtlinien:
+{ctx.skeleton_page_map}
+
+Nutze die Inhaltsrichtlinien oben um zu entscheiden, welche Inhalte auf
+welche bestehende Seite gehören. Erstelle neue Dateien NUR wenn keine
+passende Skeleton-Seite existiert.
+"""
+
     return f"""Du bist ein erfahrener MkDocs-Experte und Technical Writer.
 
 ## Projekt: {project_name}
-
+{skeleton_section}
 ## Aktuelle mkdocs.yml:
 ```yaml
 {ctx.code_content}

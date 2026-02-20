@@ -29,6 +29,10 @@ class PromptContext:
     drafts_section: str = ""
     context: str = ""
     stakeholder: str = ""
+    # Skeleton guideline context
+    skeleton_guidelines: str = ""       # Guideline text for the target page
+    skeleton_page_map: str = ""         # Compact overview of all pages + guidelines
+    target_page_path: str = ""          # Path of the target page (if known)
     # Model-specific
     max_context_tokens: int = 32768
 
