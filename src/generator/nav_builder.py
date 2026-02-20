@@ -23,6 +23,9 @@ _SECTION_ORDER: list[tuple[str, str]] = [
     ("development", "Entwicklung"),
     ("operations", "Betrieb"),
     ("compliance", "Compliance"),
+    ("design", "Design-System"),
+    ("testing", "Testdokumentation"),
+    ("project", "Projektmanagement"),
     ("reference", "Referenz"),
 ]
 
