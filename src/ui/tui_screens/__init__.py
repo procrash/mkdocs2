@@ -7,6 +7,7 @@ from .skeleton_suggestions_screen import SkeletonSuggestionsScreen
 from .generation_screen import GenerationScreen
 from .failure_screen import FailureScreen
 from .chat_screen import ChatScreen
+from .diff_review_screen import DiffReviewScreen
 
 __all__ = [
     "WelcomeScreen",
@@ -17,4 +18,5 @@ __all__ = [
     "GenerationScreen",
     "FailureScreen",
     "ChatScreen",
+    "DiffReviewScreen",
 ]

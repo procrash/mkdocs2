@@ -400,3 +400,119 @@ class TestEngineExtensions:
         )
         engine.disable_model("fail-model")
         assert "fail-model" in engine._disabled_models
+
+
+# ── Diff Review & File Change Parsing ────────────────────────────────
+
+
+class TestDiffReview:
+    """Test file change parsing and diff generation."""
+
+    def test_parse_file_changes_format1(self):
+        from src.ui.tui_screens.diff_review_screen import parse_file_changes
+        output = """Some preamble text.
+
+<<<FILE src/main.py
+DESCRIPTION: Add hello function
+>>>
+def hello():
+    print("Hello")
+<<<END>>>
+
+<<<FILE src/utils.py
+DESCRIPTION: Add utility
+>>>
+def util():
+    return 42
+<<<END>>>
+
+Some trailing text."""
+        changes = parse_file_changes(output)
+        assert len(changes) == 2
+        assert changes[0].file_path == "src/main.py"
+        assert changes[0].description == "Add hello function"
+        assert "def hello():" in changes[0].new_content
+        assert changes[1].file_path == "src/utils.py"
+
+    def test_parse_file_changes_format2(self):
+        from src.ui.tui_screens.diff_review_screen import parse_file_changes
+        output = """Here is the implementation:
+
+```file:src/hello.py
+def hello():
+    print("world")
+```
+
+```file:src/bye.py
+def bye():
+    pass
+```"""
+        changes = parse_file_changes(output)
+        assert len(changes) == 2
+        assert changes[0].file_path == "src/hello.py"
+        assert "def hello():" in changes[0].new_content
+        assert changes[1].file_path == "src/bye.py"
+
+    def test_parse_with_base_dir(self):
+        from src.ui.tui_screens.diff_review_screen import parse_file_changes
+        output = """<<<FILE main.py
+>>>
+print("hi")
+<<<END>>>"""
+        changes = parse_file_changes(output, base_dir="/project")
+        assert changes[0].file_path == "/project/main.py"
+
+    def test_parse_absolute_path_not_prefixed(self):
+        from src.ui.tui_screens.diff_review_screen import parse_file_changes
+        output = """<<<FILE /absolute/path.py
+>>>
+content
+<<<END>>>"""
+        changes = parse_file_changes(output, base_dir="/project")
+        assert changes[0].file_path == "/absolute/path.py"
+
+    def test_parse_empty_output(self):
+        from src.ui.tui_screens.diff_review_screen import parse_file_changes
+        assert parse_file_changes("") == []
+        assert parse_file_changes("no structured content here") == []
+
+    def test_file_change_new_file(self, tmp_path: Path):
+        from src.ui.tui_screens.diff_review_screen import FileChange
+        fc = FileChange(str(tmp_path / "new.py"), "print('new')\n")
+        assert fc.is_new_file is True
+
+    def test_file_change_existing_file(self, tmp_path: Path):
+        from src.ui.tui_screens.diff_review_screen import FileChange
+        existing = tmp_path / "existing.py"
+        existing.write_text("old content\n", encoding="utf-8")
+        fc = FileChange(str(existing), "new content\n")
+        assert fc.is_new_file is False
+
+    def test_file_change_diff(self, tmp_path: Path):
+        from src.ui.tui_screens.diff_review_screen import FileChange
+        existing = tmp_path / "test.py"
+        existing.write_text("line1\nline2\n", encoding="utf-8")
+        fc = FileChange(str(existing), "line1\nline2\nline3\n")
+        diff = fc.get_diff()
+        assert "+line3" in diff
+
+    def test_file_change_apply(self, tmp_path: Path):
+        from src.ui.tui_screens.diff_review_screen import FileChange
+        target = tmp_path / "subdir" / "newfile.py"
+        fc = FileChange(str(target), "hello = 42\n")
+        assert fc.apply() is True
+        assert target.exists()
+        assert target.read_text(encoding="utf-8") == "hello = 42\n"
+
+    def test_file_change_apply_overwrite(self, tmp_path: Path):
+        from src.ui.tui_screens.diff_review_screen import FileChange
+        existing = tmp_path / "overwrite.py"
+        existing.write_text("old\n", encoding="utf-8")
+        fc = FileChange(str(existing), "new\n")
+        assert fc.apply() is True
+        assert existing.read_text(encoding="utf-8") == "new\n"
+
+    def test_escape_markup(self):
+        from src.ui.tui_screens.diff_review_screen import _escape_markup
+        assert _escape_markup("no markup") == "no markup"
+        assert _escape_markup("[bold]text[/bold]") == "\\[bold\\]text\\[/bold\\]"
